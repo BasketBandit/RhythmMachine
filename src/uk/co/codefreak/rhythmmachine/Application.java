@@ -11,12 +11,12 @@ public class Application extends Canvas implements Runnable {
     public static final int height = (width/16)*9;
 
     private JFrame frame = new JFrame(title);
-    private JPanel panel = new JPanel();
-    private JLabel framesPerSecondLabel = new JLabel("0 FPS", JLabel.CENTER);
-    private JLabel sineAngleLabel = new JLabel("Sin 0", JLabel.CENTER);
+    private String framesPerSecondText = "0 FPS";
+    private String ticksPerSecondText = "0 TPS";
+    private int applicationRunTime = 0;
 
-    private SineNode[] sineNodes = new SineNode[30];
-    private Graphics2D[] grr = new Graphics2D[10];
+    private SineNode[] sineNodes = new SineNode[(int)Math.round(width/5.2)];
+    private Graphics2D grr;
 
     private boolean isRunning;
 
@@ -89,9 +89,11 @@ public class Application extends Canvas implements Runnable {
             if(System.currentTimeMillis() - 1000 > timer) {
                 timer += 1000;
                 //System.out.printf("FPS: %d | TPS: %d\n", framesPerSecond, ticksPerSecond);
-                framesPerSecondLabel.setText(framesPerSecond + " FPS");
+                framesPerSecondText = framesPerSecond + " FPS";
+                ticksPerSecondText = ticksPerSecond + " TPS";
                 framesPerSecond = 0;
                 ticksPerSecond = 0;
+                applicationRunTime++;
             }
         }
     }
@@ -109,29 +111,23 @@ public class Application extends Canvas implements Runnable {
 
         //////////////////////////////////
 
-        for(int i = 0; i < grr.length; i++) {
-            grr[i] = (Graphics2D) g;
-        }
+        grr = (Graphics2D) g;
 
-        grr[0].setColor(Color.WHITE);
-        grr[0].drawString(framesPerSecondLabel.getText(), 10, 20);
+        grr.setColor(Color.WHITE);
 
-
-        grr[1].setColor(Color.WHITE);
-        grr[1].drawString(sineNodes[0].getAngle()+"",10,40);
-
-
-        grr[2].setColor(Color.WHITE);
+        grr.drawString(applicationRunTime + " Second(s)", 10, 20);
+        grr.drawString(framesPerSecondText, 10, 40);
+        grr.drawString(ticksPerSecondText, 10, 60);
+        grr.drawString(sineNodes[0].getAngle()+"",10,80);
 
         for(int j = 0; j < sineNodes.length; j++) {
-            grr[2].fill3DRect(j*50+100, 150, 50, (int) Math.round(75 * sineNodes[j].getAngle()), true);
+            grr.fill3DRect(j*5+30, 250, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
         }
 
         //////////////////////////////////
 
         g.dispose();
         bs.show();
-
     }
 
     private void tick() {
@@ -142,7 +138,7 @@ public class Application extends Canvas implements Runnable {
 
     private void frameInit(Application ex) {
 
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < sineNodes.length; i++) {
             sineNodes[i] = new SineNode();
             for(int x = 0; x < i; x++) {
                 sineNodes[i].setAngle();
