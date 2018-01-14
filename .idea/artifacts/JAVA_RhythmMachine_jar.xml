@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JAVA-RhythmMachine:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JAVA_RhythmMachine_jar</output-path>
+    <root id="archive" name="JAVA-RhythmMachine.jar">
+      <element id="module-output" name="JAVA-RhythmMachine" />
+    </root>
+  </artifact>
+</component>
