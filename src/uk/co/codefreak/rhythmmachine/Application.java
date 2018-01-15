@@ -9,8 +9,8 @@ public class Application extends Canvas implements Runnable {
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public static final String title = "Rhythm Machine";
-    public final int width = (int) Math.round(screenSize.getWidth()*0.75);
-    public final int height = (width/16)*9;
+    public int width = (int) Math.round(screenSize.getWidth()*0.75);
+    public int height = (width/16)*9;
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -122,7 +122,7 @@ public class Application extends Canvas implements Runnable {
         grr.drawString(ticksPerSecondText, 10, 60);
         grr.drawString(sineNodes[0].getAngle()+"",10,80);
 
-        grr.drawString(width + " x " + height, 10, 100);
+        grr.drawString(width + " x " + height, 200, 20);
 
         for(int j = 0; j < sineNodes.length; j++) {
             grr.fill3DRect(j*5+30, 250, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
