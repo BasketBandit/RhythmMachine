@@ -227,8 +227,10 @@
       <include name="src"/>
     </dirset>
   </path>
-  
-  
+
+  <target name="test">
+  </target>
+
   <target name="compile.module.java-rhythmmachine" depends="compile.module.java-rhythmmachine.production,compile.module.java-rhythmmachine.tests" description="Compile module JAVA-RhythmMachine"/>
   
   <target name="compile.module.java-rhythmmachine.production" depends="register.custom.compilers" description="Compile module JAVA-RhythmMachine; production classes">
