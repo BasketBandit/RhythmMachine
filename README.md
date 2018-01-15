@@ -6,3 +6,7 @@ As the description suggests, this repository is purely for my own experimental c
 ## Paint, Canvas and Sine waves.
 
 I've been looking into how to properly make GUIs within Java but got side tracked into making a video game (which gave me a simple type of engine to work with for constant updates) and now how to simply make a GUI using 2D graphics and such. Taking it one step at a time or a few steps in this case. :)
+
+## TravisCI, how to actually implement.
+
+[![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
