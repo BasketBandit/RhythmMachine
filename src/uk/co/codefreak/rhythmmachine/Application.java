@@ -2,12 +2,12 @@ package uk.co.codefreak.rhythmmachine;
 
 import uk.co.codefreak.rhythmmachine.colour.Colours;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
+import uk.co.codefreak.rhythmmachine.object.Player;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas implements Runnable {
@@ -20,10 +20,10 @@ public class Application extends Canvas implements Runnable {
 
     private World world;
     private Tile[][] tiles;
-    private int worldX = 0;
-    private int worldY = 0;
 
     private Colours colours = new Colours();
+
+    private Player player = new Player("Josh",0);
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -153,11 +153,11 @@ public class Application extends Canvas implements Runnable {
                     grr.setColor(Color.GREEN);
                 } else if(tiles[x][y].getInside() == "H"){
                     grr.setColor(Color.WHITE);
-                } else if(tiles[x][y].getInside() == "m" || tiles[x][y].getInside() == "M") {
+                } else if(tiles[x][y].getInside() == "w" || tiles[x][y].getInside() == "W") {
                     grr.setColor(Color.BLUE);
                 } else if(tiles[x][y].getInside() == "E") {
                     grr.setColor(colours.getColour(0));
-                } else if(tiles[x][y].getInside() == "W") {
+                } else if(tiles[x][y].getInside() == "B") {
                     grr.setColor(Color.RED);
                 }
                 grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
@@ -184,15 +184,15 @@ public class Application extends Canvas implements Runnable {
         }
 
         world.update();
-        tiles[worldX][worldY].setInside("H");
+        tiles[player.getX()][player.getY()].setInside("H");
 
     }
 
     private void keyCheck() {
         if(KeyInput.isDown(0x25) && keyPressed == false) {
             System.out.println("left");
-            if(worldX > 0 && tiles[worldX-1][worldY].getType() != 1) {
-                worldX--;
+            if(player.getX() > 0 && tiles[player.getX()-1][player.getY()].getType() != 1) {
+                player.decX();
             }
             keyPressed = true;
 
@@ -200,8 +200,8 @@ public class Application extends Canvas implements Runnable {
 
         } else if(KeyInput.isDown(0x26) && keyPressed == false) {
             System.out.println("up");
-            if(worldY > 0 && tiles[worldX][worldY-1].getType() != 1) {
-                worldY--;
+            if(player.getY() > 0 && tiles[player.getX()][player.getY()-1].getType() != 1) {
+                player.decY();
             }
             keyPressed = true;
 
@@ -209,8 +209,8 @@ public class Application extends Canvas implements Runnable {
 
         } else if(KeyInput.isDown(0x27) && keyPressed == false) {
             System.out.println("right");
-            if(worldX < world.getWidth()-1 && tiles[worldX+1][worldY].getType() != 1) {
-                worldX++;
+            if(player.getX() < world.getWidth()-1 && tiles[player.getX()+1][player.getY()].getType() != 1) {
+                player.incX();
             }
             keyPressed = true;
 
@@ -218,8 +218,8 @@ public class Application extends Canvas implements Runnable {
 
         } else if(KeyInput.isDown(0x28) && keyPressed == false) {
             System.out.println("down");
-            if(worldY < world.getHeight()-1 && tiles[worldX][worldY+1].getType() != 1) {
-                worldY++;
+            if(player.getY() < world.getHeight()-1 && tiles[player.getX()][player.getY()+1].getType() != 1) {
+                player.incY();
             }
             keyPressed = true;
 

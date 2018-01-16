@@ -17,3 +17,6 @@ Note: To get travis working, you need to create a .travis.yml file in the projec
 
 I always wanted to be able to give some kind of input to a program. This time around I was able to achieve this and I wanted to press how far I could take that in the short amount of time I have been looking into it. From this and using techniques I have previously learnt I've started to create a Dwarf Fortress type game out of ascii characters. So far you can move around and I've already implemented objects you can't pass but I'll see where I can take this.
 
+## Entities, inheritance and randomness.
+
+As I'm kind of developing this into a mini video game type thing, I thought that the playable character deserved some data of their own. Introducing entities -> players, npcs and items. Now everything that is on the map that isn't terrain will have some amount of information describing it, rather than just appearing as the letter 'H' for example. Nothing really new in terms of things I haven't seen before. Looked more into randoms for dynamic looking water. (It went really well!)
