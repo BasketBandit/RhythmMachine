@@ -1,7 +1,13 @@
 package uk.co.codefreak.rhythmmachine;
 
+import uk.co.codefreak.rhythmmachine.colour.Colours;
+import uk.co.codefreak.rhythmmachine.input.KeyInput;
+import uk.co.codefreak.rhythmmachine.world.Tile;
+import uk.co.codefreak.rhythmmachine.world.World;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas implements Runnable {
@@ -12,6 +18,13 @@ public class Application extends Canvas implements Runnable {
     public int width = (int) Math.round(screenSize.getWidth()*0.75);
     public int height = (width/16)*9;
 
+    private World world;
+    private Tile[][] tiles;
+    private int worldX = 0;
+    private int worldY = 0;
+
+    private Colours colours = new Colours();
+
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
     private String ticksPerSecondText = "0 TPS";
@@ -21,6 +34,7 @@ public class Application extends Canvas implements Runnable {
     private Graphics2D grr;
 
     private boolean isRunning;
+    private boolean keyPressed = false;
 
     private void start() {
         if(isRunning) return;
@@ -36,6 +50,9 @@ public class Application extends Canvas implements Runnable {
     @Override
     public void run() {
         System.out.println("Running...");
+
+        this.world = new World(95,30);
+        this.tiles = world.getTiles();
 
         frameInit(this);
 
@@ -62,6 +79,8 @@ public class Application extends Canvas implements Runnable {
         int framesPerSecond = 0;
         int ticksPerSecond = 0;
         boolean canRender = false;
+
+        addKeyListener(new KeyInput());
 
         while(isRunning) {
             long now = System.nanoTime();
@@ -125,7 +144,24 @@ public class Application extends Canvas implements Runnable {
         grr.drawString(width + " x " + height, 200, 20);
 
         for(int j = 0; j < sineNodes.length; j++) {
-            grr.fill3DRect(j*5+30, 250, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
+            grr.fill3DRect(j*5+30, 150, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
+        }
+
+        for(int x = 0; x < world.getWidth(); x++) {
+            for(int y = 0; y < world.getHeight(); y++) {
+                if(tiles[x][y].getInside() == "n") {
+                    grr.setColor(Color.GREEN);
+                } else if(tiles[x][y].getInside() == "H"){
+                    grr.setColor(Color.WHITE);
+                } else if(tiles[x][y].getInside() == "m" || tiles[x][y].getInside() == "M") {
+                    grr.setColor(Color.BLUE);
+                } else if(tiles[x][y].getInside() == "E") {
+                    grr.setColor(colours.getColour(0));
+                } else if(tiles[x][y].getInside() == "W") {
+                    grr.setColor(Color.RED);
+                }
+                grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
+            }
         }
 
         //////////////////////////////////
@@ -137,6 +173,60 @@ public class Application extends Canvas implements Runnable {
     private void tick() {
         for (int i = 0; i < sineNodes.length; i++) {
         sineNodes[i].setAngle();
+        }
+
+        keyCheck();
+
+        for(int x = 0; x < world.getWidth(); x++) {
+            for(int y = 0; y < world.getHeight(); y++) {
+                tiles[x][y].setInside("n");
+            }
+        }
+
+        world.update();
+        tiles[worldX][worldY].setInside("H");
+
+    }
+
+    private void keyCheck() {
+        if(KeyInput.isDown(0x25) && keyPressed == false) {
+            System.out.println("left");
+            if(worldX > 0 && tiles[worldX-1][worldY].getType() != 1) {
+                worldX--;
+            }
+            keyPressed = true;
+
+        } else if(KeyInput.isDown(0x25) && keyPressed == true) {
+
+        } else if(KeyInput.isDown(0x26) && keyPressed == false) {
+            System.out.println("up");
+            if(worldY > 0 && tiles[worldX][worldY-1].getType() != 1) {
+                worldY--;
+            }
+            keyPressed = true;
+
+        } else if(KeyInput.isDown(0x26) && keyPressed == true) {
+
+        } else if(KeyInput.isDown(0x27) && keyPressed == false) {
+            System.out.println("right");
+            if(worldX < tiles.length-1 && tiles[worldX+1][worldY].getType() != 1) {
+                worldX++;
+            }
+            keyPressed = true;
+
+        } else if(KeyInput.isDown(0x27) && keyPressed == true) {
+
+        } else if(KeyInput.isDown(0x28) && keyPressed == false) {
+            System.out.println("down");
+            if(worldY < tiles.length-1 && tiles[worldX][worldY+1].getType() != 1) {
+                worldY++;
+            }
+            keyPressed = true;
+
+        } else if(KeyInput.isDown(0x28) && keyPressed == true) {
+
+        } else {
+            keyPressed = false;
         }
     }
 

@@ -20,8 +20,9 @@ public class KeyInput extends KeyAdapter {
     }
 
     public static void update() {
-        for (int i = 0; i < numKeys; i++)
+        for (int i = 0; i < numKeys; i++) {
             lastKeys[i] = keys[i];
+        }
     }
 
     public static boolean isDown(int keyCode) {
