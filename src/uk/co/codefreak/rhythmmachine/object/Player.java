@@ -7,7 +7,7 @@ public class Player extends Entity {
 
     public Player(String name, int gender) {
         this.setName(name);
-        this.setType(1);
+        this.setType(0);
         this.gender = gender;
 
         for(int i = 0; i < inventory.length; i++) {

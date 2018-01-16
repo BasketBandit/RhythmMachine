@@ -149,6 +149,7 @@ public class Application extends Canvas implements Runnable {
 
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
+
                 if(tiles[x][y].getInside() == "n") {
                     grr.setColor(Color.GREEN);
                 } else if(tiles[x][y].getInside() == "H"){
@@ -159,8 +160,11 @@ public class Application extends Canvas implements Runnable {
                     grr.setColor(colours.getColour(0));
                 } else if(tiles[x][y].getInside() == "B") {
                     grr.setColor(Color.RED);
+                } else if(tiles[x][y].getInside() == "S") {
+                    grr.setColor(Color.WHITE);
                 }
                 grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
+
             }
         }
 
