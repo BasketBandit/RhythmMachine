@@ -209,7 +209,7 @@ public class Application extends Canvas implements Runnable {
 
         } else if(KeyInput.isDown(0x27) && keyPressed == false) {
             System.out.println("right");
-            if(worldX < tiles.length-1 && tiles[worldX+1][worldY].getType() != 1) {
+            if(worldX < world.getWidth()-1 && tiles[worldX+1][worldY].getType() != 1) {
                 worldX++;
             }
             keyPressed = true;
@@ -218,7 +218,7 @@ public class Application extends Canvas implements Runnable {
 
         } else if(KeyInput.isDown(0x28) && keyPressed == false) {
             System.out.println("down");
-            if(worldY < tiles.length-1 && tiles[worldX][worldY+1].getType() != 1) {
+            if(worldY < world.getHeight()-1 && tiles[worldX][worldY+1].getType() != 1) {
                 worldY++;
             }
             keyPressed = true;
