@@ -1,38 +1,38 @@
-package uk.co.codefreak.rhythmmachine;
+package uk.co.codefreak.rhythmmachine.world;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.Iterator;
 
-public class TrackSerialize {
+public class MapSerialize implements Serializable {
 
-    private Track track;
-    private Path path = Paths.get("X:\\Josh\\Desktop\\");
+    private Map map;
+    private Path path = Paths.get("src/maps");
 
-    public TrackSerialize() {
+    public MapSerialize() {
         // Remember to replace with filepath from settings file.
     }
 
-    public TrackSerialize(Track trackIn) {
-        serializeSpecific(trackIn);
+    public MapSerialize(Map mapIn) {
+        serializeSpecific(mapIn);
     }
 
     /**
      *
-     * @param filePath the file path for the track, including the file's name and extension. E.g. "C:\\Josh\\Desktop\\test.track".
-     * @param filePathTo the file path in which the new serialized track is to be saved, without file name or extension.
+     * @param filePath the file path for the map, including the file's name and extension. E.g. "C:\\Josh\\Desktop\\test.map".
+     * @param filePathTo the file path in which the new serialized map is to be saved, without file name or extension.
      * @param fileNameTo the name of the file that is to be written.
      *
      */
     public void serializeSpecific(String filePath, String filePathTo, String fileNameTo) {
         try {
-            track = new Track(filePath);
+            map = new Map(filePath);
             FileOutputStream fileOut = new FileOutputStream(filePathTo+fileNameTo);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(track);
+            out.writeObject(map);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved to your desktop. \n");
+            System.out.printf("Serialized data has been successfully created. \n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,15 +40,15 @@ public class TrackSerialize {
 
     /**
      *
-     * @param trackIn a direct track object from the application.
+     * @param mapIn a direct map object from the application.
      *
      */
-    public void serializeSpecific(Track trackIn) {
+    public void serializeSpecific(Map mapIn) {
         // Remember to replace with filepath from settings file.
         try {
-            FileOutputStream fileOut = new FileOutputStream("X:\\Josh\\Desktop\\testX.track");
+            FileOutputStream fileOut = new FileOutputStream("/maps/t.map");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(trackIn);
+            out.writeObject(mapIn);
             out.close();
             fileOut.close();
             System.out.printf("Serialized data is saved to your desktop. \n");
@@ -59,30 +59,30 @@ public class TrackSerialize {
 
     /**
      *
-     * @param filePathTo the file path in which the new serialized track is to be saved, without file name or extension.
+     * @param filePathTo the file path in which the new serialized map is to be saved, without file name or extension.
      * @param fileNameTo the name of the file that is to be written.
-     * @return number of tracks serialized, or -1 if uncaught exception
+     * @return number of maps serialized, or -1 if uncaught exception
      *
      */
     public int serializeAll(String filePathTo, String fileNameTo) {
-        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.Untrack")) {
-            int tracksSerialized = 0;
+        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.smap")) {
+            int mapsSerialized = 0;
             Iterator it = stream.iterator();
             while(it.hasNext()) {
                 try {
-                    track = new Track(it.next().toString());
-                    FileOutputStream fileOut = new FileOutputStream(filePathTo+fileNameTo+tracksSerialized+".track");
+                    this.map = new Map(it.next().toString());
+                    FileOutputStream fileOut = new FileOutputStream(filePathTo+fileNameTo+mapsSerialized+".map");
                     ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                    out.writeObject(track);
+                    out.writeObject(this.map);
                     out.close();
                     fileOut.close();
                     System.out.printf("Serialized data is saved to your desktop. \n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                tracksSerialized++;
+                mapsSerialized++;
             }
-            return tracksSerialized;
+            return mapsSerialized;
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -91,16 +91,16 @@ public class TrackSerialize {
 
     /**
      *
-     * @param filename the filename of the track to be unserialized.
-     * @return unserialized track object if success, else return null
+     * @param filename the filename of the map to be unserialized.
+     * @return unserialized map object if success, else return null
      *
      */
-    public Track unserialize(Path filename) {
-        Track e;
+    public Map unserialize(Path filename) {
+        Map e;
         try {
             FileInputStream fileIn = new FileInputStream(filename.toString());
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            e = (Track) in.readObject();
+            e = (Map) in.readObject();
             in.close();
             fileIn.close();
             return e;
@@ -108,7 +108,7 @@ public class TrackSerialize {
             i.printStackTrace();
             return null;
         } catch (ClassNotFoundException c) {
-            System.out.println("Track no found. :( ");
+            System.out.println("Map no found. :( ");
             c.printStackTrace();
             return null;
         }

@@ -1,47 +1,43 @@
 package uk.co.codefreak.rhythmmachine.world;
 
 import uk.co.codefreak.rhythmmachine.object.*;
-
 import java.util.Random;
 
 public class World {
 
-    private Tile[][] tiles;
+    private MapList maps;
+
+    private Map map;
     private Npc[] npcs;
-    private int width;
-    private int height;
 
     private boolean initialised = false;
 
-    public World(int width, int height) {
-        this.width = width;
-        this.height = height;
-        this.tiles = new Tile[width][height];
-        this.npcs = new Npc[2];
+    public World(String name) {
 
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                tiles[x][y] = new Tile();
-            }
-        }
+        this.maps = new MapList();
 
-        update();
+        this.map = maps.getMap(0);
+        this.npcs = map.getNpcs();
+
+        update(0,0);
         initNpcs();
         initTypes();
-
-        this.initialised = true;
     }
 
     public Tile[][] getTiles() {
-        return tiles;
+        return map.getTiles();
+    }
+
+    public Tile getTile(int x, int y) {
+        return map.getTile(x,y);
     }
 
     public int getWidth() {
-        return width;
+        return map.getWidth();
     }
 
     public int getHeight() {
-        return height;
+        return map.getHeight();
     }
 
     public Npc[] getNpcs() {
@@ -49,54 +45,49 @@ public class World {
     }
 
     public void initNpcs() {
-        npcs[0] = new Npc(new Random().nextInt(40)+50,new Random().nextInt(20)+5,0);
-        npcs[1] = new Npc(new Random().nextInt(40)+50,new Random().nextInt(20)+5,0);
-        tiles[npcs[0].getX()][npcs[0].getY()].setInside("S");
-        tiles[npcs[1].getX()][npcs[1].getY()].setInside("S");
+        npcs[0] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
+        npcs[1] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
+        npcs[2] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
+        //this.initialised = true;
     }
 
     public void initTypes() {
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                if(tiles[x][y].getInside() == "B") {
-                    tiles[x][y].setType(1);
+        for(int x = 0; x < map.getWidth(); x++) {
+            for(int y = 0; y < map.getHeight(); y++) {
+
+                // If wall, make solid.
+                if(map.getTile(x,y).getInside() == "B") {
+                    map.getTile(x,y).setType(1);
                 }
 
-                if(tiles[x][y].getInside() == "S") {
-
-                }
             }
         }
     }
 
-    public void update() {
-        tiles[10][2].setInside("B");
-        tiles[11][2].setInside("B");
-        tiles[12][2].setInside("B");
-        tiles[13][2].setInside("B");
-        tiles[14][2].setInside("B");
+    public void update(int playerX, int playerY) {
 
         // Give the water a ripple effect using Random(). (It looks really nice!)
-        for(int x = 30; x < 40; x++) {
-            for(int y = 0; y < height; y++) {
-                tiles[x][y].setInside("w");
-                if(new Random().nextInt(11) == 1) {
-                    tiles[x][y].setInside("W");
+        for(int x = 0; x < map.getWidth(); x++) {
+            for(int y = 0; y < map.getHeight(); y++) {
+                if(new Random().nextInt(11) == 1 && map.getTile(x,y).getInside() == "w") {
+                    map.getTile(x,y).setInside("W");
                 }
             }
         }
 
         // Dynamically set the waters edge to E.
-        for(int x = 30; x < 40; x++) {
-            for(int y = 0; y < height; y++) {
-                if(x + 1 < width && tiles[x+1][y].getInside() != "w" && tiles[x+1][y].getInside() != "W" && tiles[x+1][y].getInside() != "E") {
-                    tiles[x][y].setInside("E");
-                } else if(x - 1 > -1 && tiles[x-1][y].getInside() != "w" && tiles[x-1][y].getInside() != "W" && tiles[x-1][y].getInside() != "E") {
-                    tiles[x][y].setInside("E");
-                } else if(y - 1 > -1 && tiles[x][y-1].getInside() != "w" && tiles[x][y-1].getInside() != "W" && tiles[x][y-1].getInside() != "E") {
-                    tiles[x][y].setInside("E");
-                } else if(y + 1 < height && tiles[x][y+1].getInside() != "w" && tiles[x][y+1].getInside() != "W" && tiles[x][y+1].getInside() != "E") {
-                    tiles[x][y].setInside("E");
+        for(int x = 0; x < map.getWidth(); x++) {
+            for(int y = 0; y < map.getHeight(); y++) {
+                if(map.getTile(x,y).getInside() == "w" || map.getTile(x,y).getInside() == "W") {
+                    if (x + 1 < map.getWidth() && map.getTile(x+1,y).getInside() != "w" && map.getTile(x+1,y).getInside() != "W" && map.getTile(x+1,y).getInside() != "E") {
+                        map.getTile(x,y).setInside("E");
+                    } else if (x - 1 > -1 && map.getTile(x-1,y).getInside() != "w" && map.getTile(x-1,y).getInside() != "W" && map.getTile(x-1,y).getInside() != "E") {
+                        map.getTile(x,y).setInside("E");
+                    } else if (y - 1 > -1 && map.getTile(x,y-1).getInside() != "w" && map.getTile(x,y-1).getInside() != "W" && map.getTile(x,y-1).getInside() != "E") {
+                        map.getTile(x,y).setInside("E");
+                    } else if (y + 1 < map.getHeight() && map.getTile(x,y+1).getInside() != "w" && map.getTile(x,y+1).getInside() != "W" && map.getTile(x,y+1).getInside() != "E") {
+                        map.getTile(x,y).setInside("E");
+                    }
                 }
             }
         }
@@ -105,18 +96,32 @@ public class World {
         if(initialised) {
             for (int a = 0; a <= npcs.length - 1; a++) {
 
-                if(new Random().nextInt(500) == 1 && npcs[a].getX() < width-1) {
+                if(new Random().nextInt(500) == 1 && npcs[a].getX() < map.getWidth()-1 && posCheck(2, a, playerX, playerY)) {
                     npcs[a].incX();
-                } else if(new Random().nextInt(500) == 2 && npcs[a].getX() > 0) {
+                } else if(new Random().nextInt(500) == 2 && npcs[a].getX() > 0 && posCheck(0, a, playerX, playerY)) {
                     npcs[a].decX();
-                } else if(new Random().nextInt(500) == 3 && npcs[a].getY() < height-1) {
+                } else if(new Random().nextInt(500) == 3 && npcs[a].getY() < map.getHeight()-1 && posCheck(3, a, playerX, playerY)) {
                     npcs[a].incY();
-                } else if(new Random().nextInt(500) == 4 && npcs[a].getY() > 0) {
+                } else if(new Random().nextInt(500) == 4 && npcs[a].getY() > 0 && posCheck(1, a, playerX, playerY)) {
                     npcs[a].decY();
                 }
 
-                tiles[npcs[a].getX()][npcs[a].getY()].setInside(npcs[a].toString());
+                map.getTile(npcs[a].getX(),npcs[a].getY()).setInside(npcs[a].toString());
             }
         }
+
+    }
+
+    private boolean posCheck(int direction, int a, int playerX, int playerY) {
+        if(direction == 0 && npcs[a].getX()-1 == playerX && npcs[a].getY() == playerY) {
+            return false;
+        } else if (direction == 1 && npcs[a].getX() == playerX && npcs[a].getY()-1 == playerY) {
+            return false;
+        } else if (direction == 2 && npcs[a].getX()+1 == playerX && npcs[a].getY() == playerY) {
+            return false;
+        } else if(direction == 3 && npcs[a].getX() == playerX && npcs[a].getY()+1 == playerY) {
+            return false;
+        }
+        return true;
     }
 }

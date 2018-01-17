@@ -2,7 +2,9 @@ package uk.co.codefreak.rhythmmachine;
 
 import uk.co.codefreak.rhythmmachine.colour.Colours;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
+import uk.co.codefreak.rhythmmachine.object.Npc;
 import uk.co.codefreak.rhythmmachine.object.Player;
+import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
 
@@ -23,7 +25,7 @@ public class Application extends Canvas implements Runnable {
 
     private Colours colours = new Colours();
 
-    private Player player = new Player("Josh",0);
+    private Player player;
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -51,8 +53,10 @@ public class Application extends Canvas implements Runnable {
     public void run() {
         System.out.println("Running...");
 
-        this.world = new World(95,30);
+        this.world = new World("world_0");
         this.tiles = world.getTiles();
+
+        this.player = new Player("Josh",0);
 
         frameInit(this);
 
@@ -147,12 +151,16 @@ public class Application extends Canvas implements Runnable {
             grr.fill3DRect(j*5+30, 150, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
         }
 
+        // Draw character information.
+        grr.drawString(player.getName(), 30, 205);
+
+        // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
 
-                if(tiles[x][y].getInside() == "n") {
+                if(tiles[x][y].getInside().equals("n")) {
                     grr.setColor(Color.GREEN);
-                } else if(tiles[x][y].getInside() == "H"){
+                } else if(tiles[x][y].getInside().equals("H")){
                     grr.setColor(Color.WHITE);
                 } else if(tiles[x][y].getInside() == "w" || tiles[x][y].getInside() == "W") {
                     grr.setColor(Color.BLUE);
@@ -183,55 +191,125 @@ public class Application extends Canvas implements Runnable {
 
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-                tiles[x][y].setInside("n");
+                tiles[x][y].setInside(world.getTile(x,y).getInside());
             }
         }
 
-        world.update();
+        tiles = world.getTiles();
+
+        world.update(player.getX(), player.getY());
         tiles[player.getX()][player.getY()].setInside("H");
 
     }
 
     private void keyCheck() {
-        if(KeyInput.isDown(0x25) && keyPressed == false) {
+        if(KeyInput.isDown(0x25) && !keyPressed) {
             System.out.println("left");
-            if(player.getX() > 0 && tiles[player.getX()-1][player.getY()].getType() != 1) {
+            if(player.getX() > 0 && typeCheck(0)) {
                 player.decX();
             }
             keyPressed = true;
 
-        } else if(KeyInput.isDown(0x25) && keyPressed == true) {
+        } else if(KeyInput.isDown(0x25) && keyPressed) {
 
-        } else if(KeyInput.isDown(0x26) && keyPressed == false) {
+        } else if(KeyInput.isDown(0x26) && !keyPressed) {
             System.out.println("up");
-            if(player.getY() > 0 && tiles[player.getX()][player.getY()-1].getType() != 1) {
+            if(player.getY() > 0 && typeCheck(1)) {
                 player.decY();
             }
             keyPressed = true;
 
-        } else if(KeyInput.isDown(0x26) && keyPressed == true) {
+        } else if(KeyInput.isDown(0x26) && keyPressed) {
 
-        } else if(KeyInput.isDown(0x27) && keyPressed == false) {
+        } else if(KeyInput.isDown(0x27) && !keyPressed) {
             System.out.println("right");
-            if(player.getX() < world.getWidth()-1 && tiles[player.getX()+1][player.getY()].getType() != 1) {
+            if(player.getX() < world.getWidth()-1 && typeCheck(2)) {
                 player.incX();
             }
             keyPressed = true;
 
-        } else if(KeyInput.isDown(0x27) && keyPressed == true) {
+        } else if(KeyInput.isDown(0x27) && keyPressed) {
 
-        } else if(KeyInput.isDown(0x28) && keyPressed == false) {
+        } else if(KeyInput.isDown(0x28) && !keyPressed) {
             System.out.println("down");
-            if(player.getY() < world.getHeight()-1 && tiles[player.getX()][player.getY()+1].getType() != 1) {
+            if(player.getY() < world.getHeight()-1 && typeCheck(3)) {
                 player.incY();
             }
             keyPressed = true;
 
-        } else if(KeyInput.isDown(0x28) && keyPressed == true) {
+        } else if(KeyInput.isDown(0x28) && keyPressed) {
 
         } else {
             keyPressed = false;
         }
+    }
+
+    private boolean typeCheck(int direction) {
+        // Directions: 0 -> Left, 1 -> Up, 2 -> Right, 3 -> Down.
+        // NOTE: ONCE IDS ARE IMPLEMENTED CHECK BY ID AND NOT ARRAY POS
+
+        Npc[] npcs = world.getNpcs();
+
+        if(direction == 0) {
+
+            if(tiles[player.getX()-1][player.getY()].getType() != 1) {
+                for(int n = 0; n < npcs.length; n++) {
+                    if (npcs[n].getX() == player.getX() - 1 && npcs[n].getY() == player.getY()) {
+                        System.out.println(npcs[n].getDetails());
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+
+        } else if(direction == 1) {
+
+            if(tiles[player.getX()][player.getY()-1].getType() != 1) {
+                for(int n = 0; n < npcs.length; n++) {
+                    if (npcs[n].getX() == player.getX() && npcs[n].getY() == player.getY()-1) {
+                        System.out.println(npcs[n].getDetails());
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+
+        } else if(direction == 2) {
+
+            if(tiles[player.getX()+1][player.getY()].getType() != 1) {
+                for(int n = 0; n < npcs.length; n++) {
+                    if (npcs[n].getX() == player.getX()+1 && npcs[n].getY() == player.getY()) {
+                        System.out.println(npcs[n].getDetails());
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+
+        } else if(direction == 3) {
+
+            if(tiles[player.getX()][player.getY()+1].getType() != 1) {
+                for(int n = 0; n < npcs.length; n++) {
+                    if (npcs[n].getX() == player.getX() && npcs[n].getY() == player.getY()+1) {
+                        System.out.println(npcs[n].getDetails());
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        return false;
+
     }
 
     private void frameInit(Application ex) {
@@ -257,6 +335,9 @@ public class Application extends Canvas implements Runnable {
     }
 
     public static void main(String[] args) {
+        MapSerialize ms = new MapSerialize();
+        ms.serializeAll("src/maps/","world_");
+
         Application ex = new Application();
         ex.start();
     }

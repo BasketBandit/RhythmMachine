@@ -1,12 +1,19 @@
 package uk.co.codefreak.rhythmmachine.world;
 
-public class Tile {
+import java.io.Serializable;
+
+public class Tile implements Serializable {
 
     private String inside = "0";
     private int type = 0;
 
     public Tile() {
         this.inside = "0";
+        this.type = 0;
+    }
+
+    public Tile(String inside) {
+        this.inside = inside;
         this.type = 0;
     }
 
@@ -24,6 +31,10 @@ public class Tile {
 
     public int getType() {
         return type;
+    }
+
+    public String toString() {
+        return inside;
     }
 
 }
