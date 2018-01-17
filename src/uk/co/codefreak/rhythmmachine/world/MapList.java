@@ -40,4 +40,8 @@ public class MapList implements Serializable {
         return maps.get(map);
     }
 
+    public int mapsTotal() {
+        return maps.size();
+    }
+
 }

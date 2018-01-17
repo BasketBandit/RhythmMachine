@@ -25,6 +25,10 @@ public class World {
         initTypes();
     }
 
+    public int mapsTotal() {
+        return maps.mapsTotal();
+    }
+
     public Tile[][] getTiles() {
         return map.getTiles();
     }
@@ -46,9 +50,9 @@ public class World {
     }
 
     private void initNpcs() {
-        npcs[0] = new Npc(new Random().nextInt(10)+20,new Random().nextInt(10)+4,0);
-        npcs[1] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+10,0);
-        npcs[2] = new Npc(new Random().nextInt(10)+5,new Random().nextInt(10)+6,0);
+        for(int i = 0; i < npcs.length; i++) {
+            npcs[i] = new Npc(new Random().nextInt(10) + 20, new Random().nextInt(10) + 4, 0);
+        }
         this.initialised = true;
     }
 

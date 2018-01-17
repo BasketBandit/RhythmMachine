@@ -23,6 +23,7 @@ public class Application extends Canvas implements Runnable {
     // Base world is used to update the map correctly.
     private World baseWorld;
     private World world;
+    private int currentWorld = 0;
 
     private Tile[][] tiles;
 
@@ -57,8 +58,8 @@ public class Application extends Canvas implements Runnable {
     public void run() {
         System.out.println("Running...");
 
-        world = new World(0);
-        baseWorld = new World(0);
+        world = new World(currentWorld);
+        baseWorld = new World(currentWorld);
         tiles = world.getTiles();
 
         player = new Player("Josh",0);
@@ -214,6 +215,8 @@ public class Application extends Canvas implements Runnable {
             System.out.println("left");
             if(player.getX() > 0 && typeCheck(0)) {
                 player.decX();
+            } else if(player.getX() == 0) {
+                changeMap(0);
             }
             keyPressed = true;
 
@@ -232,6 +235,8 @@ public class Application extends Canvas implements Runnable {
             System.out.println("right");
             if(player.getX() < world.getWidth()-1 && typeCheck(2)) {
                 player.incX();
+            } else if(player.getX() == world.getWidth()-1) {
+                changeMap(1);
             }
             keyPressed = true;
 
@@ -314,6 +319,34 @@ public class Application extends Canvas implements Runnable {
             }
         }
         return false;
+    }
+
+    public void changeMap(int direction) {
+
+        if(direction == 1 && currentWorld+1 < world.mapsTotal()) {
+            int playerY = player.getY();
+
+            currentWorld++;
+            baseWorld = new World(currentWorld);
+            world = new World(currentWorld);
+            tiles = world.getTiles();
+
+            player.setX(0);
+            player.setY(playerY);
+        }
+
+        if(direction == 0 && currentWorld > 0) {
+            int playerY = player.getY();
+
+            currentWorld--;
+            baseWorld = new World(currentWorld);
+            world = new World(currentWorld);
+            tiles = world.getTiles();
+
+            player.setX(world.getWidth()-1);
+            player.setY(playerY);
+        }
+
     }
 
     private void frameInit(Application ex) {

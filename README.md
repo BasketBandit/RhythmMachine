@@ -24,3 +24,4 @@ As I'm kind of developing this into a mini video game type thing, I thought that
 ##  IO, cleaning, maps and serializing.
 
 At this stage, I've gone full into game development mode. I've completely re(designed) a set of classes to make everything run smoothly, following on from the last commit. Now I've implemented a map system which can load external maps using serialization and such, doing this had made the rendering a bit buggy but I figured out a fix while writing this entry which essentially involved duplicating the world map and using that as a tick/render base that everything else then renders over.
+EDIT: I've now also added the ability to move from map to map. For example, move to the edge of a map and attempt to walk off and it will load the map next to it!
