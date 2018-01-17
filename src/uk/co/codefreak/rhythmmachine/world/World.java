@@ -8,15 +8,16 @@ public class World {
     private MapList maps;
 
     private Map map;
+    private Map currentMap;
     private Npc[] npcs;
 
     private boolean initialised = false;
 
-    public World(String name) {
+    public World(int world) {
 
         this.maps = new MapList();
-
-        this.map = maps.getMap(0);
+        this.map = maps.getMap(world);
+        this.currentMap = maps.getMap(world);
         this.npcs = map.getNpcs();
 
         update(0,0);
@@ -44,19 +45,19 @@ public class World {
         return npcs;
     }
 
-    public void initNpcs() {
-        npcs[0] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
-        npcs[1] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
-        npcs[2] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+5,0);
-        //this.initialised = true;
+    private void initNpcs() {
+        npcs[0] = new Npc(new Random().nextInt(10)+20,new Random().nextInt(10)+4,0);
+        npcs[1] = new Npc(new Random().nextInt(10)+10,new Random().nextInt(10)+10,0);
+        npcs[2] = new Npc(new Random().nextInt(10)+5,new Random().nextInt(10)+6,0);
+        this.initialised = true;
     }
 
-    public void initTypes() {
+    private void initTypes() {
         for(int x = 0; x < map.getWidth(); x++) {
             for(int y = 0; y < map.getHeight(); y++) {
 
                 // If wall, make solid.
-                if(map.getTile(x,y).getInside() == "B") {
+                if(map.getTile(x,y).getInside().equals("B")) {
                     map.getTile(x,y).setType(1);
                 }
 
@@ -69,7 +70,7 @@ public class World {
         // Give the water a ripple effect using Random(). (It looks really nice!)
         for(int x = 0; x < map.getWidth(); x++) {
             for(int y = 0; y < map.getHeight(); y++) {
-                if(new Random().nextInt(11) == 1 && map.getTile(x,y).getInside() == "w") {
+                if(new Random().nextInt(11) == 1 && map.getTile(x,y).getInside().equals("w")) {
                     map.getTile(x,y).setInside("W");
                 }
             }
@@ -78,14 +79,14 @@ public class World {
         // Dynamically set the waters edge to E.
         for(int x = 0; x < map.getWidth(); x++) {
             for(int y = 0; y < map.getHeight(); y++) {
-                if(map.getTile(x,y).getInside() == "w" || map.getTile(x,y).getInside() == "W") {
-                    if (x + 1 < map.getWidth() && map.getTile(x+1,y).getInside() != "w" && map.getTile(x+1,y).getInside() != "W" && map.getTile(x+1,y).getInside() != "E") {
+                if(map.getTile(x,y).getInside().equals("w") || map.getTile(x,y).getInside().equals("W")) {
+                    if (x + 1 < map.getWidth() && !map.getTile(x+1,y).getInside().equals("w") && !map.getTile(x+1,y).getInside().equals("W") && !map.getTile(x+1,y).getInside().equals("E")) {
                         map.getTile(x,y).setInside("E");
-                    } else if (x - 1 > -1 && map.getTile(x-1,y).getInside() != "w" && map.getTile(x-1,y).getInside() != "W" && map.getTile(x-1,y).getInside() != "E") {
+                    } else if (x - 1 > -1 && !map.getTile(x-1,y).getInside().equals("w") && !map.getTile(x-1,y).getInside().equals("W") && !map.getTile(x-1,y).getInside().equals("E")) {
                         map.getTile(x,y).setInside("E");
-                    } else if (y - 1 > -1 && map.getTile(x,y-1).getInside() != "w" && map.getTile(x,y-1).getInside() != "W" && map.getTile(x,y-1).getInside() != "E") {
+                    } else if (y - 1 > -1 && !map.getTile(x,y-1).getInside().equals("w") && !map.getTile(x,y-1).getInside().equals("W") && !map.getTile(x,y-1).getInside().equals("E")) {
                         map.getTile(x,y).setInside("E");
-                    } else if (y + 1 < map.getHeight() && map.getTile(x,y+1).getInside() != "w" && map.getTile(x,y+1).getInside() != "W" && map.getTile(x,y+1).getInside() != "E") {
+                    } else if (y + 1 < map.getHeight() && !map.getTile(x,y+1).getInside().equals("w") && !map.getTile(x,y+1).getInside().equals("W") && !map.getTile(x,y+1).getInside().equals("E")) {
                         map.getTile(x,y).setInside("E");
                     }
                 }

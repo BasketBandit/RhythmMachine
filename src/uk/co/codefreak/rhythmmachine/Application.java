@@ -16,11 +16,14 @@ public class Application extends Canvas implements Runnable {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public static final String title = "Rhythm Machine";
-    public int width = (int) Math.round(screenSize.getWidth()*0.75);
-    public int height = (width/16)*9;
+    private static final String title = "Rhythm Machine";
+    private int width = (int) Math.round(screenSize.getWidth()*0.75);
+    private int height = (width/16)*9;
 
+    // Base world is used to update the map correctly.
+    private World baseWorld;
     private World world;
+
     private Tile[][] tiles;
 
     private Colours colours = new Colours();
@@ -41,7 +44,8 @@ public class Application extends Canvas implements Runnable {
     private void start() {
         if(isRunning) return;
         isRunning = true;
-        new Thread(this, "Main-Thread").start();
+        new Thread(this, "application-thread").start();
+        // new Thread(this, "application-thread2").start(); // -> If you uncomment this, shit hits the fan.
     }
 
     private void stop() {
@@ -53,10 +57,11 @@ public class Application extends Canvas implements Runnable {
     public void run() {
         System.out.println("Running...");
 
-        this.world = new World("world_0");
-        this.tiles = world.getTiles();
+        world = new World(0);
+        baseWorld = new World(0);
+        tiles = world.getTiles();
 
-        this.player = new Player("Josh",0);
+        player = new Player("Josh",0);
 
         frameInit(this);
 
@@ -65,7 +70,7 @@ public class Application extends Canvas implements Runnable {
 
         int refreshRate = 0;
 
-        for (int i = 0; i < gs.length; i++) {
+        for(int i = 0; i < gs.length; i++) {
             DisplayMode dm = gs[i].getDisplayMode();
 
             refreshRate = dm.getRefreshRate();
@@ -162,13 +167,13 @@ public class Application extends Canvas implements Runnable {
                     grr.setColor(Color.GREEN);
                 } else if(tiles[x][y].getInside().equals("H")){
                     grr.setColor(Color.WHITE);
-                } else if(tiles[x][y].getInside() == "w" || tiles[x][y].getInside() == "W") {
+                } else if(tiles[x][y].getInside().equals("w") || tiles[x][y].getInside().equals("W")) {
                     grr.setColor(Color.BLUE);
-                } else if(tiles[x][y].getInside() == "E") {
+                } else if(tiles[x][y].getInside().equals("E")) {
                     grr.setColor(colours.getColour(0));
-                } else if(tiles[x][y].getInside() == "B") {
+                } else if(tiles[x][y].getInside().equals("B")) {
                     grr.setColor(Color.RED);
-                } else if(tiles[x][y].getInside() == "S") {
+                } else if(tiles[x][y].getInside().equals("S")) {
                     grr.setColor(Color.WHITE);
                 }
                 grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
@@ -189,15 +194,17 @@ public class Application extends Canvas implements Runnable {
 
         keyCheck();
 
+        // Redraw the whole map.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-                tiles[x][y].setInside(world.getTile(x,y).getInside());
+                tiles[x][y].setInside(baseWorld.getTile(x,y).getInside()) ;
             }
         }
 
-        tiles = world.getTiles();
-
+        // Update dynamic objects and draw.
         world.update(player.getX(), player.getY());
+
+        // Draw player position.
         tiles[player.getX()][player.getY()].setInside("H");
 
     }
@@ -305,11 +312,8 @@ public class Application extends Canvas implements Runnable {
             } else {
                 return false;
             }
-
         }
-
         return false;
-
     }
 
     private void frameInit(Application ex) {

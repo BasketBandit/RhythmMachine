@@ -38,11 +38,14 @@ public class Map implements Serializable {
                     }
 
                     if(s != 13 && s != 10) {
-                        String inside = (char) s;
+                        char c = (char) s;
+                        String inside = Character.toString(c);
                         this.tiles[x][y] = new Tile(inside);
                     }
+
                 }
             }
+
         }
         catch (FileNotFoundException e) {
             System.out.println("File not found.");
@@ -54,7 +57,7 @@ public class Map implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -62,7 +65,7 @@ public class Map implements Serializable {
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public void setWidth(int width) {
@@ -70,7 +73,7 @@ public class Map implements Serializable {
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public void setHeight(int height) {
@@ -78,19 +81,19 @@ public class Map implements Serializable {
     }
 
     public Tile[][] getTiles() {
-        return tiles;
+        return this.tiles;
     }
 
     public Tile getTile(int x, int y) {
-        return tiles[x][y];
+        return this.tiles[x][y];
     }
 
-    public void setTiles(Tile[][] tiles) {
-        this.tiles = tiles;
+    public void setTiles(int x, int y, String inside) {
+        this.tiles[x][y].setInside(inside);
     }
 
     public Npc[] getNpcs() {
-        return npcs;
+        return this.npcs;
     }
 
     public void setNpcs(Npc[] npcs) {

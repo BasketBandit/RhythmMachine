@@ -18,7 +18,7 @@ public class MapList implements Serializable {
         findMaps();
     }
 
-    public int findMaps() {
+    private int findMaps() {
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.map")) {
             int mapsFound = 0;
             Iterator it = stream.iterator();
