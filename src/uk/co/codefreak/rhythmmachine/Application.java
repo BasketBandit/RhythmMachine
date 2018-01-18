@@ -4,6 +4,7 @@ import uk.co.codefreak.rhythmmachine.colour.Colours;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.Npc;
 import uk.co.codefreak.rhythmmachine.object.Player;
+import uk.co.codefreak.rhythmmachine.other.SineNode;
 import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
@@ -373,7 +374,7 @@ public class Application extends Canvas implements Runnable {
 
     public static void main(String[] args) {
         MapSerialize ms = new MapSerialize();
-        ms.serializeAll("src/maps/","world_");
+        ms.serializeAll("src/resources/maps/","world_");
 
         Application ex = new Application();
         ex.start();

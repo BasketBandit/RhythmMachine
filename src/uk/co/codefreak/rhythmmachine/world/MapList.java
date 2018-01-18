@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 public class MapList implements Serializable {
 
-    private Path path = Paths.get("src/maps");
+    private Path path = Paths.get("src/resources/maps");
     private ArrayList<Map> maps;
     private MapSerialize serialize;
 

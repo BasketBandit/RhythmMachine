@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class MapSerialize implements Serializable {
 
     private Map map;
-    private Path path = Paths.get("src/maps");
+    private Path path = Paths.get("src/resources/maps");
 
     public MapSerialize() {
         // Remember to replace with filepath from settings file.
@@ -46,12 +46,12 @@ public class MapSerialize implements Serializable {
     public void serializeSpecific(Map mapIn) {
         // Remember to replace with filepath from settings file.
         try {
-            FileOutputStream fileOut = new FileOutputStream("/maps/t.map");
+            FileOutputStream fileOut = new FileOutputStream("src/resources/maps/t.map");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(mapIn);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved to your desktop. \n");
+            System.out.printf("Serialized data has been successfully created. \n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +76,7 @@ public class MapSerialize implements Serializable {
                     out.writeObject(this.map);
                     out.close();
                     fileOut.close();
-                    System.out.printf("Serialized data is saved to your desktop. \n");
+                    System.out.printf("Serialized data has been successfully created. \n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

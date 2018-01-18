@@ -1,4 +1,4 @@
-package uk.co.codefreak.rhythmmachine;
+package uk.co.codefreak.rhythmmachine.other;
 
 import java.util.*;
 
