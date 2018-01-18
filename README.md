@@ -1,6 +1,5 @@
 # JAVA-RhythmMachine
 
-
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the bottom of the list.
 
 ## Paint, canvas and sine waves.
@@ -21,7 +20,11 @@ I always wanted to be able to give some kind of input to a program. This time ar
 
 As I'm kind of developing this into a mini video game type thing, I thought that the playable character deserved some data of their own. Introducing entities -> players, npcs and items. Now everything that is on the map that isn't terrain will have some amount of information describing it, rather than just appearing as the letter 'H' for example. Nothing really new in terms of things I haven't seen before. Looked more into randoms for dynamic looking water. (It went really well!)
 
-##  IO, cleaning, maps and serializing.
+## IO, cleaning, maps and serializing.
 
 At this stage, I've gone full into game development mode. I've completely re(designed) a set of classes to make everything run smoothly, following on from the last commit. Now I've implemented a map system which can load external maps using serialization and such, doing this had made the rendering a bit buggy but I figured out a fix while writing this entry which essentially involved duplicating the world map and using that as a tick/render base that everything else then renders over.
 EDIT: I've now also added the ability to move from map to map. For example, move to the edge of a map and attempt to walk off and it will load the map next to it!
+
+## Making color, colour again.
+
+It's no secret that that base awt colours are a little lacking when it comes to public field colours such as Color.RED, for example. What better way to practice the use of public static final fields than to minify awt.color and add many, many more colours to save the need in a month to find obscure hex or rgb values for colours. (I don't currently have 'many, many more', but I will!)

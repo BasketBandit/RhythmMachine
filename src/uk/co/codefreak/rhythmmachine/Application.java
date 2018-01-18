@@ -1,6 +1,6 @@
 package uk.co.codefreak.rhythmmachine;
 
-import uk.co.codefreak.rhythmmachine.colour.Colours;
+import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.Npc;
 import uk.co.codefreak.rhythmmachine.object.Player;
@@ -27,8 +27,6 @@ public class Application extends Canvas implements Runnable {
     private int currentWorld = 0;
 
     private Tile[][] tiles;
-
-    private Colours colours = new Colours();
 
     private Player player;
 
@@ -138,14 +136,14 @@ public class Application extends Canvas implements Runnable {
         }
 
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.darkGray);
+        g.setColor(Colour.DARK_GREY);
         g.fillRect(0, 0, width, height);
 
         //////////////////////////////////
 
         grr = (Graphics2D) g;
 
-        grr.setColor(Color.WHITE);
+        grr.setColor(Colour.WHITE);
 
         grr.drawString(applicationRunTime + " Second(s)", 10, 20);
         grr.drawString(framesPerSecondText, 10, 40);
@@ -166,17 +164,17 @@ public class Application extends Canvas implements Runnable {
             for(int y = 0; y < world.getHeight(); y++) {
 
                 if(tiles[x][y].getInside().equals("n")) {
-                    grr.setColor(Color.GREEN);
+                    grr.setColor(Colour.GREEN);
                 } else if(tiles[x][y].getInside().equals("H")){
-                    grr.setColor(Color.WHITE);
+                    grr.setColor(Colour.WHITE);
                 } else if(tiles[x][y].getInside().equals("w") || tiles[x][y].getInside().equals("W")) {
-                    grr.setColor(Color.BLUE);
+                    grr.setColor(Colour.BLUE);
                 } else if(tiles[x][y].getInside().equals("E")) {
-                    grr.setColor(colours.getColour(0));
+                    grr.setColor(Colour.SADDLE_BROWN);
                 } else if(tiles[x][y].getInside().equals("B")) {
-                    grr.setColor(Color.RED);
+                    grr.setColor(Colour.RED);
                 } else if(tiles[x][y].getInside().equals("S")) {
-                    grr.setColor(Color.WHITE);
+                    grr.setColor(Colour.WHITE);
                 }
                 grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
 
