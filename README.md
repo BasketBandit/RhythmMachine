@@ -12,19 +12,23 @@ I've been looking into how to properly make GUIs within Java but got side tracke
 
 Note: To get travis working, you need to create a .travis.yml file in the project root, generate an ant build, (named build.xml for ease of use) edit the build.xml file and add <target name="test"></target> to appease Travis, Push a commit to trigger a Travis build and then upload the badge icon via markdown to the README.md file.
 
-## KeyListeners and then some.
+## KeyListeners and then some. (0.1.0)
 
 I always wanted to be able to give some kind of input to a program. This time around I was able to achieve this and I wanted to press how far I could take that in the short amount of time I have been looking into it. From this and using techniques I have previously learnt I've started to create a Dwarf Fortress type game out of ascii characters. So far you can move around and I've already implemented objects you can't pass but I'll see where I can take this.
 
-## Entities, inheritance and randomness.
+## Entities, inheritance and randomness. (0.2.0)
 
 As I'm kind of developing this into a mini video game type thing, I thought that the playable character deserved some data of their own. Introducing entities -> players, npcs and items. Now everything that is on the map that isn't terrain will have some amount of information describing it, rather than just appearing as the letter 'H' for example. Nothing really new in terms of things I haven't seen before. Looked more into randoms for dynamic looking water. (It went really well!)
 
-## IO, cleaning, maps and serializing.
+## IO, cleaning, maps and serializing. (0.3.0)
 
 At this stage, I've gone full into game development mode. I've completely re(designed) a set of classes to make everything run smoothly, following on from the last commit. Now I've implemented a map system which can load external maps using serialization and such, doing this had made the rendering a bit buggy but I figured out a fix while writing this entry which essentially involved duplicating the world map and using that as a tick/render base that everything else then renders over.
 EDIT: I've now also added the ability to move from map to map. For example, move to the edge of a map and attempt to walk off and it will load the map next to it!
 
-## Making color, colour again.
+## Making color, colour again. (0.4.0)
 
 It's no secret that that base awt colours are a little lacking when it comes to public field colours such as Color.RED, for example. What better way to practice the use of public static final fields than to minify awt.color and add many, many more colours to save the need in a month to find obscure hex or rgb values for colours. (I don't currently have 'many, many more', but I will!)
+
+## Version controlling, increasing base size. (0.4.1)
+
+In an effort to become more professional with my work, despite having this log, (not dated) I've properly set up Git on my IDE which apparently, I hadn't done before. In relation to the game which has no name currently, I've increased default map size to 50x50. In the future, I hope to have non-standard map sizes and shapes... in fact as I'm writing this and thinking about how I'd do that, I can just add some kind of character that represents blank and colour it to the background colour. Look out for that in 0.6.0!

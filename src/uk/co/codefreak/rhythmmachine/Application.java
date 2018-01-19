@@ -16,10 +16,11 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas implements Runnable {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final String version = "0.4.1";
 
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.75);
-    private int height = (width/16)*9;
+    private int height = 580;
 
     // Base world is used to update the map correctly.
     private World baseWorld;
@@ -57,11 +58,15 @@ public class Application extends Canvas implements Runnable {
     public void run() {
         System.out.println("Running...");
 
-        world = new World(currentWorld);
         baseWorld = new World(currentWorld);
+        world = new World(currentWorld);
+
         tiles = world.getTiles();
 
         player = new Player("Josh",0);
+
+        player.setX(world.getStartPosX());
+        player.setY(world.getStartPosY());
 
         frameInit(this);
 
@@ -144,10 +149,10 @@ public class Application extends Canvas implements Runnable {
         grr = (Graphics2D) g;
 
         grr.setColor(Colour.WHITE);
-        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + width + " x " + height, 10, 20);
+        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height, 10, 20);
 
         // Draw character information.
-        grr.drawString(player.getName(), 10, 60);
+        grr.drawString(player.getName(), 600, 60);
 
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
@@ -166,7 +171,7 @@ public class Application extends Canvas implements Runnable {
                 } else if(tiles[x][y].getInside().equals("S")) {
                     grr.setColor(Colour.WHITE);
                 }
-                grr.drawString(tiles[x][y].getInside() + "", 10 + (10 * x), 80 + (10 * y));
+                grr.drawString(tiles[x][y].getInside() + "", 10 + (10 * x), 40 + (10 * y));
 
             }
         }
@@ -197,7 +202,7 @@ public class Application extends Canvas implements Runnable {
 
     private void keyCheck() {
         if(KeyInput.isDown(0x25) && !keyPressed) {
-            System.out.println("left");
+            //System.out.println("left");
             if(player.getX() > 0 && typeCheck(0)) {
                 player.decX();
             } else if(player.getX() == 0) {
@@ -208,7 +213,7 @@ public class Application extends Canvas implements Runnable {
         } else if(KeyInput.isDown(0x25) && keyPressed) {
 
         } else if(KeyInput.isDown(0x26) && !keyPressed) {
-            System.out.println("up");
+            //System.out.println("up");
             if(player.getY() > 0 && typeCheck(1)) {
                 player.decY();
             }
@@ -217,7 +222,7 @@ public class Application extends Canvas implements Runnable {
         } else if(KeyInput.isDown(0x26) && keyPressed) {
 
         } else if(KeyInput.isDown(0x27) && !keyPressed) {
-            System.out.println("right");
+            //System.out.println("right");
             if(player.getX() < world.getWidth()-1 && typeCheck(2)) {
                 player.incX();
             } else if(player.getX() == world.getWidth()-1) {
@@ -228,13 +233,15 @@ public class Application extends Canvas implements Runnable {
         } else if(KeyInput.isDown(0x27) && keyPressed) {
 
         } else if(KeyInput.isDown(0x28) && !keyPressed) {
-            System.out.println("down");
+            //System.out.println("down");
             if(player.getY() < world.getHeight()-1 && typeCheck(3)) {
                 player.incY();
             }
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x28) && keyPressed) {
+
+
 
         } else {
             keyPressed = false;

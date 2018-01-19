@@ -22,8 +22,8 @@ public class Map implements Serializable {
             this.setName(in.readLine());
             this.setWidth(Integer.parseInt(in.readLine()));
             this.setHeight(Integer.parseInt(in.readLine()));
-            this.setStartX(Integer.parseInt(in.readLine()));
-            this.setStartY(Integer.parseInt(in.readLine()));
+            this.setStartPosX(Integer.parseInt(in.readLine()));
+            this.setStartPosY(Integer.parseInt(in.readLine()));
             this.npcs = new Npc[Integer.parseInt(in.readLine())];
 
             this.tiles = new Tile[getWidth()][getHeight()];
@@ -100,19 +100,19 @@ public class Map implements Serializable {
         this.npcs = npcs;
     }
 
-    public int getStartX() {
+    public int getStartPosX() {
         return startX;
     }
 
-    public void setStartX(int startX) {
+    public void setStartPosX(int startX) {
         this.startX = startX;
     }
 
-    public int getStartY() {
+    public int getStartPosY() {
         return startY;
     }
 
-    public void setStartY(int startY) {
+    public void setStartPosY(int startY) {
         this.startY = startY;
     }
 }

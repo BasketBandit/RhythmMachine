@@ -11,6 +11,9 @@ public class World {
     private Map currentMap;
     private Npc[] npcs;
 
+    private int startX;
+    private int startY;
+
     private boolean initialised = false;
 
     public World(int world) {
@@ -47,6 +50,14 @@ public class World {
 
     public Npc[] getNpcs() {
         return npcs;
+    }
+
+    public int getStartPosX() {
+        return map.getStartPosX();
+    }
+
+    public int getStartPosY() {
+        return map.getStartPosY();
     }
 
     private void initNpcs() {
