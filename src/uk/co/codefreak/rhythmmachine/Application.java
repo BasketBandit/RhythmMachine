@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas implements Runnable {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.5.1";
+    private static final String version = "0.5.2";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.75);
     private int height = 580;
@@ -163,7 +163,7 @@ public class Application extends Canvas implements Runnable {
 
         int invX = 0; int invY = 0;
         for(int inv = 0; inv < player.getInventory().length; inv++) {
-            grr.drawString(player.getInventoryItem(inv).toString(),520 + (40 * invX),60 + (40 * invY));
+            grr.drawString(player.getInventoryItem(inv).toString(),520 + (20 * invX),60 + (20 * invY));
 
             invX++;
 

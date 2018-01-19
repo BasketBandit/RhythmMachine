@@ -28,18 +28,22 @@ public class World {
         for(int i = 0; i < npcs.length; i++) {
             // Randomly select the location and which NPCs are spawned.
             int rand = new Random().nextInt(2);
-            if(rand == 0) {
-                int x = new Random().nextInt(50);
-                int y = new Random().nextInt(50);
+            int x = new Random().nextInt(50);
+            int y = new Random().nextInt(50);
 
-                while(getTile(x,y).getTileType() == 1 || getTile(x,y).getTileType() == 2) {
+            if(rand == 0) {
+                while(getTile(x,y).getTileType() == 1 || getTile(x,y).getTileType() == 2 || getTile(x,y).containsNpc()) {
                     x = new Random().nextInt(50);
                     y = new Random().nextInt(50);
                 }
 
                 npcs[i] = new NonPlayableCharacter(x,y,0);
             } else {
-                npcs[i] = new NonPlayableCharacter(new Random().nextInt(50), new Random().nextInt(50), 1);
+                while(getTile(x,y).getTileType() == 1 || getTile(x,y).containsNpc()) {
+                    x = new Random().nextInt(50);
+                    y = new Random().nextInt(50);
+                }
+                npcs[i] = new NonPlayableCharacter(x, y, 1);
             }
         }
         this.initialised = true;
