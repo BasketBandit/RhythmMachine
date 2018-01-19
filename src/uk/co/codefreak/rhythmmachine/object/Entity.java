@@ -6,7 +6,7 @@ public class Entity {
     private String name;
 
     // Type -> 0 = Player, 1 = NPC, 2 = Item
-    private int type;
+    private int entityType;
 
     // Physics Type -> 0 = Not Solid (haha), 1 = Solid
     private int physType;
@@ -21,8 +21,8 @@ public class Entity {
         return id;
     }
 
-    public int getType() {
-        return type;
+    public int getEntityType() {
+        return entityType;
     }
 
     public String getName() {
@@ -33,11 +33,11 @@ public class Entity {
         return physType;
     }
 
-    public int getX() {
+    public int getXPos() {
         return xPos;
     }
 
-    public int getY() {
+    public int getYPos() {
         return yPos;
     }
 
@@ -49,35 +49,35 @@ public class Entity {
         this.name = name;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setEntityType(int entityType) {
+        this.entityType = entityType;
     }
 
     public void setPhysType(int physType) {
         this.physType = physType;
     }
 
-    public void setX(int pos) {
+    public void setXPos(int pos) {
         xPos = pos;
     }
 
-    public void setY(int pos) {
+    public void setYPos(int pos) {
         yPos = pos;
     }
 
-    public void incX() {
+    public void incXPos() {
         xPos++;
     }
 
-    public void incY() {
+    public void incYPos() {
         yPos++;
     }
 
-    public void decX() {
+    public void decXPos() {
         xPos--;
     }
 
-    public void decY() {
+    public void decYPos() {
         yPos--;
     }
 

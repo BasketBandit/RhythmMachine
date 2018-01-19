@@ -7,7 +7,7 @@ public class Player extends Entity {
 
     public Player(String name, int gender) {
         this.setName(name);
-        this.setType(0);
+        this.setEntityType(0);
         this.setPhysType(1);
         this.gender = gender;
 

@@ -12,8 +12,8 @@ public class Map implements Serializable {
     private Tile[][] tiles;
     private NonPlayableCharacter[] npcs;
 
-    private int startPosX;
-    private int startPosY;
+    private int startXPos;
+    private int startYPos;
 
     public Map(String name) {
         try {
@@ -22,8 +22,8 @@ public class Map implements Serializable {
             this.setName(in.readLine());
             this.setWidth(Integer.parseInt(in.readLine()));
             this.setHeight(Integer.parseInt(in.readLine()));
-            this.setStartPosX(Integer.parseInt(in.readLine()));
-            this.setStartPosY(Integer.parseInt(in.readLine()));
+            this.setStartXPos(Integer.parseInt(in.readLine()));
+            this.setStartYPos(Integer.parseInt(in.readLine()));
             this.npcs = new NonPlayableCharacter[Integer.parseInt(in.readLine())];
 
             this.tiles = new Tile[getWidth()][getHeight()];
@@ -60,6 +60,8 @@ public class Map implements Serializable {
         }
     }
 
+    // Setters & Getters
+
     public String getName() {
         return this.name;
     }
@@ -92,8 +94,8 @@ public class Map implements Serializable {
         return this.tiles[x][y];
     }
 
-    public void setTiles(int x, int y, String inside) {
-        this.tiles[x][y].setInside(inside);
+    public void setTiles(int x, int y, String tileInside) {
+        this.tiles[x][y].setTileInside(tileInside);
     }
 
     public NonPlayableCharacter[] getNpcs() {
@@ -104,19 +106,19 @@ public class Map implements Serializable {
         this.npcs = npcs;
     }
 
-    public int getStartPosX() {
-        return startPosX;
+    public int getStartXPos() {
+        return startXPos;
     }
 
-    public void setStartPosX(int startPosX) {
-        this.startPosX = startPosX;
+    public void setStartXPos(int startXPos) {
+        this.startXPos = startXPos;
     }
 
-    public int getStartPosY() {
-        return startPosY;
+    public int getStartYPos() {
+        return startYPos;
     }
 
-    public void setStartPosY(int startPosY) {
-        this.startPosY = startPosY;
+    public void setStartYPos(int startYPos) {
+        this.startYPos = startYPos;
     }
 }

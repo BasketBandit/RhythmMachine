@@ -4,42 +4,51 @@ import java.io.Serializable;
 
 public class Tile implements Serializable {
 
-    private String inside = "0";
-    private int type = 0;
+    private String tileInside = "0";
+    private int tileType = 0;
 
     public Tile() {
-        this.inside = "▒";
-        this.type = 0;
+        this.tileInside = "▒";
+        this.tileType = 0;
     }
 
     public Tile(String inside) {
-        this.inside = inside;
-        this.type = 0;
+        this.tileInside = inside;
+        this.tileType = 0;
     }
 
     public Tile(String inside, int type) {
-        this.inside = inside;
-        this.type = type;
+        this.tileInside = inside;
+        this.tileType = type;
     }
 
-    public void setInside(String inside) {
-        this.inside = inside;
+    public void setTileInside(String inside) {
+        this.tileInside = inside;
     }
 
-    public String getInside() {
-        return inside;
+    public String getTileInside() {
+        return tileInside;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setTileType(int tileType) {
+        this.tileType = tileType;
     }
 
-    public int getType() {
-        return type;
+    public int getTileType() {
+        return tileType;
+    }
+
+    public boolean containsNpc() {
+        switch(tileInside) {
+            case "S":
+            case "D":
+                return true;
+            default: return false;
+        }
     }
 
     public String toString() {
-        return inside;
+        return tileInside;
     }
 
 }

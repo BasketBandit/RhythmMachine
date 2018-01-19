@@ -4,14 +4,14 @@ import java.util.Random;
 
 public class NonPlayableCharacter extends Entity {
 
-    // NPC Type -> 0 = Sheep, 1 = Duck, etc.
+    // See documentation for type information.
     private int npcType;
 
     public NonPlayableCharacter(int xPos, int yPos, int npcType) {
-        this.setX(xPos);
-        this.setY(yPos);
+        this.setXPos(xPos);
+        this.setYPos(yPos);
         this.setName(new Random().nextInt(1001)+"");
-        this.setType(1);
+        this.setEntityType(1);
         this.setPhysType(1);
         this.npcType = npcType;
     }

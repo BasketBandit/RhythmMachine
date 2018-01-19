@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas implements Runnable {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.5.0";
+    private static final String version = "0.5.1";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.75);
     private int height = 580;
@@ -34,15 +34,14 @@ public class Application extends Canvas implements Runnable {
     private String ticksPerSecondText = "0 TPS";
     private int applicationRunTime = 0;
 
-    private Graphics2D grr;
-
     private boolean isRunning;
     private boolean keyPressed = false;
 
     private void start() {
         if(isRunning) return;
         isRunning = true;
-        new Thread(this, "application-thread").start();
+        Thread applicationThread = new Thread(this, "application-thread");
+        applicationThread.start();
         // new Thread(this, "application-thread2").start(); // -> If you uncomment this, shit hits the fan.
     }
 
@@ -62,8 +61,8 @@ public class Application extends Canvas implements Runnable {
 
         player = new Player("Josh",0);
 
-        player.setX(world.getStartPosX());
-        player.setY(world.getStartPosY());
+        player.setXPos(world.getStartXPos());
+        player.setYPos(world.getStartYPos());
 
         frameInit(this);
 
@@ -143,7 +142,7 @@ public class Application extends Canvas implements Runnable {
 
         //////////////////////////////////
 
-        grr = (Graphics2D) g;
+        Graphics2D grr = (Graphics2D) g;
 
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
@@ -156,7 +155,7 @@ public class Application extends Canvas implements Runnable {
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
                 grr.setColor(colourCheck(x,y));
-                grr.drawString(tiles[x][y].getInside() + "", 10 + (10 * x), 40 + (10 * y));
+                grr.drawString(tiles[x][y].getTileInside() + "", 10 + (10 * x), 40 + (10 * y));
             }
         }
 
@@ -187,15 +186,15 @@ public class Application extends Canvas implements Runnable {
         // Reset the whole map.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-                tiles[x][y].setInside(baseWorld.getTile(x,y).getInside()) ;
+                tiles[x][y].setTileInside(baseWorld.getTile(x,y).getTileInside()) ;
             }
         }
 
         // Update dynamic objects and draw.
-        world.update(player.getX(), player.getY());
+        world.update(player.getXPos(), player.getYPos());
 
         // Set player position.
-        tiles[player.getX()][player.getY()].setInside("H");
+        tiles[player.getXPos()][player.getYPos()].setTileInside("H");
     }
 
     private void keyCheck() {
@@ -204,9 +203,9 @@ public class Application extends Canvas implements Runnable {
 
         if(KeyInput.isDown(0x25) && !keyPressed) {
             //System.out.println("left");
-            if(player.getX() > 0 && typeCheck(0)) {
-                player.decX();
-            } else if(player.getX() == 0) {
+            if(player.getXPos() > 0 && typeCheck(0)) {
+                player.decXPos();
+            } else if(player.getXPos() == 0) {
                 changeMap(0);
             }
             keyPressed = true;
@@ -214,17 +213,17 @@ public class Application extends Canvas implements Runnable {
         } else if(KeyInput.isDown(0x25) && keyPressed) {
         } else if(KeyInput.isDown(0x26) && !keyPressed) {
             //System.out.println("up");
-            if(player.getY() > 0 && typeCheck(1)) {
-                player.decY();
+            if(player.getYPos() > 0 && typeCheck(1)) {
+                player.decYPos();
             }
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x26) && keyPressed) {
         } else if(KeyInput.isDown(0x27) && !keyPressed) {
             //System.out.println("right");
-            if(player.getX() < world.getWidth()-1 && typeCheck(2)) {
-                player.incX();
-            } else if(player.getX() == world.getWidth()-1) {
+            if(player.getXPos() < world.getWidth()-1 && typeCheck(2)) {
+                player.incXPos();
+            } else if(player.getXPos() == world.getWidth()-1) {
                 changeMap(1);
             }
             keyPressed = true;
@@ -232,8 +231,8 @@ public class Application extends Canvas implements Runnable {
         } else if(KeyInput.isDown(0x27) && keyPressed) {
         } else if(KeyInput.isDown(0x28) && !keyPressed) {
             //System.out.println("down");
-            if(player.getY() < world.getHeight()-1 && typeCheck(3)) {
-                player.incY();
+            if(player.getYPos() < world.getHeight()-1 && typeCheck(3)) {
+                player.incYPos();
             }
             keyPressed = true;
 
@@ -251,9 +250,9 @@ public class Application extends Canvas implements Runnable {
 
         if(direction == 0) {
 
-            if(tiles[player.getX()-1][player.getY()].getType() != 1) {
+            if(tiles[player.getXPos()-1][player.getYPos()].getTileType() != 1) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getX() == player.getX() - 1 && npcs[n].getY() == player.getY()) {
+                    if (npcs[n].getXPos() == player.getXPos() - 1 && npcs[n].getYPos() == player.getYPos() && npcs[n].getPhysType() == 1) {
                         System.out.println(npcs[n].getDetails());
                         return false;
                     }
@@ -265,9 +264,9 @@ public class Application extends Canvas implements Runnable {
 
         } else if(direction == 1) {
 
-            if(tiles[player.getX()][player.getY()-1].getType() != 1) {
+            if(tiles[player.getXPos()][player.getYPos()-1].getTileType() != 1) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getX() == player.getX() && npcs[n].getY() == player.getY()-1) {
+                    if (npcs[n].getXPos() == player.getXPos() && npcs[n].getYPos() == player.getYPos()-1 && npcs[n].getPhysType() == 1) {
                         System.out.println(npcs[n].getDetails());
                         return false;
                     }
@@ -279,9 +278,9 @@ public class Application extends Canvas implements Runnable {
 
         } else if(direction == 2) {
 
-            if(tiles[player.getX()+1][player.getY()].getType() != 1) {
+            if(tiles[player.getXPos()+1][player.getYPos()].getTileType() != 1) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getX() == player.getX()+1 && npcs[n].getY() == player.getY()) {
+                    if (npcs[n].getXPos() == player.getXPos()+1 && npcs[n].getYPos() == player.getYPos() && npcs[n].getPhysType() == 1) {
                         System.out.println(npcs[n].getDetails());
                         return false;
                     }
@@ -293,9 +292,9 @@ public class Application extends Canvas implements Runnable {
 
         } else if(direction == 3) {
 
-            if(tiles[player.getX()][player.getY()+1].getType() != 1) {
+            if(tiles[player.getXPos()][player.getYPos()+1].getTileType() != 1) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getX() == player.getX() && npcs[n].getY() == player.getY()+1) {
+                    if (npcs[n].getXPos() == player.getXPos() && npcs[n].getYPos() == player.getYPos()+1 && npcs[n].getPhysType() == 1) {
                         System.out.println(npcs[n].getDetails());
                         return false;
                     }
@@ -308,50 +307,50 @@ public class Application extends Canvas implements Runnable {
         return false;
     }
 
-    public Color colourCheck(int x, int y) {
-        if(tiles[x][y].getInside().equals("▒")) {
+    private Color colourCheck(int x, int y) {
+        if(tiles[x][y].getTileInside().equals("▒")) {
             return Colour.DARK_GREY;
-        } else if(tiles[x][y].getInside().equals("n")) {
+        } else if(tiles[x][y].getTileInside().equals("n")) {
             return Colour.GREEN;
-        } else if(tiles[x][y].getInside().equals("H") || tiles[x][y].getInside().equals("S")){
+        } else if(tiles[x][y].getTileInside().equals("H") || tiles[x][y].getTileInside().equals("S")){
             return Colour.WHITE;
-        } else if(tiles[x][y].getInside().equals("w") || tiles[x][y].getInside().equals("W")) {
+        } else if(tiles[x][y].getTileInside().equals("w") || tiles[x][y].getTileInside().equals("W")) {
             return Colour.BLUE;
-        } else if(tiles[x][y].getInside().equals("E")) {
+        } else if(tiles[x][y].getTileInside().equals("E")) {
             return Colour.SADDLE_BROWN;
-        } else if(tiles[x][y].getInside().equals("B")) {
+        } else if(tiles[x][y].getTileInside().equals("B")) {
             return Colour.RED;
-        } else if(tiles[x][y].getInside().equals("D")) {
+        } else if(tiles[x][y].getTileInside().equals("D")) {
             return Colour.YELLOW;
         } else {
             return Colour.BLACK;
         }
     }
 
-    public void changeMap(int direction) {
+    private void changeMap(int direction) {
 
         if(direction == 1 && currentWorld+1 < world.mapsTotal()) {
-            int playerY = player.getY();
+            int playerYPos = player.getYPos();
 
             currentWorld++;
             baseWorld = new World(currentWorld);
             world = new World(currentWorld);
             tiles = world.getTiles();
 
-            player.setX(0);
-            player.setY(playerY);
+            player.setXPos(0);
+            player.setYPos(playerYPos);
         }
 
         if(direction == 0 && currentWorld > 0) {
-            int playerY = player.getY();
+            int playerYPos = player.getYPos();
 
             currentWorld--;
             baseWorld = new World(currentWorld);
             world = new World(currentWorld);
             tiles = world.getTiles();
 
-            player.setX(world.getWidth()-1);
-            player.setY(playerY);
+            player.setXPos(world.getWidth()-1);
+            player.setYPos(playerYPos);
         }
 
     }
