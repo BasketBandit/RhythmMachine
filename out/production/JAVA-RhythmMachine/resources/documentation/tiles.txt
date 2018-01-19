@@ -1,0 +1,14 @@
+Base
+
+n - Grass | Green | Can walk on
+w/W - Water | Blue | Can walk on
+E - Bank (Auto) | Brown | Can walk on
+B - Brick/Wall | Red | Can't walk on
+
+Player
+
+H - Player | White (will make customizable)
+
+NPCs
+
+S - Sheep | White | Can't walk on (haha)
