@@ -21,4 +21,14 @@ public class SineNode {
         return (int) Math.round(Math.sin(angle));
     }
 
+    // IN THE RENDER METHOD
+    // for(int j = 0; j < sineNodes.length; j++) {
+    //     grr.fill3DRect(j*5+30, 150, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
+    // }
+
+    // IN THE TICK METHOD
+    // for (int i = 0; i < sineNodes.length; i++) {
+    //     sineNodes[i].setAngle();
+    // }
+
 }

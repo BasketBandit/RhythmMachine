@@ -144,20 +144,10 @@ public class Application extends Canvas implements Runnable {
         grr = (Graphics2D) g;
 
         grr.setColor(Colour.WHITE);
-
-        grr.drawString(applicationRunTime + " Second(s)", 10, 20);
-        grr.drawString(framesPerSecondText, 10, 40);
-        grr.drawString(ticksPerSecondText, 10, 60);
-        grr.drawString(sineNodes[0].getAngle()+"",10,80);
-
-        grr.drawString(width + " x " + height, 200, 20);
-
-        for(int j = 0; j < sineNodes.length; j++) {
-            grr.fill3DRect(j*5+30, 150, 5, (int) Math.round(33 * sineNodes[j].getAngle()), true);
-        }
+        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + width + " x " + height, 10, 20);
 
         // Draw character information.
-        grr.drawString(player.getName(), 30, 205);
+        grr.drawString(player.getName(), 10, 60);
 
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
@@ -176,7 +166,7 @@ public class Application extends Canvas implements Runnable {
                 } else if(tiles[x][y].getInside().equals("S")) {
                     grr.setColor(Colour.WHITE);
                 }
-                grr.drawString(tiles[x][y].getInside() + "", 30 + (10 * x), 220 + (10 * y));
+                grr.drawString(tiles[x][y].getInside() + "", 10 + (10 * x), 80 + (10 * y));
 
             }
         }
@@ -188,10 +178,6 @@ public class Application extends Canvas implements Runnable {
     }
 
     private void tick() {
-        for (int i = 0; i < sineNodes.length; i++) {
-        sineNodes[i].setAngle();
-        }
-
         keyCheck();
 
         // Redraw the whole map.
