@@ -15,5 +15,6 @@ public class Colour {
     public static final Color GREEN = new Color(0x00ff00, false);
     public static final Color RED = new Color(0xff0000, false);
     public static final Color BLUE = new Color(0x0000ff, false);
+    public static final Color YELLOW = new Color(0xffff00, false);
 
 }

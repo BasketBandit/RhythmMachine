@@ -1,6 +1,6 @@
 package uk.co.codefreak.rhythmmachine.world;
 
-import uk.co.codefreak.rhythmmachine.object.Npc;
+import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 
 import java.io.*;
 
@@ -10,10 +10,10 @@ public class Map implements Serializable {
     private int width;
     private int height;
     private Tile[][] tiles;
-    private Npc[] npcs;
+    private NonPlayableCharacter[] npcs;
 
-    private int startX;
-    private int startY;
+    private int startPosX;
+    private int startPosY;
 
     public Map(String name) {
         try {
@@ -24,7 +24,7 @@ public class Map implements Serializable {
             this.setHeight(Integer.parseInt(in.readLine()));
             this.setStartPosX(Integer.parseInt(in.readLine()));
             this.setStartPosY(Integer.parseInt(in.readLine()));
-            this.npcs = new Npc[Integer.parseInt(in.readLine())];
+            this.npcs = new NonPlayableCharacter[Integer.parseInt(in.readLine())];
 
             this.tiles = new Tile[getWidth()][getHeight()];
 
@@ -40,7 +40,11 @@ public class Map implements Serializable {
                     if(s != 13 && s != 10) {
                         char c = (char) s;
                         String inside = Character.toString(c);
-                        this.tiles[x][y] = new Tile(inside);
+                        if(inside.equals("w")) {
+                            this.tiles[x][y] = new Tile(inside, 2);
+                        } else {
+                            this.tiles[x][y] = new Tile(inside);
+                        }
                     }
 
                 }
@@ -92,27 +96,27 @@ public class Map implements Serializable {
         this.tiles[x][y].setInside(inside);
     }
 
-    public Npc[] getNpcs() {
+    public NonPlayableCharacter[] getNpcs() {
         return this.npcs;
     }
 
-    public void setNpcs(Npc[] npcs) {
+    public void setNpcs(NonPlayableCharacter[] npcs) {
         this.npcs = npcs;
     }
 
     public int getStartPosX() {
-        return startX;
+        return startPosX;
     }
 
-    public void setStartPosX(int startX) {
-        this.startX = startX;
+    public void setStartPosX(int startPosX) {
+        this.startPosX = startPosX;
     }
 
     public int getStartPosY() {
-        return startY;
+        return startPosY;
     }
 
-    public void setStartPosY(int startY) {
-        this.startY = startY;
+    public void setStartPosY(int startPosY) {
+        this.startPosY = startPosY;
     }
 }

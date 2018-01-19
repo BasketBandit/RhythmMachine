@@ -31,4 +31,8 @@ It's no secret that that base awt colours are a little lacking when it comes to 
 
 ## Version controlling, increasing base size. (0.4.1)
 
-In an effort to become more professional with my work, despite having this log, (not dated) I've properly set up Git on my IDE which apparently, I hadn't done before. In relation to the game which has no name currently, I've increased default map size to 50x50. In the future, I hope to have non-standard map sizes and shapes... in fact as I'm writing this and thinking about how I'd do that, I can just add some kind of character that represents blank and colour it to the background colour. Look out for that in 0.6.0!
+In an effort to become more professional with my work, despite having this log, (not dated) I've properly set up Git on my IDE which apparently, I hadn't done before. In relation to the game which has no name currently, I've increased default map size to 50x50. In the future, I hope to have non-standard map sizes and shapes... in fact as I'm writing this and thinking about how I'd do that, I can just add some kind of character that represents blank and colour it to the background colour. Look out for that in 0.5.0!
+
+## Inventory, odd-maps and ducks. (0.5.0)
+
+I haven't been able to do much today due to lectures and such but what I have done is the following. I've started to set up the inventory system to the point where it exists and you can add/remove/shuffle items around. There just aren't many items yet. I've added ducks and refined where sheep can stand. I've also added the ability to create maps which aren't squares... are at least they appear that way. I changed the encoding type of the map files so I can use utf-8 and I use a dark-grey coloured '▒' as a kind of marker for blank spaces. Finally, I've added a spreadsheet with all the characters and the information surrounding them for obvious reasons.

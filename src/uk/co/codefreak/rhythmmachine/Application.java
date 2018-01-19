@@ -2,9 +2,8 @@ package uk.co.codefreak.rhythmmachine;
 
 import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
-import uk.co.codefreak.rhythmmachine.object.Npc;
+import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
-import uk.co.codefreak.rhythmmachine.other.SineNode;
 import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
@@ -16,8 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas implements Runnable {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.4.1";
-
+    private static final String version = "0.5.0";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.75);
     private int height = 580;
@@ -36,7 +34,6 @@ public class Application extends Canvas implements Runnable {
     private String ticksPerSecondText = "0 TPS";
     private int applicationRunTime = 0;
 
-    private SineNode[] sineNodes = new SineNode[(int)Math.round(width/5.4)];
     private Graphics2D grr;
 
     private boolean isRunning;
@@ -148,32 +145,34 @@ public class Application extends Canvas implements Runnable {
 
         grr = (Graphics2D) g;
 
+        // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
         grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height, 10, 20);
 
         // Draw character information.
-        grr.drawString(player.getName(), 600, 60);
+        grr.drawString("Inventory", 520, 40);
 
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-
-                if(tiles[x][y].getInside().equals("n")) {
-                    grr.setColor(Colour.GREEN);
-                } else if(tiles[x][y].getInside().equals("H")){
-                    grr.setColor(Colour.WHITE);
-                } else if(tiles[x][y].getInside().equals("w") || tiles[x][y].getInside().equals("W")) {
-                    grr.setColor(Colour.BLUE);
-                } else if(tiles[x][y].getInside().equals("E")) {
-                    grr.setColor(Colour.SADDLE_BROWN);
-                } else if(tiles[x][y].getInside().equals("B")) {
-                    grr.setColor(Colour.RED);
-                } else if(tiles[x][y].getInside().equals("S")) {
-                    grr.setColor(Colour.WHITE);
-                }
+                grr.setColor(colourCheck(x,y));
                 grr.drawString(tiles[x][y].getInside() + "", 10 + (10 * x), 40 + (10 * y));
-
             }
+        }
+
+        grr.setColor(Colour.WHITE);
+
+        int invX = 0; int invY = 0;
+        for(int inv = 0; inv < player.getInventory().length; inv++) {
+            grr.drawString(player.getInventoryItem(inv).toString(),520 + (40 * invX),60 + (40 * invY));
+
+            invX++;
+
+            if(invX == 4) {
+                invX = 0;
+                invY++;
+            }
+
         }
 
         //////////////////////////////////
@@ -185,7 +184,7 @@ public class Application extends Canvas implements Runnable {
     private void tick() {
         keyCheck();
 
-        // Redraw the whole map.
+        // Reset the whole map.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
                 tiles[x][y].setInside(baseWorld.getTile(x,y).getInside()) ;
@@ -195,12 +194,14 @@ public class Application extends Canvas implements Runnable {
         // Update dynamic objects and draw.
         world.update(player.getX(), player.getY());
 
-        // Draw player position.
+        // Set player position.
         tiles[player.getX()][player.getY()].setInside("H");
-
     }
 
     private void keyCheck() {
+
+        // Arrow keys
+
         if(KeyInput.isDown(0x25) && !keyPressed) {
             //System.out.println("left");
             if(player.getX() > 0 && typeCheck(0)) {
@@ -211,7 +212,6 @@ public class Application extends Canvas implements Runnable {
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x25) && keyPressed) {
-
         } else if(KeyInput.isDown(0x26) && !keyPressed) {
             //System.out.println("up");
             if(player.getY() > 0 && typeCheck(1)) {
@@ -220,7 +220,6 @@ public class Application extends Canvas implements Runnable {
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x26) && keyPressed) {
-
         } else if(KeyInput.isDown(0x27) && !keyPressed) {
             //System.out.println("right");
             if(player.getX() < world.getWidth()-1 && typeCheck(2)) {
@@ -231,7 +230,6 @@ public class Application extends Canvas implements Runnable {
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x27) && keyPressed) {
-
         } else if(KeyInput.isDown(0x28) && !keyPressed) {
             //System.out.println("down");
             if(player.getY() < world.getHeight()-1 && typeCheck(3)) {
@@ -240,9 +238,6 @@ public class Application extends Canvas implements Runnable {
             keyPressed = true;
 
         } else if(KeyInput.isDown(0x28) && keyPressed) {
-
-
-
         } else {
             keyPressed = false;
         }
@@ -252,7 +247,7 @@ public class Application extends Canvas implements Runnable {
         // Directions: 0 -> Left, 1 -> Up, 2 -> Right, 3 -> Down.
         // NOTE: ONCE IDS ARE IMPLEMENTED CHECK BY ID AND NOT ARRAY POS
 
-        Npc[] npcs = world.getNpcs();
+        NonPlayableCharacter[] npcs = world.getNpcs();
 
         if(direction == 0) {
 
@@ -313,6 +308,26 @@ public class Application extends Canvas implements Runnable {
         return false;
     }
 
+    public Color colourCheck(int x, int y) {
+        if(tiles[x][y].getInside().equals("▒")) {
+            return Colour.DARK_GREY;
+        } else if(tiles[x][y].getInside().equals("n")) {
+            return Colour.GREEN;
+        } else if(tiles[x][y].getInside().equals("H") || tiles[x][y].getInside().equals("S")){
+            return Colour.WHITE;
+        } else if(tiles[x][y].getInside().equals("w") || tiles[x][y].getInside().equals("W")) {
+            return Colour.BLUE;
+        } else if(tiles[x][y].getInside().equals("E")) {
+            return Colour.SADDLE_BROWN;
+        } else if(tiles[x][y].getInside().equals("B")) {
+            return Colour.RED;
+        } else if(tiles[x][y].getInside().equals("D")) {
+            return Colour.YELLOW;
+        } else {
+            return Colour.BLACK;
+        }
+    }
+
     public void changeMap(int direction) {
 
         if(direction == 1 && currentWorld+1 < world.mapsTotal()) {
@@ -342,16 +357,6 @@ public class Application extends Canvas implements Runnable {
     }
 
     private void frameInit(Application ex) {
-
-        for(int i = 0; i < sineNodes.length; i++) {
-            sineNodes[i] = new SineNode();
-            for(int x = 0; x < i; x++) {
-                sineNodes[i].setAngle();
-                sineNodes[i].setAngle();
-                sineNodes[i].setAngle();
-            }
-        }
-
         frame.add(ex);
         frame.setSize(width, height);
         frame.setResizable(false);

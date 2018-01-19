@@ -1,7 +1,5 @@
 package uk.co.codefreak.rhythmmachine.other;
 
-import java.util.*;
-
 public class SineNode {
 
     private double angle = 0.0;
@@ -20,6 +18,16 @@ public class SineNode {
     public int getAngleInt() {
         return (int) Math.round(Math.sin(angle));
     }
+
+    // IN FRAME INIT
+    // for(int i = 0; i < sineNodes.length; i++) {
+    //    sineNodes[i] = new SineNode();
+    //    for(int x = 0; x < i; x++) {
+    //        sineNodes[i].setAngle();
+    //        sineNodes[i].setAngle();
+    //        sineNodes[i].setAngle();
+    //    }
+    // }
 
     // IN THE RENDER METHOD
     // for(int j = 0; j < sineNodes.length; j++) {

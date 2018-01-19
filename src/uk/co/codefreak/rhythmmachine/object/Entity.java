@@ -81,4 +81,8 @@ public class Entity {
         yPos--;
     }
 
+    public String toString() {
+        return name;
+    }
+
 }

@@ -8,13 +8,18 @@ public class Tile implements Serializable {
     private int type = 0;
 
     public Tile() {
-        this.inside = "0";
+        this.inside = "▒";
         this.type = 0;
     }
 
     public Tile(String inside) {
         this.inside = inside;
         this.type = 0;
+    }
+
+    public Tile(String inside, int type) {
+        this.inside = inside;
+        this.type = type;
     }
 
     public void setInside(String inside) {

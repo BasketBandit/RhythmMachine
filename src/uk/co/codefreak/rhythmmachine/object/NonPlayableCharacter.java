@@ -2,12 +2,12 @@ package uk.co.codefreak.rhythmmachine.object;
 
 import java.util.Random;
 
-public class Npc extends Entity {
+public class NonPlayableCharacter extends Entity {
 
-    // NPC Type -> 0 = Sheep, 1 = Cow, etc.
+    // NPC Type -> 0 = Sheep, 1 = Duck, etc.
     private int npcType;
 
-    public Npc(int xPos, int yPos, int npcType) {
+    public NonPlayableCharacter(int xPos, int yPos, int npcType) {
         this.setX(xPos);
         this.setY(yPos);
         this.setName(new Random().nextInt(1001)+"");
@@ -30,7 +30,8 @@ public class Npc extends Entity {
         switch(npcType) {
             case 0: string += "Sheep ";
             break;
-
+            case 1: string += "Duck ";
+            break;
             default: string += "ERR";
         }
 
@@ -42,6 +43,7 @@ public class Npc extends Entity {
     public String toString() {
         switch(npcType) {
             case 0: return "S";
+            case 1: return "D";
             default: return "ERR";
         }
     }
