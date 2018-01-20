@@ -43,8 +43,13 @@ public class Map implements Serializable {
 
     private void initTiles(BufferedReader in) {
         try {
+            boolean flip = true;
+
             for(int y = 0; y < getHeight(); y++) {
+                flip = !flip;
+
                 for (int x = 0; x < getWidth(); x++) {
+                    flip = !flip;
 
                     int s = in.read();
 
@@ -56,11 +61,21 @@ public class Map implements Serializable {
                         char c = (char) s;
                         String character = Character.toString(c);
                         if(character.equals("n")) {
-                            this.tiles[x][y] = new Tile(character, 0, Colour.GREEN_BB);
+                            this.tiles[x][y] = (flip) ? new Tile(character, 0, Colour.GREEN_BB) : new Tile(character, 0, Colour.GREEN_99);
                         } else if(character.equals("w")) {
                             this.tiles[x][y] = new Tile(character, 2, Colour.BLUE_BB);
                         } else if(character.equals("B")) {
                             this.tiles[x][y] = new Tile(character, 1, Colour.RED_BB);
+                        } else if(character.equals("c")) {
+                            this.tiles[x][y] = new Tile(character, 0, Colour.GREY_70);
+                        } else if(character.equals("@")) {
+                            this.tiles[x][y] = new Tile(character, 0, Colour.GREY_D0);
+                        } else if(character.equals("K")) {
+                            this.tiles[x][y] = new Tile(character, 1, Colour.GREY_30);
+                        } else if(character.equals("O")) {
+                            this.tiles[x][y] = new Tile(character, 1, Colour.GREY_70);
+                        } else if(character.equals("X")) {
+                            this.tiles[x][y] = new Tile(character, 0, Colour.WHITE);
                         } else {
                             this.tiles[x][y] = new Tile();
                         }

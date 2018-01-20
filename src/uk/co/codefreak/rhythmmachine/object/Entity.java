@@ -1,6 +1,9 @@
 package uk.co.codefreak.rhythmmachine.object;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Entity {
 
@@ -91,6 +94,15 @@ public class Entity {
 
     public void decYPos() {
         yPos--;
+    }
+
+    private String randomName() {
+        try(BufferedReader br = new BufferedReader(new FileReader("src/resources/textfiles/names.txt"))) {
+            return br.readLine();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return "John";
     }
 
     public String toString() {

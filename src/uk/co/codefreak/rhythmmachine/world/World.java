@@ -12,6 +12,8 @@ public class World {
     private Map map;
     private NonPlayableCharacter[] npcs;
 
+    private String notification = "";
+
     private boolean initialised = false;
 
     public World(int world) {
@@ -26,23 +28,28 @@ public class World {
     private void initNpcs() {
         for(int i = 0; i < npcs.length; i++) {
             // Randomly select the location and which NPCs are spawned.
-            int rand = new Random().nextInt(2);
-            int x = new Random().nextInt(50);
-            int y = new Random().nextInt(50);
+            int rand = new Random().nextInt(3);
+            int x = new Random().nextInt(60);
+            int y = new Random().nextInt(60);
 
             if(rand == 0) {
                 while(getTile(x,y).getTileType() == 1 || getTile(x,y).getTileType() == 2 || getTile(x,y).containsNpc()) {
-                    x = new Random().nextInt(50);
-                    y = new Random().nextInt(50);
+                    x = new Random().nextInt(60);
+                    y = new Random().nextInt(60);
                 }
-
                 npcs[i] = new NonPlayableCharacter(x,y,0);
-            } else {
+            } else if(rand == 1) {
                 while(getTile(x,y).getTileType() == 1 || getTile(x,y).containsNpc()) {
-                    x = new Random().nextInt(50);
-                    y = new Random().nextInt(50);
+                    x = new Random().nextInt(60);
+                    y = new Random().nextInt(60);
                 }
                 npcs[i] = new NonPlayableCharacter(x, y, 1);
+            } else {
+                while(getTile(x,y).getTileType() == 1 || getTile(x,y).getTileType() == 2 || getTile(x,y).containsNpc()) {
+                    x = new Random().nextInt(60);
+                    y = new Random().nextInt(60);
+                }
+                npcs[i] = new NonPlayableCharacter(x,y,2);
             }
         }
         this.initialised = true;
@@ -53,24 +60,24 @@ public class World {
         // Water ripple
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
-                if(map.getTile(x,y).isWater() && ticksPerSecond % 3 == 0) {
+                if(map.getTile(x,y).isWater() && ticksPerSecond % 15 == 0) {
                     map.getTile(x,y).setTileColour(Colour.randomBlue());
                 }
             }
         }
 
-        // Dynamically set the waters edge to E.
+        // Dynamically set the waters edge to e.
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
-                if (map.getTile(x,y).getTileCharacter().equals("w")) {
-                    if (x + 1 < map.getWidth() && !map.getTile(x + 1, y).getTileCharacter().equals("w") && !map.getTile(x + 1, y).getTileCharacter().equals("E")) {
-                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
-                    } else if (x - 1 > -1 && !map.getTile(x - 1, y).getTileCharacter().equals("w") && !map.getTile(x - 1, y).getTileCharacter().equals("E")) {
-                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
-                    } else if (y - 1 > -1 && !map.getTile(x, y - 1).getTileCharacter().equals("w") && !map.getTile(x, y - 1).getTileCharacter().equals("E")) {
-                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
-                    } else if (y + 1 < map.getHeight() && !map.getTile(x, y + 1).getTileCharacter().equals("w") && !map.getTile(x, y + 1).getTileCharacter().equals("E")) {
-                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
+                if (map.getTile(x,y).isWater()) {
+                    if (x + 1 < map.getWidth() && !map.getTile(x + 1, y).isWater() && !map.getTile(x + 1, y).getTileCharacter().equals("e") && !map.getTile(x + 1, y).getTileCharacter().equals("@")) {
+                        map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
+                    } else if (x - 1 > -1 && !map.getTile(x - 1, y).isWater() && !map.getTile(x - 1, y).getTileCharacter().equals("e") && !map.getTile(x - 1, y).getTileCharacter().equals("@")) {
+                        map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
+                    } else if (y - 1 > -1 && !map.getTile(x, y - 1).isWater() && !map.getTile(x, y - 1).getTileCharacter().equals("e") && !map.getTile(x, y - 1).getTileCharacter().equals("@")) {
+                        map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
+                    } else if (y + 1 < map.getHeight() && !map.getTile(x, y + 1).isWater() && !map.getTile(x, y + 1).getTileCharacter().equals("e") && !map.getTile(x, y + 1).getTileCharacter().equals("@")) {
+                        map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
                     }
                 }
             }
@@ -99,37 +106,35 @@ public class World {
 
     private boolean posCheck(int direction, int a, int playerXPos, int playerYPos) {
 
-        int npcType = npcs[a].getNpcType();
-
         if(direction == 0) {
             if(npcs[a].getXPos()-1 == playerXPos && npcs[a].getYPos() == playerYPos) {
             } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).getTileType() == 1) {
-            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).getTileType() == 2 && npcType == 0) {
+            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).isSolid()) {
+            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).isWater() && !npcs[a].canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 1) {
             if(npcs[a].getXPos() == playerXPos && npcs[a].getYPos()-1 == playerYPos) {
             } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).getTileType() == 1) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).getTileType() == 2 && npcType == 0) {
+            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).isSolid()) {
+            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).isWater() && !npcs[a].canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 2) {
             if(npcs[a].getXPos()+1 == playerXPos && npcs[a].getYPos() == playerYPos) {
             } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).getTileType() == 1) {
-            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).getTileType() == 2 && npcType == 0) {
+            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).isSolid()) {
+            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).isWater() && !npcs[a].canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 3) {
             if(npcs[a].getXPos() == playerXPos && npcs[a].getYPos()+1 == playerYPos) {
             } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).getTileType() == 1) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).getTileType() == 2 && npcType == 0) {
+            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).isSolid()) {
+            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).isWater() && !npcs[a].canSwim()) {
             } else {
                 return true;
             }
@@ -178,5 +183,13 @@ public class World {
 
     public int getStartYPos() {
         return map.getStartYPos();
+    }
+
+    public String getNotification() {
+        return notification;
+    }
+
+    public void setNotification(String text) {
+        this.notification = text;
     }
 }

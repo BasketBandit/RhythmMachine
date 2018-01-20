@@ -57,6 +57,7 @@ public class Tile implements Serializable {
         switch(tileCharacter) {
             case "S":
             case "D":
+            case "M":
                 return true;
             default: return false;
         }
@@ -68,6 +69,14 @@ public class Tile implements Serializable {
 
     public boolean isWater() {
         return tileCharacter.equals("w");
+    }
+
+    public boolean isDoor() {
+        return tileCharacter.equals("X");
+    }
+
+    public boolean isSolid() {
+        return tileType == 1;
     }
 
     public String toString() {

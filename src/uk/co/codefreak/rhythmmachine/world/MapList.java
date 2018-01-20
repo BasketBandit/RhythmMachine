@@ -1,7 +1,11 @@
 package uk.co.codefreak.rhythmmachine.world;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,12 +13,9 @@ public class MapList implements Serializable {
 
     private Path path = Paths.get("src/resources/maps");
     private ArrayList<Map> maps;
-    private MapSerialize serialize;
 
     public MapList() {
-        // Changing the path is as simple as putting a file path in a settings file and then reading and setting before calling findMaps()
         maps = new ArrayList<>();
-        serialize = new MapSerialize();
         findMaps();
     }
 
@@ -25,7 +26,7 @@ public class MapList implements Serializable {
             while(it.hasNext()) {
                 String pathString = it.next().toString();
                 Path pathPath = Paths.get(pathString);
-                Map map = serialize.unserialize(pathPath);
+                Map map = new MapSerialize().unserialize(pathPath);
                 maps.add(map);
                 mapsFound++;
             }
