@@ -8,6 +8,7 @@ public class Colour {
     public static final Color WHITE = new Color(0xffffff, false);
     public static final Color GREY_E0 = new Color(0xe0e0e0, false);
     public static final Color GREY_D0 = new Color(0xd0d0d0, false);
+    public static final Color GREY_B0 = new Color(0xb0b0b0, false);
     public static final Color GREY_70 = new Color(0x707070, false);
     public static final Color GREY_40 = new Color(0x404040, false);
     public static final Color GREY_30 = new Color(0x303030, false);

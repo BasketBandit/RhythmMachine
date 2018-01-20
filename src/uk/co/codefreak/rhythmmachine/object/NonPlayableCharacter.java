@@ -33,10 +33,6 @@ public class NonPlayableCharacter extends Entity {
         }
     }
 
-    public int getNpcType() {
-        return this.npcType;
-    }
-
     public void setNpcType(int npcType) {
         this.npcType = npcType;
     }

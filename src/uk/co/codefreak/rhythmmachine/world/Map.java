@@ -69,7 +69,7 @@ public class Map implements Serializable {
                         } else if(character.equals("c")) {
                             this.tiles[x][y] = new Tile(character, 0, Colour.GREY_70);
                         } else if(character.equals("@")) {
-                            this.tiles[x][y] = new Tile(character, 0, Colour.GREY_D0);
+                            this.tiles[x][y] = new Tile(character, 0, Colour.GREY_B0);
                         } else if(character.equals("K")) {
                             this.tiles[x][y] = new Tile(character, 1, Colour.GREY_30);
                         } else if(character.equals("O")) {
@@ -95,7 +95,7 @@ public class Map implements Serializable {
         return this.name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -103,7 +103,7 @@ public class Map implements Serializable {
         return this.width;
     }
 
-    public void setWidth(int width) {
+    private void setWidth(int width) {
         this.width = width;
     }
 
@@ -111,7 +111,7 @@ public class Map implements Serializable {
         return this.height;
     }
 
-    public void setHeight(int height) {
+    private void setHeight(int height) {
         this.height = height;
     }
 

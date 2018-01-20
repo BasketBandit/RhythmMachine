@@ -64,7 +64,7 @@ public class Tile implements Serializable {
     }
 
     public boolean containsPlayer() {
-        return tileCharacter.equals("H");
+        return tileCharacter.equals("λ");
     }
 
     public boolean isWater() {
@@ -77,6 +77,15 @@ public class Tile implements Serializable {
 
     public boolean isSolid() {
         return tileType == 1;
+    }
+
+    public boolean causesShoreline() {
+        switch(tileCharacter) {
+            case "e":
+            case "@":
+                return false;
+            default: return true;
+        }
     }
 
     public String toString() {

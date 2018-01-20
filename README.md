@@ -1,12 +1,16 @@
-# JAVA-RhythmMachine
+# JAVA-RhythmMachine (0.6.1)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
 
+## Lambda, further cleaning, further refactoring. (0.6.1)
+
+Before I continue, I must mention that each of the previous update notes doesn't include everything that has been done, merely what I can remember at the time. However, this time I have just been doing some more refactoring where I can, various bits of code cleanup and important comments to try and keep things organised as I reach the point where I can't just glance and understand exactly what is going on. I've also changed Application.java from implementing Runnable and instead used a runnable lambda function.
+
 ## Bridges, paths, further map extension and readable code. (0.6.0)
 
-Quite a lot has been added today. These things are: bridges, cows, paths, windows and entrances (can go inside building). I've changed banks to a lower case E (e) because it looks softer which in this case is better. I've added more colours, and tried to texture the grass in whichever ways I could. I've also extended the map size from 50x50 to 60x60 and have changed the font size/spacing to give the game a better look. An relatively important thing I have started also doing with my refactoring is making methods name that you can read and make logical sense. For example, instead of doing something like if(npc.getNpcType == 1), it is now if(npc.canSwim()) which is much better!
+Quite a lot has been added today. These things are: bridges, cows, paths, windows and entrances (can go inside building). I've changed banks to a lower case E (e) because it looks softer which in this case is better. I've added more colours, and tried to texture the grass in whichever ways I could. I've also extended the map size from 50x50 to 60x60 and have changed the font size/spacing to give the game a better look. A relatively important thing I have started also doing with my refactoring is making methods name that you can read and make logical sense. For example, instead of doing something like if(npc.getNpcType == 1), it is now if(npc.canSwim()) which is much better!
 
 ## Heavy refactoring, almost destroying everything. (0.5.3)
 

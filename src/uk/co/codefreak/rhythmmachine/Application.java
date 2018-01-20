@@ -12,10 +12,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class Application extends Canvas implements Runnable {
+public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.6.0";
+    private static final String version = "0.6.1";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -35,8 +35,8 @@ public class Application extends Canvas implements Runnable {
     private int ticksPerSecondNumber = 0;
     private int applicationRunTime = 0;
 
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    Font[] fonts = ge.getAllFonts();
+    private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private Font[] fonts = ge.getAllFonts();
 
     private boolean isRunning;
     private boolean keyPressed = false;
@@ -44,7 +44,7 @@ public class Application extends Canvas implements Runnable {
     private void start() {
         if(isRunning) return;
         isRunning = true;
-        new Thread(this, "application-thread").start();
+        new Thread(run, "application-thread").start();
         // new Thread(this, "application-thread2").start(); // -> If you uncomment this, shit hits the fan.
     }
 
@@ -53,12 +53,10 @@ public class Application extends Canvas implements Runnable {
         isRunning = false;
     }
 
-    @Override
-    public void run() {
+    private Runnable run = () -> {
         System.out.println("Running...");
 
         worldInit();
-
         frameInit(this);
 
         int refreshRate = 60; // Capped framerate.
@@ -110,7 +108,7 @@ public class Application extends Canvas implements Runnable {
                 applicationRunTime++;
             }
         }
-    }
+    };
 
     private void render() {
         BufferStrategy bs = getBufferStrategy();
@@ -177,7 +175,7 @@ public class Application extends Canvas implements Runnable {
         }
 
         world.update(player.getXPos(), player.getYPos(), ticksPerSecondNumber); // Update dynamic objects and draw.
-        tiles[player.getXPos()][player.getYPos()].setTileCharacter("H"); // Set player position.
+        tiles[player.getXPos()][player.getYPos()].setTileCharacter("λ"); // Set player position.
     }
 
     private void keyCheck(int x, int y) {
@@ -224,40 +222,40 @@ public class Application extends Canvas implements Runnable {
         NonPlayableCharacter[] npcs = world.getNpcs();
 
         if(direction == 0) {
-            if(tiles[x-1][y].getTileType() != 1) {
+            if(!tiles[x-1][y].isSolid() && !tiles[x-1][y].isWater()) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x - 1 && npcs[n].getYPos() == y && npcs[n].getPhysType() == 1) {
-                        System.out.println(npcs[n].getDetails());
+                    if (npcs[n].getXPos() == x - 1 && npcs[n].getYPos() == y && npcs[n].isSolid()) {
+                        world.setNotification(npcs[n].getDetails());
                         return false;
                     }
                 }
                 return true;
             }
         } else if(direction == 1) {
-            if(tiles[x][y-1].getTileType() != 1) {
+            if(!tiles[x][y-1].isSolid() && !tiles[x][y-1].isWater()) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y-1 && npcs[n].getPhysType() == 1) {
-                        System.out.println(npcs[n].getDetails());
+                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y-1 && npcs[n].isSolid()) {
+                        world.setNotification(npcs[n].getDetails());
                         return false;
                     }
                 }
                 return true;
             }
         } else if(direction == 2) {
-            if(tiles[x+1][y].getTileType() != 1) {
+            if(!tiles[x+1][y].isSolid() && !tiles[x+1][y].isWater()) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x+1 && npcs[n].getYPos() == y && npcs[n].getPhysType() == 1) {
-                        System.out.println(npcs[n].getDetails());
+                    if (npcs[n].getXPos() == x+1 && npcs[n].getYPos() == y && npcs[n].isSolid()) {
+                        world.setNotification(npcs[n].getDetails());
                         return false;
                     }
                 }
                 return true;
             }
         } else if(direction == 3) {
-            if(tiles[x][y+1].getTileType() != 1) {
+            if(!tiles[x][y+1].isSolid() && !tiles[x][y+1].isWater()) {
                 for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y+1 && npcs[n].getPhysType() == 1) {
-                        System.out.println(npcs[n].getDetails());
+                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y+1 && npcs[n].isSolid()) {
+                        world.setNotification(npcs[n].getDetails());
                         return false;
                     }
                 }
@@ -325,11 +323,8 @@ public class Application extends Canvas implements Runnable {
     }
 
     public static void main(String[] args) {
-        MapSerialize ms = new MapSerialize();
-        ms.serializeAll("src/resources/maps/","world_");
-
-        Application ex = new Application();
-        ex.start();
+        new MapSerialize().serializeAll("src/resources/maps/","world_");
+        new Application().start();
     }
 
 }

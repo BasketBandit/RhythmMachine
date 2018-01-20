@@ -70,13 +70,13 @@ public class World {
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 if (map.getTile(x,y).isWater()) {
-                    if (x + 1 < map.getWidth() && !map.getTile(x + 1, y).isWater() && !map.getTile(x + 1, y).getTileCharacter().equals("e") && !map.getTile(x + 1, y).getTileCharacter().equals("@")) {
+                    if (x + 1 < map.getWidth() && !map.getTile(x + 1, y).isWater() && map.getTile(x + 1, y).causesShoreline()) {
                         map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
-                    } else if (x - 1 > -1 && !map.getTile(x - 1, y).isWater() && !map.getTile(x - 1, y).getTileCharacter().equals("e") && !map.getTile(x - 1, y).getTileCharacter().equals("@")) {
+                    } else if (x - 1 > -1 && !map.getTile(x - 1, y).isWater() && map.getTile(x - 1, y).causesShoreline()) {
                         map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
-                    } else if (y - 1 > -1 && !map.getTile(x, y - 1).isWater() && !map.getTile(x, y - 1).getTileCharacter().equals("e") && !map.getTile(x, y - 1).getTileCharacter().equals("@")) {
+                    } else if (y - 1 > -1 && !map.getTile(x, y - 1).isWater() && map.getTile(x, y - 1).causesShoreline()) {
                         map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
-                    } else if (y + 1 < map.getHeight() && !map.getTile(x, y + 1).isWater() && !map.getTile(x, y + 1).getTileCharacter().equals("e") && !map.getTile(x, y + 1).getTileCharacter().equals("@")) {
+                    } else if (y + 1 < map.getHeight() && !map.getTile(x, y + 1).isWater() && map.getTile(x, y + 1).causesShoreline()) {
                         map.getTile(x,y).setTileInternals("e", 0, Colour.SADDLE_BROWN);
                     }
                 }

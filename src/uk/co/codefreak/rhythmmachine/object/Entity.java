@@ -72,6 +72,10 @@ public class Entity {
         this.physType = physType;
     }
 
+    public boolean isSolid() {
+        return physType == 1;
+    }
+
     public void setXPos(int pos) {
         xPos = pos;
     }

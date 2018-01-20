@@ -30,7 +30,6 @@ public class Player extends Entity {
         }
     }
 
-
     // Inventory
 
     public Item[] getInventory() {
@@ -49,6 +48,15 @@ public class Player extends Entity {
         Item temp = inventory[slot2];
         inventory[slot2] = inventory[slot1];
         inventory[slot1] = temp;
+    }
+
+    public boolean hasItem(Item requestedItem) {
+        for(Item item: inventory) {
+            if(item == requestedItem) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void removeInventory(int slot) {
