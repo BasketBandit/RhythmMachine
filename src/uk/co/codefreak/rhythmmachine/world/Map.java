@@ -1,5 +1,6 @@
 package uk.co.codefreak.rhythmmachine.world;
 
+import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 
 import java.io.*;
@@ -28,27 +29,7 @@ public class Map implements Serializable {
 
             this.tiles = new Tile[getWidth()][getHeight()];
 
-            for(int y = 0; y < getHeight(); y++) {
-                for(int x = 0; x < getWidth(); x++) {
-
-                    int s = in.read();
-
-                    while(s == 13 || s == 10) {
-                        s = in.read();
-                    }
-
-                    if(s != 13 && s != 10) {
-                        char c = (char) s;
-                        String inside = Character.toString(c);
-                        if(inside.equals("w")) {
-                            this.tiles[x][y] = new Tile(inside, 2);
-                        } else {
-                            this.tiles[x][y] = new Tile(inside);
-                        }
-                    }
-
-                }
-            }
+            initTiles(in);
 
         }
         catch (FileNotFoundException e) {
@@ -57,6 +38,39 @@ public class Map implements Serializable {
         }
         catch (IOException e) {
             System.exit(2);
+        }
+    }
+
+    private void initTiles(BufferedReader in) {
+        try {
+            for(int y = 0; y < getHeight(); y++) {
+                for (int x = 0; x < getWidth(); x++) {
+
+                    int s = in.read();
+
+                    while(s == 13 || s == 10) {
+                        s = in.read();
+                    }
+
+                    if (s != 13 && s != 10) {
+                        char c = (char) s;
+                        String character = Character.toString(c);
+                        if(character.equals("n")) {
+                            this.tiles[x][y] = new Tile(character, 0, Colour.GREEN_BB);
+                        } else if(character.equals("w")) {
+                            this.tiles[x][y] = new Tile(character, 2, Colour.BLUE_BB);
+                        } else if(character.equals("B")) {
+                            this.tiles[x][y] = new Tile(character, 1, Colour.RED_BB);
+                        } else {
+                            this.tiles[x][y] = new Tile();
+                        }
+                    }
+
+                }
+
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -94,8 +108,8 @@ public class Map implements Serializable {
         return this.tiles[x][y];
     }
 
-    public void setTiles(int x, int y, String tileInside) {
-        this.tiles[x][y].setTileInside(tileInside);
+    public void setTiles(int x, int y, String tileCharacter) {
+        this.tiles[x][y].setTileCharacter(tileCharacter);
     }
 
     public NonPlayableCharacter[] getNpcs() {

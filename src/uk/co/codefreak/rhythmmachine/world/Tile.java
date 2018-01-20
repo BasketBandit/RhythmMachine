@@ -1,33 +1,34 @@
 package uk.co.codefreak.rhythmmachine.world;
 
+import uk.co.codefreak.rhythmmachine.colour.Colour;
+
+import java.awt.*;
 import java.io.Serializable;
 
 public class Tile implements Serializable {
 
-    private String tileInside = "0";
+    private String tileCharacter = "0";
+    private Color tileColour = null;
     private int tileType = 0;
 
     public Tile() {
-        this.tileInside = "▒";
+        this.tileCharacter = "▒";
+        this.tileColour = Colour.GREY_40;
         this.tileType = 0;
     }
 
-    public Tile(String inside) {
-        this.tileInside = inside;
-        this.tileType = 0;
-    }
-
-    public Tile(String inside, int type) {
-        this.tileInside = inside;
+    public Tile(String character, int type, Color colour) {
+        this.tileCharacter = character;
         this.tileType = type;
+        this.tileColour = colour;
     }
 
-    public void setTileInside(String inside) {
-        this.tileInside = inside;
+    public void setTileCharacter(String character) {
+        this.tileCharacter = character;
     }
 
-    public String getTileInside() {
-        return tileInside;
+    public String getTileCharacter() {
+        return tileCharacter;
     }
 
     public void setTileType(int tileType) {
@@ -38,8 +39,22 @@ public class Tile implements Serializable {
         return tileType;
     }
 
+    public void setTileColour(Color colour) {
+        this.tileColour = colour;
+    }
+
+    public void setTileInternals(String character, int type, Color colour) {
+        this.tileCharacter = character;
+        this.tileType = type;
+        this.tileColour = colour;
+    }
+
+    public Color getTileColour() {
+        return tileColour;
+    }
+
     public boolean containsNpc() {
-        switch(tileInside) {
+        switch(tileCharacter) {
             case "S":
             case "D":
                 return true;
@@ -47,8 +62,16 @@ public class Tile implements Serializable {
         }
     }
 
+    public boolean containsPlayer() {
+        return tileCharacter.equals("H");
+    }
+
+    public boolean isWater() {
+        return tileCharacter.equals("w");
+    }
+
     public String toString() {
-        return tileInside;
+        return tileCharacter;
     }
 
 }

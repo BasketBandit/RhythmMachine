@@ -1,5 +1,6 @@
 package uk.co.codefreak.rhythmmachine.world;
 
+import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 
 import java.util.Random;
@@ -14,14 +15,12 @@ public class World {
     private boolean initialised = false;
 
     public World(int world) {
-
         this.maps = new MapList();
         this.map = maps.getMap(world);
         this.npcs = map.getNpcs();
 
-        update(0,0);
+        update(0,0, 0);
         initNpcs();
-        initTypes();
     }
 
     private void initNpcs() {
@@ -49,47 +48,29 @@ public class World {
         this.initialised = true;
     }
 
-    private void initTypes() {
-        for(int x = 0; x < map.getWidth(); x++) {
-            for(int y = 0; y < map.getHeight(); y++) {
+    public void update(int playerXPos, int playerYPos, int ticksPerSecond) {
 
-                // If wall, make solid.
-                String s = map.getTile(x,y).getTileInside();
-                if(s.equals("B") || s.equals("▒")) {
-                    map.getTile(x,y).setTileType(1);
-                }
-
-            }
-        }
-    }
-
-    public void update(int playerXPos, int playerYPos) {
-
-        // Give the water a ripple effect using Random(). (It looks really nice!)
-        for(int x = 0; x < map.getWidth(); x++) {
-            for(int y = 0; y < map.getHeight(); y++) {
-                if(new Random().nextInt(15) == 1 && map.getTile(x,y).getTileInside().equals("w")) {
-                    map.getTile(x,y).setTileInside("W");
+        // Water ripple
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+                if(map.getTile(x,y).isWater() && ticksPerSecond % 3 == 0) {
+                    map.getTile(x,y).setTileColour(Colour.randomBlue());
                 }
             }
         }
 
         // Dynamically set the waters edge to E.
-        for(int x = 0; x < map.getWidth(); x++) {
-            for(int y = 0; y < map.getHeight(); y++) {
-                if(map.getTile(x,y).getTileInside().equals("w") || map.getTile(x,y).getTileInside().equals("W")) {
-                    if (x + 1 < map.getWidth() && !map.getTile(x+1,y).getTileInside().equals("w") && !map.getTile(x+1,y).getTileInside().equals("W") && !map.getTile(x+1,y).getTileInside().equals("E")) {
-                        map.getTile(x,y).setTileInside("E");
-                    } else if (x - 1 > -1 && !map.getTile(x-1,y).getTileInside().equals("w") && !map.getTile(x-1,y).getTileInside().equals("W") && !map.getTile(x-1,y).getTileInside().equals("E")) {
-                        map.getTile(x,y).setTileInside("E");
-                    } else if (y - 1 > -1 && !map.getTile(x,y-1).getTileInside().equals("w") && !map.getTile(x,y-1).getTileInside().equals("W") && !map.getTile(x,y-1).getTileInside().equals("E")) {
-                        map.getTile(x,y).setTileInside("E");
-                    } else if (y + 1 < map.getHeight() && !map.getTile(x,y+1).getTileInside().equals("w") && !map.getTile(x,y+1).getTileInside().equals("W") && !map.getTile(x,y+1).getTileInside().equals("E")) {
-                        map.getTile(x,y).setTileInside("E");
-                    }
-
-                    if(map.getTile(x,y).getTileType() != 0 && map.getTile(x,y).getTileInside().equals("E")) {
-                        map.getTile(x, y).setTileType(0);
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+                if (map.getTile(x,y).getTileCharacter().equals("w")) {
+                    if (x + 1 < map.getWidth() && !map.getTile(x + 1, y).getTileCharacter().equals("w") && !map.getTile(x + 1, y).getTileCharacter().equals("E")) {
+                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
+                    } else if (x - 1 > -1 && !map.getTile(x - 1, y).getTileCharacter().equals("w") && !map.getTile(x - 1, y).getTileCharacter().equals("E")) {
+                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
+                    } else if (y - 1 > -1 && !map.getTile(x, y - 1).getTileCharacter().equals("w") && !map.getTile(x, y - 1).getTileCharacter().equals("E")) {
+                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
+                    } else if (y + 1 < map.getHeight() && !map.getTile(x, y + 1).getTileCharacter().equals("w") && !map.getTile(x, y + 1).getTileCharacter().equals("E")) {
+                        map.getTile(x,y).setTileInternals("E", 0, Colour.SADDLE_BROWN);
                     }
                 }
             }
@@ -110,7 +91,7 @@ public class World {
                     npcs[a].decYPos();
                 }
 
-                map.getTile(npcs[a].getXPos(),npcs[a].getYPos()).setTileInside(npcs[a].toString());
+                map.getTile(npcs[a].getXPos(),npcs[a].getYPos()).setTileCharacter(npcs[a].toString());
             }
         }
 
@@ -180,6 +161,15 @@ public class World {
 
     public NonPlayableCharacter[] getNpcs() {
         return npcs;
+    }
+
+    public NonPlayableCharacter getNpcByPos(int x, int y) {
+        for(NonPlayableCharacter npc: npcs) {
+            if(npc.getXPos() == x && npc.getYPos() == y) {
+                return npc;
+            }
+        }
+        return null;
     }
 
     public int getStartXPos() {

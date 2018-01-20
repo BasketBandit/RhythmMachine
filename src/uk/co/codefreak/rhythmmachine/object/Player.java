@@ -1,5 +1,7 @@
 package uk.co.codefreak.rhythmmachine.object;
 
+import uk.co.codefreak.rhythmmachine.colour.Colour;
+
 public class Player extends Entity {
 
     private int gender;
@@ -10,6 +12,7 @@ public class Player extends Entity {
         this.setEntityType(0);
         this.setPhysType(1);
         this.gender = gender;
+        this.setEntityColour(Colour.WHITE);
 
         for (int i = 0; i < inventory.length; i++) {
             inventory[i] = Item.KEY;
@@ -57,5 +60,4 @@ public class Player extends Entity {
             inventory[i] = null;
         }
     }
-
 }

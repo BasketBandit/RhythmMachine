@@ -1,9 +1,13 @@
 package uk.co.codefreak.rhythmmachine.object;
 
+import java.awt.*;
+
 public class Entity {
 
     private int id;
     private String name;
+
+    private Color entityColour;
 
     // Type -> 0 = Player, 1 = NPC, 2 = Item
     private int entityType;
@@ -21,12 +25,16 @@ public class Entity {
         return id;
     }
 
-    public int getEntityType() {
-        return entityType;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public Color getEntityColour() {
+        return entityColour;
+    }
+
+    public int getEntityType() {
+        return entityType;
     }
 
     public int getPhysType() {
@@ -47,6 +55,10 @@ public class Entity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setEntityColour(Color colour) {
+        this.entityColour = colour;
     }
 
     public void setEntityType(int entityType) {
