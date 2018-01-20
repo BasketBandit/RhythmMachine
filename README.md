@@ -36,3 +36,7 @@ In an effort to become more professional with my work, despite having this log, 
 ## Inventory, odd-maps and ducks. (0.5.0)
 
 I haven't been able to do much today due to lectures and such but what I have done is the following. I've started to set up the inventory system to the point where it exists and you can add/remove/shuffle items around. There just aren't many items yet. I've added ducks and refined where sheep can stand. I've also added the ability to create maps which aren't squares... are at least they appear that way. I changed the encoding type of the map files so I can use utf-8 and I use a dark-grey coloured '▒' as a kind of marker for blank spaces. Finally, I've added a spreadsheet with all the characters and the information surrounding them for obvious reasons.
+
+## Heavy refactoring, almost destroying everything. (0.5.3)
+
+To make everything efficient and to keep code duplication to a minimum, I am constantly looking at how I can refactor the code, whether it be with inheritance or breaking larger methods into smaller ones. This time around I also wanted to add a new field to the tiles so that each individual tile held its own colour, allowing independent tiles to have new colours. While doing this and refactoring, I managed to mess something up and shit really did hit the fan. Thankfully I could see my history thanks to version controlling and was able to fix it without so much of a headache.
