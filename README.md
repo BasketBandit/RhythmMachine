@@ -1,8 +1,12 @@
-# JAVA-RhythmMachine (0.6.3)
+# JAVA-RhythmMachine (0.7.0)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## Night time... and time in general. (0.7.0)
+
+So I remembered that night time was a thing... so that's a thing in the game now and may actually be quite a core mechanic. More importantly, I've implemented time into the world. The default time in ticks that I've set is 36000, which is equivalent to 10 minutes at 60 ticks per second. I've come to realise the kind of direction that I'm moving in and that it's to incorporate as many different entities and mechanics, etc, as I can without making the game feel bloated. I have a couple of friends who have expressed interest in making maps, etc. So I want to make a platform that is rich with features for them to take advantage of.
 
 ## File paths, jars and production execution. (0.6.2)
 

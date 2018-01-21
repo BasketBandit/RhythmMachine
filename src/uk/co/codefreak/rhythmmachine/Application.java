@@ -4,6 +4,7 @@ import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
+import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
 
@@ -14,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.6.3";
+    private static final String version = "0.7.0";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -66,7 +67,7 @@ public class Application extends Canvas {
         double unprocessed = 0.0;
         int framesPerSecond = 0;
         int ticksPerSecond = 0;
-        boolean canRender = false;
+        boolean canRender;
 
         addKeyListener(new KeyInput());
 
@@ -129,7 +130,10 @@ public class Application extends Canvas {
         grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height, 10, 20);
 
         // Draw notifications
-        grr.drawString(world.getNotification(), 560, 40);
+        grr.drawString(world.getNotification(), 560, 60);
+
+        // Draw clock
+        grr.drawString(world.getTimeString(), 560, 40);
 
         // Draw character information.
         grr.drawString("Inventory", 560, 80);
@@ -138,8 +142,15 @@ public class Application extends Canvas {
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-                grr.setColor(colourCheck(x,y));
+
+                // Testing a darkness feature.
+                if(world.isNight() && player.isDistanceFromTile(x,y,5)) {
+                    grr.setColor(colourCheck(x, y, true));
+                } else {
+                    grr.setColor(colourCheck(x, y, false));
+                }
                 grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 40 + (9 * y));
+
             }
         }
 
@@ -264,14 +275,25 @@ public class Application extends Canvas {
         return false;
     }
 
-    private Color colourCheck(int x, int y) {
-        if(tiles[x][y].containsNpc()) {
-            return world.getNpcByPos(x,y).getEntityColour();
-        } else if(tiles[x][y].containsPlayer()) {
-            return player.getEntityColour();
+    private Color colourCheck(int x, int y, boolean night) {
+        if(night) {
+            if (tiles[x][y].containsNpc()) {
+                return world.getNpcByPos(x,y).getEntityColour();
+            } else if (tiles[x][y].containsPlayer()) {
+                return player.getEntityColour();
+            } else {
+                return tiles[x][y].getTileColour(true);
+            }
         } else {
-            return tiles[x][y].getTileColour();
+            if (tiles[x][y].containsNpc()) {
+                return world.getNpcByPos(x, y).getEntityColour();
+            } else if (tiles[x][y].containsPlayer()) {
+                return player.getEntityColour();
+            } else {
+                return tiles[x][y].getTileColour(false);
+            }
         }
+
     }
 
     private void changeMap(int direction) {
@@ -322,7 +344,7 @@ public class Application extends Canvas {
     }
 
     public static void main(String[] args) {
-        //new MapSerialize().serialize("src/resources/maps/");
+        new MapSerialize().serialize("src/resources/maps/");
         new Application().start();
     }
 

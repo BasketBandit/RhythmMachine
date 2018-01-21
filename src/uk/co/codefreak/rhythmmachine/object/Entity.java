@@ -27,6 +27,8 @@ public class Entity {
     public Entity() {
     }
 
+    // Setters & Getters
+
     public int getId() {
         return id;
     }
@@ -75,10 +77,6 @@ public class Entity {
         this.physType = physType;
     }
 
-    public boolean isSolid() {
-        return physType == 1;
-    }
-
     public void setXPos(int pos) {
         xPos = pos;
     }
@@ -101,6 +99,16 @@ public class Entity {
 
     public void decYPos() {
         yPos--;
+    }
+
+    // Informative
+
+    public boolean isSolid() {
+        return physType == 1;
+    }
+
+    public boolean isDistanceFromTile(int x, int y, int distance) {
+        return xPos + distance <= x || xPos - distance >= x || yPos + distance <= y || yPos - distance >= y;
     }
 
     public String randomName() {

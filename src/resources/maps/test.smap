@@ -2,7 +2,7 @@
 60
 60
 35
-10
+11
 20
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
@@ -17,8 +17,8 @@ nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnncccccccnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnncccccccnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnncccccccnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnncccccccnnnnnnnnnnnnnnncnnnnn
+nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnncccccccnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnncccccnnnnnnnnnnnnnnnncnnnnn
-nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnncnnnnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnncnnnnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnncnnnnnnnnnnnnnnnnnncnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnncnnnnnnnnnnnnnnnnnncnnnnn
@@ -67,3 +67,11 @@ nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 END
+
+// Name
+// Width
+// Height
+// Start X
+// Start Y
+// NPC Count
+// Map Data

@@ -23,6 +23,8 @@ public class Tile implements Serializable {
         this.tileColour = colour;
     }
 
+    // Setters & Getters
+
     public void setTileCharacter(String character) {
         this.tileCharacter = character;
     }
@@ -43,15 +45,28 @@ public class Tile implements Serializable {
         this.tileColour = colour;
     }
 
+    public Color getTileBaseColour() {
+        return tileColour;
+    }
+
+    public Color getTileColour(boolean night) {
+        if(night) {
+            double red = tileColour.getRed() * 0.4;
+            double green = tileColour.getGreen() * 0.4;
+            double blue = tileColour.getBlue() * 0.4;
+            return new Color((int)red,(int)green,(int)blue);
+        } else {
+            return tileColour;
+        }
+    }
+
     public void setTileInternals(String character, int type, Color colour) {
         this.tileCharacter = character;
         this.tileType = type;
         this.tileColour = colour;
     }
 
-    public Color getTileColour() {
-        return tileColour;
-    }
+    // Informative
 
     public boolean containsNpc() {
         switch(tileCharacter) {

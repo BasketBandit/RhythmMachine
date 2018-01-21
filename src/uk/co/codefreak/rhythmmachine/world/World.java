@@ -10,10 +10,10 @@ public class World {
     private MapList maps;
 
     private Map map;
+    private int time = 18000;
+    private int timeMax = 36000; // 10 minutes @ 60 ticks per second. (36000)
     private NonPlayableCharacter[] npcs;
-
     private String notification = "";
-
     private boolean initialised = false;
 
     public World(int world) {
@@ -57,6 +57,9 @@ public class World {
 
     public void update(int playerXPos, int playerYPos, int ticksPerSecond) {
 
+        // Deal with the time
+        time = (time == timeMax) ? 0 : time + 1;
+
         // Water ripple
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
@@ -85,61 +88,101 @@ public class World {
 
         // Update all the NPC locations.
         if(initialised) {
-            for (int a = 0; a <= npcs.length - 1; a++) {
+            for(NonPlayableCharacter npc : npcs) {
+                int rand = new Random().nextInt(501);
 
-                int rand = new Random().nextInt(500);
-                if(rand == 1 && npcs[a].getXPos() < map.getWidth()-1 && posCheck(2, a, playerXPos, playerYPos)) {
-                    npcs[a].incXPos();
-                } else if(rand == 2 && npcs[a].getXPos() > 0 && posCheck(0, a, playerXPos, playerYPos)) {
-                    npcs[a].decXPos();
-                } else if(rand == 3 && npcs[a].getYPos() < map.getHeight()-1 && posCheck(3, a, playerXPos, playerYPos)) {
-                    npcs[a].incYPos();
-                } else if(rand == 4 && npcs[a].getYPos() > 0 && posCheck(1, a, playerXPos, playerYPos)) {
-                    npcs[a].decYPos();
+                // Randomly decide if the NPC is going to move or not. (4/500)x60 -> (240/500) -> (12/25) -> (0.48)/s
+                if(rand == 1 && npc.getXPos() < map.getWidth()-1 && posCheck(2, npc, playerXPos, playerYPos)) {
+                    npc.incXPos();
+                } else if(rand == 2 && npc.getXPos() > 0 && posCheck(0, npc, playerXPos, playerYPos)) {
+                    npc.decXPos();
+                } else if(rand == 3 && npc.getYPos() < map.getHeight()-1 && posCheck(3, npc, playerXPos, playerYPos)) {
+                    npc.incYPos();
+                } else if(rand == 4 && npc.getYPos() > 0 && posCheck(1, npc, playerXPos, playerYPos)) {
+                    npc.decYPos();
                 }
 
-                map.getTile(npcs[a].getXPos(),npcs[a].getYPos()).setTileCharacter(npcs[a].toString());
+                // If its dark and the NPC is within viewing distance, display, else don't.
+                if(isNight() && !npc.isDistanceFromTile(playerXPos,playerYPos,5)) {
+                    map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
+                } else if(!isNight()) {
+                    map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
+                }
             }
         }
 
     }
 
-    private boolean posCheck(int direction, int a, int playerXPos, int playerYPos) {
+    private boolean posCheck(int direction, NonPlayableCharacter npc, int playerXPos, int playerYPos) {
 
         if(direction == 0) {
-            if(npcs[a].getXPos()-1 == playerXPos && npcs[a].getYPos() == playerYPos) {
-            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).isSolid()) {
-            } else if(getTile(npcs[a].getXPos()-1,npcs[a].getYPos()).isWater() && !npcs[a].canSwim()) {
+            if(npc.getXPos()-1 == playerXPos && npc.getYPos() == playerYPos) {
+            } else if(getTile(npc.getXPos()-1,npc.getYPos()).containsNpc()) {
+            } else if(getTile(npc.getXPos()-1,npc.getYPos()).isSolid()) {
+            } else if(getTile(npc.getXPos()-1,npc.getYPos()).isWater() && !npc.canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 1) {
-            if(npcs[a].getXPos() == playerXPos && npcs[a].getYPos()-1 == playerYPos) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).isSolid()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()-1).isWater() && !npcs[a].canSwim()) {
+            if(npc.getXPos() == playerXPos && npc.getYPos()-1 == playerYPos) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()-1).containsNpc()) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()-1).isSolid()) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()-1).isWater() && !npc.canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 2) {
-            if(npcs[a].getXPos()+1 == playerXPos && npcs[a].getYPos() == playerYPos) {
-            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).isSolid()) {
-            } else if(getTile(npcs[a].getXPos()+1,npcs[a].getYPos()).isWater() && !npcs[a].canSwim()) {
+            if(npc.getXPos()+1 == playerXPos && npc.getYPos() == playerYPos) {
+            } else if(getTile(npc.getXPos()+1,npc.getYPos()).containsNpc()) {
+            } else if(getTile(npc.getXPos()+1,npc.getYPos()).isSolid()) {
+            } else if(getTile(npc.getXPos()+1,npc.getYPos()).isWater() && !npc.canSwim()) {
             } else {
                 return true;
             }
         } else if(direction == 3) {
-            if(npcs[a].getXPos() == playerXPos && npcs[a].getYPos()+1 == playerYPos) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).containsNpc()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).isSolid()) {
-            } else if(getTile(npcs[a].getXPos(),npcs[a].getYPos()+1).isWater() && !npcs[a].canSwim()) {
+            if(npc.getXPos() == playerXPos && npc.getYPos()+1 == playerYPos) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()+1).containsNpc()) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()+1).isSolid()) {
+            } else if(getTile(npc.getXPos(),npc.getYPos()+1).isWater() && !npc.canSwim()) {
             } else {
                 return true;
             }
         }
             return false;
+    }
+
+    // Time methods
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getTimeMax() {
+        return timeMax;
+    }
+
+    public boolean isNight() {
+        return time > -1 && time < (timeMax/2);
+    }
+
+    public boolean isDay() {
+        return time < timeMax && time > (timeMax/2);
+    }
+
+    public int timeUntilDay() {
+        return ((timeMax/2) - time) / 60;
+    }
+
+    public int timeUntilNight() {
+        return (timeMax - time) / 60;
+    }
+
+    public String getTimeString() {
+        return (isNight()) ? timeUntilDay() + " seconds until day." : timeUntilNight() + " seconds until night.";
     }
 
     // Getters
@@ -192,4 +235,5 @@ public class World {
     public void setNotification(String text) {
         this.notification = text;
     }
+
 }
