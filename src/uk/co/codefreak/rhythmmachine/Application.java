@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.7.0";
+    private static final String version = "0.7.1";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -23,7 +23,7 @@ public class Application extends Canvas {
     // Base world is used to update the map correctly.
     private World baseWorld;
     private World world;
-    private int currentWorld = 0;
+    private int currentMap = 0;
 
     private Tile[][] tiles;
 
@@ -297,24 +297,24 @@ public class Application extends Canvas {
     }
 
     private void changeMap(int direction) {
-        if(direction == 1 && currentWorld+1 < world.mapsTotal()) {
+        if(direction == 1 && currentMap+1 < world.mapsTotal()) {
             int playerYPos = player.getYPos();
 
-            currentWorld++;
-            baseWorld = new World(currentWorld);
-            world = new World(currentWorld);
+            currentMap++;
+            baseWorld.changeMap(currentMap);
+            world.changeMap(currentMap);
             tiles = world.getTiles();
 
             player.setXPos(0);
             player.setYPos(playerYPos);
         }
 
-        if(direction == 0 && currentWorld > 0) {
+        if(direction == 0 && currentMap > 0) {
             int playerYPos = player.getYPos();
 
-            currentWorld--;
-            baseWorld = new World(currentWorld);
-            world = new World(currentWorld);
+            currentMap--;
+            baseWorld.changeMap(currentMap);
+            world.changeMap(currentMap);
             tiles = world.getTiles();
 
             player.setXPos(world.getWidth()-1);
@@ -323,8 +323,8 @@ public class Application extends Canvas {
     }
 
     private void worldInit() {
-        baseWorld = new World(currentWorld);
-        world = new World(currentWorld);
+        baseWorld = new World(0);
+        world = new World(0);
         tiles = world.getTiles();
 
         player = new Player("Josh",0);

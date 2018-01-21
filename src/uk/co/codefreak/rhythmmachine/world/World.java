@@ -16,12 +16,22 @@ public class World {
     private String notification = "";
     private boolean initialised = false;
 
-    public World(int world) {
+    public World(int no) {
         this.maps = new MapList();
-        this.map = maps.getMap(world);
+        this.map = maps.getMap(no);
         this.npcs = map.getNpcs();
 
         update(0,0, 0);
+        initNpcs();
+    }
+
+    public void changeMap(int no) {
+        this.map = maps.getMap(no);
+        this.npcs = map.getNpcs();
+
+        initialised = false;
+
+        update(0,0,0);
         initNpcs();
     }
 
