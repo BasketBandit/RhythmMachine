@@ -108,17 +108,15 @@ public class Entity {
         BufferedReader in = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("textfiles/names.txt")));
 
         try {
+            int number = new Random().nextInt(4946);
+            String name = "";
 
-        int number = new Random().nextInt(4946);
-        String name = "";
+            for(int i = 0; i < number; i++) {
+                    name = in.readLine();
+            }
 
-        for(int i = 0; i < number; i++) {
-                name = in.readLine();
-        }
-
-        in.close();
-
-        return name;
+            in.close();
+            return name;
 
         } catch(IOException e) {
             e.printStackTrace();

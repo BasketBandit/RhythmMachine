@@ -4,7 +4,6 @@ import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
-import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
 
@@ -15,7 +14,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.6.2";
+    private static final String version = "0.6.3";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -223,9 +222,9 @@ public class Application extends Canvas {
 
         if(direction == 0) {
             if(!tiles[x-1][y].isSolid() && !tiles[x-1][y].isWater()) {
-                for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x - 1 && npcs[n].getYPos() == y && npcs[n].isSolid()) {
-                        world.setNotification(npcs[n].getDetails());
+                for(NonPlayableCharacter npc : npcs) {
+                    if (npc.getXPos() == x - 1 && npc.getYPos() == y && npc.isSolid()) {
+                        world.setNotification(npc.getDetails());
                         return false;
                     }
                 }
@@ -233,9 +232,9 @@ public class Application extends Canvas {
             }
         } else if(direction == 1) {
             if(!tiles[x][y-1].isSolid() && !tiles[x][y-1].isWater()) {
-                for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y-1 && npcs[n].isSolid()) {
-                        world.setNotification(npcs[n].getDetails());
+                for(NonPlayableCharacter npc : npcs) {
+                    if (npc.getXPos() == x && npc.getYPos() == y-1 && npc.isSolid()) {
+                        world.setNotification(npc.getDetails());
                         return false;
                     }
                 }
@@ -243,9 +242,9 @@ public class Application extends Canvas {
             }
         } else if(direction == 2) {
             if(!tiles[x+1][y].isSolid() && !tiles[x+1][y].isWater()) {
-                for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x+1 && npcs[n].getYPos() == y && npcs[n].isSolid()) {
-                        world.setNotification(npcs[n].getDetails());
+                for(NonPlayableCharacter npc : npcs) {
+                    if (npc.getXPos() == x+1 && npc.getYPos() == y && npc.isSolid()) {
+                        world.setNotification(npc.getDetails());
                         return false;
                     }
                 }
@@ -253,9 +252,9 @@ public class Application extends Canvas {
             }
         } else if(direction == 3) {
             if(!tiles[x][y+1].isSolid() && !tiles[x][y+1].isWater()) {
-                for(int n = 0; n < npcs.length; n++) {
-                    if (npcs[n].getXPos() == x && npcs[n].getYPos() == y+1 && npcs[n].isSolid()) {
-                        world.setNotification(npcs[n].getDetails());
+                for(NonPlayableCharacter npc : npcs) {
+                    if (npc.getXPos() == x && npc.getYPos() == y+1 && npc.isSolid()) {
+                        world.setNotification(npc.getDetails());
                         return false;
                     }
                 }
@@ -265,7 +264,7 @@ public class Application extends Canvas {
         return false;
     }
 
-    public Color colourCheck(int x, int y) {
+    private Color colourCheck(int x, int y) {
         if(tiles[x][y].containsNpc()) {
             return world.getNpcByPos(x,y).getEntityColour();
         } else if(tiles[x][y].containsPlayer()) {
@@ -323,7 +322,7 @@ public class Application extends Canvas {
     }
 
     public static void main(String[] args) {
-        new MapSerialize().serialize("src/resources/maps/");
+        //new MapSerialize().serialize("src/resources/maps/");
         new Application().start();
     }
 

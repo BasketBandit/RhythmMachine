@@ -17,7 +17,7 @@ public class MapList implements Serializable {
         findMaps();
     }
 
-    private int findMaps() {
+    private void findMaps() {
         try {
 
             BufferedReader count = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("maps/world.maps")));
@@ -34,11 +34,9 @@ public class MapList implements Serializable {
                 maps.add(map);
             }
 
-            return mapCount;
         } catch(IOException e) {
             e.printStackTrace();
         }
-        return -1;
     }
 
     public Map getMap(int map) {

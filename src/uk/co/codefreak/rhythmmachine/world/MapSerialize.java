@@ -13,7 +13,6 @@ public class MapSerialize implements Serializable {
     // Classloader allowing access to the resource folder after build
     private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
-    private Map map;
     private Path path = Paths.get("src/resources/maps");
 
     public MapSerialize() {
@@ -29,6 +28,7 @@ public class MapSerialize implements Serializable {
     public int serialize(String filePathOut) {
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.smap")) {
 
+            Map map;
             int mapsSerialized = 0;
             Iterator it = stream.iterator();
 
@@ -43,10 +43,10 @@ public class MapSerialize implements Serializable {
                     String mapSplit[] = mapString2.split(Pattern.quote("."));
                     String mapName = mapSplit[0];
 
-                    this.map = new Map(location);
+                    map = new Map(location);
                     FileOutputStream fileOut = new FileOutputStream(filePathOut+mapName+".map");
                     ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                    out.writeObject(this.map);
+                    out.writeObject(map);
                     out.close();
                     fileOut.close();
 
@@ -80,13 +80,13 @@ public class MapSerialize implements Serializable {
      *
      */
     public Map unserialize(String filename) {
-        Map e;
+        Map map;
         try {
             ObjectInputStream ob = new ObjectInputStream(classloader.getResourceAsStream(filename));
-            e = (Map) ob.readObject();
+            map = (Map) ob.readObject();
             ob.close();
 
-            return e;
+            return map;
         } catch (IOException i) {
             i.printStackTrace();
             return null;
