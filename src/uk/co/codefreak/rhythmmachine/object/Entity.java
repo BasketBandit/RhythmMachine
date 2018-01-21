@@ -2,14 +2,17 @@ package uk.co.codefreak.rhythmmachine.object;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Random;
 
 public class Entity {
 
+    // Classloader allowing access to the resource folder after build
+    private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+
     private int id;
     private String name;
-
     private Color entityColour;
 
     // Type -> 0 = Player, 1 = NPC, 2 = Item
@@ -100,9 +103,23 @@ public class Entity {
         yPos--;
     }
 
-    private String randomName() {
-        try(BufferedReader br = new BufferedReader(new FileReader("src/resources/textfiles/names.txt"))) {
-            return br.readLine();
+    public String randomName() {
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("textfiles/names.txt")));
+
+        try {
+
+        int number = new Random().nextInt(4946);
+        String name = "";
+
+        for(int i = 0; i < number; i++) {
+                name = in.readLine();
+        }
+
+        in.close();
+
+        return name;
+
         } catch(IOException e) {
             e.printStackTrace();
         }

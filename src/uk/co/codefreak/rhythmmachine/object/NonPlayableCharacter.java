@@ -2,11 +2,6 @@ package uk.co.codefreak.rhythmmachine.object;
 
 import uk.co.codefreak.rhythmmachine.colour.Colour;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Random;
-
 public class NonPlayableCharacter extends Entity {
 
     // See documentation for type information.
@@ -66,20 +61,6 @@ public class NonPlayableCharacter extends Entity {
             case 2: return "M";
             default: return "ERR";
         }
-    }
-
-    private String randomName() {
-        try(BufferedReader ln = new BufferedReader(new FileReader("src/resources/textfiles/names.txt"))) {
-            int number = new Random().nextInt(4946);
-            String name = "";
-            for(int i = 0; i < number; i++) {
-                name = ln.readLine();
-            }
-            return name;
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return "John";
     }
 
 }

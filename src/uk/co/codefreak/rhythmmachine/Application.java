@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.6.1";
+    private static final String version = "0.6.2";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -323,7 +323,7 @@ public class Application extends Canvas {
     }
 
     public static void main(String[] args) {
-        new MapSerialize().serializeAll("src/resources/maps/","world_");
+        new MapSerialize().serialize("src/resources/maps/");
         new Application().start();
     }
 

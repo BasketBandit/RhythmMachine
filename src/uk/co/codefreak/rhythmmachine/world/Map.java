@@ -16,9 +16,9 @@ public class Map implements Serializable {
     private int startXPos;
     private int startYPos;
 
-    public Map(String name) {
+    public Map(String map) {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(name));
+            BufferedReader in = new BufferedReader(new FileReader(map));
 
             this.setName(in.readLine());
             this.setWidth(Integer.parseInt(in.readLine()));
@@ -80,14 +80,12 @@ public class Map implements Serializable {
                             this.tiles[x][y] = new Tile();
                         }
                     }
-
                 }
-
             }
         } catch(IOException e) {
             e.printStackTrace();
         }
-    }
+     }
 
     // Setters & Getters
 

@@ -1,8 +1,12 @@
-# JAVA-RhythmMachine (0.6.1)
+# JAVA-RhythmMachine (0.6.2)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## File paths, jars and production execution. (0.6.2)
+
+Since the start of the project, I have been referencing files from their source locations and an oversight of mine is that this clearly doesn't work in production so now I've fixed that. Using input streams for files as well as what was there before. (I can't remember off the top of my head) However, this does mean that jar files can be executed now and everything will be as it should! (Also more cleaning, obviously)
 
 ## Lambda, further cleaning, further refactoring. (0.6.1)
 
