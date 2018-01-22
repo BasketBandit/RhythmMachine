@@ -4,9 +4,10 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Entity {
+public class Entity implements Serializable {
 
     // Classloader allowing access to the resource folder after build
     private ClassLoader classloader = Thread.currentThread().getContextClassLoader();

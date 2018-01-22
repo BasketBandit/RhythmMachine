@@ -14,7 +14,7 @@ public class Tile implements Serializable {
     public Tile() {
         this.tileCharacter = "▒";
         this.tileColour = Colour.GREY_40;
-        this.tileType = 0;
+        this.tileType = 1;
     }
 
     public Tile(String character, int type, Color colour) {
@@ -43,10 +43,6 @@ public class Tile implements Serializable {
 
     public void setTileColour(Color colour) {
         this.tileColour = colour;
-    }
-
-    public Color getTileBaseColour() {
-        return tileColour;
     }
 
     public Color getTileColour(boolean night) {

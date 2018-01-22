@@ -3,9 +3,10 @@ package uk.co.codefreak.rhythmmachine.world;
 import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class World {
+public class World implements Serializable {
 
     private MapList maps;
 
@@ -16,21 +17,19 @@ public class World {
     private String notification = "";
     private boolean initialised = false;
 
-    public World(int no) {
+    public World(String name) {
         this.maps = new MapList();
-        this.map = maps.getMap(no);
+        this.map = maps.getMap(name);
         this.npcs = map.getNpcs();
 
         update(0,0, 0);
         initNpcs();
     }
 
-    public void changeMap(int no) {
-        this.map = maps.getMap(no);
+    public void changeMap(String name) {
+        this.map = maps.getMap(name);
         this.npcs = map.getNpcs();
-
         initialised = false;
-
         update(0,0,0);
         initNpcs();
     }
@@ -199,6 +198,22 @@ public class World {
 
     public int mapsTotal() {
         return maps.mapsTotal();
+    }
+
+    public int getTotalConnectedMaps() {
+        return map.getTotalConnectedMaps();
+    }
+
+    public String[] getConnectedMaps() {
+        return map.getConnectedMaps();
+    }
+
+    public String getConnectedMap(String name) {
+        return map.getConnectedMap(name);
+    }
+
+    public String getConnectedMap(int arrayPos) {
+        return map.getConnectedMap(arrayPos);
     }
 
     public Tile[][] getTiles() {

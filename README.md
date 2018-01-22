@@ -1,8 +1,12 @@
-# JAVA-RhythmMachine (0.7.1)
+# JAVA-RhythmMachine (0.8.0)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## Yep, you can save your progress now... and go anywhere. (0.8.0)
+
+Saving the game is something I've wanted to do since deciding that building a game is the direction I'm taking this. I've finally started to tackle that problem and in doing so I've seen other flaws in the project and tackled those too. The biggest of those is map switching... before it wasn't really going to work at all realistically. I've now re-worked that to allow maps in any direction and inter map (so houses for example), accessed by their filename.
 
 ## Night time... and time in general. (0.7.0)
 

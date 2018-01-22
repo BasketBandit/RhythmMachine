@@ -1,9 +1,20 @@
-﻿test_1
+﻿MAP_NAME
+test
+MAP_DIMENSIONS
 60
 60
+START_COORDINATES
 35
 11
+NPC_COUNT
 20
+CONNECTED_MAPS
+0
+test2
+test2
+test2
+test2
+MAP_DATA
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnBBBBBBBnn
@@ -68,10 +79,7 @@ nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 END
 
-// Name
-// Width
-// Height
-// Start X
-// Start Y
-// NPC Count
-// Map Data
+// START MAPS
+  // number of maps (integer)
+  // map name
+  // map name   // etc...

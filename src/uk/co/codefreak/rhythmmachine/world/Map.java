@@ -13,6 +13,8 @@ public class Map implements Serializable {
     private Tile[][] tiles;
     private NonPlayableCharacter[] npcs;
 
+    private String[] connectedMaps;
+
     private int startXPos;
     private int startYPos;
 
@@ -20,15 +22,36 @@ public class Map implements Serializable {
         try {
             BufferedReader in = new BufferedReader(new FileReader(map));
 
+            in.readLine();
             this.setName(in.readLine());
+
+            in.readLine();
             this.setWidth(Integer.parseInt(in.readLine()));
             this.setHeight(Integer.parseInt(in.readLine()));
-            this.setStartXPos(Integer.parseInt(in.readLine()));
-            this.setStartYPos(Integer.parseInt(in.readLine()));
-            this.npcs = new NonPlayableCharacter[Integer.parseInt(in.readLine())];
-
             this.tiles = new Tile[getWidth()][getHeight()];
 
+            in.readLine();
+            this.setStartXPos(Integer.parseInt(in.readLine()));
+            this.setStartYPos(Integer.parseInt(in.readLine()));
+
+            in.readLine();
+            this.npcs = new NonPlayableCharacter[Integer.parseInt(in.readLine())];
+
+            // Find all the connected maps.
+            in.readLine();
+
+            int loopTotal = Integer.parseInt(in.readLine());
+            connectedMaps = new String[4+loopTotal];
+
+            // Loops 4 times to find the 4 mandatory directional maps (null if no map);
+            for(int i = 0; i < 4; i++) {
+                connectedMaps[i] = in.readLine();
+            }
+            for(int i = 4; i < 4+loopTotal; i++) {
+                connectedMaps[i] = in.readLine();
+            }
+
+            in.readLine();
             initTiles(in);
 
         }
@@ -90,7 +113,7 @@ public class Map implements Serializable {
     // Setters & Getters
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     private void setName(String name) {
@@ -121,6 +144,33 @@ public class Map implements Serializable {
         return this.tiles[x][y];
     }
 
+    public int getTotalConnectedMaps() {
+        int count = 0;
+        for(String map : connectedMaps) {
+            if(!map.equals("null")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public String[] getConnectedMaps() {
+        return connectedMaps;
+    }
+
+    public String getConnectedMap(int arrayPos) {
+        return connectedMaps[arrayPos];
+    }
+
+    public String getConnectedMap(String name) {
+        for(String map: connectedMaps) {
+            if(map.equals(name)) {
+                return map;
+            }
+        }
+        return null;
+    }
+
     public void setTiles(int x, int y, String tileCharacter) {
         this.tiles[x][y].setTileCharacter(tileCharacter);
     }
@@ -137,7 +187,7 @@ public class Map implements Serializable {
         return startXPos;
     }
 
-    public void setStartXPos(int startXPos) {
+    private void setStartXPos(int startXPos) {
         this.startXPos = startXPos;
     }
 
@@ -145,7 +195,7 @@ public class Map implements Serializable {
         return startYPos;
     }
 
-    public void setStartYPos(int startYPos) {
+    private void setStartYPos(int startYPos) {
         this.startYPos = startYPos;
     }
 }

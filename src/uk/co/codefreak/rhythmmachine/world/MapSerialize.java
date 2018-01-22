@@ -51,7 +51,7 @@ public class MapSerialize implements Serializable {
                     fileOut.close();
 
                     // Write the next map location to the file, then new line.
-                    mapList.write("maps/"+mapName+".map");
+                    mapList.write(mapName);
                     mapList.newLine();
 
                     System.out.printf("Serialized data has been successfully created. \n");

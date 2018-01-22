@@ -1,6 +1,7 @@
 package uk.co.codefreak.rhythmmachine;
 
 import uk.co.codefreak.rhythmmachine.colour.Colour;
+import uk.co.codefreak.rhythmmachine.data.Flags;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
@@ -15,10 +16,12 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.7.1";
+    private static final String version = "0.8.0";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
+
+    private Flags flags;
 
     // Base world is used to update the map correctly.
     private World baseWorld;
@@ -127,7 +130,7 @@ public class Application extends Canvas {
 
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
-        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height, 10, 20);
+        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 20);
 
         // Draw notifications
         grr.drawString(world.getNotification(), 560, 60);
@@ -188,7 +191,7 @@ public class Application extends Canvas {
         tiles[player.getXPos()][player.getYPos()].setTileCharacter("λ"); // Set player position.
     }
 
-    private void keyCheck(int x, int y) {
+    private void keyCheck(int x, int y) { // NOTE: Try to rework this feature next, it sucks.
 
         // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
 
@@ -203,6 +206,8 @@ public class Application extends Canvas {
         } else if(KeyInput.isDown(0x26) && !keyPressed) {
             if(y > 0 && typeCheck(1,x,y)) {
                 player.decYPos();
+            } else if(y == 0) {
+                changeMap(1);
             }
             keyPressed = true;
         } else if(KeyInput.isDown(0x26) && keyPressed) {
@@ -210,13 +215,15 @@ public class Application extends Canvas {
             if(x < world.getWidth()-1 && typeCheck(2,x,y)) {
                 player.incXPos();
             } else if(x == world.getWidth()-1) {
-                changeMap(1);
+                changeMap(2);
             }
             keyPressed = true;
         } else if(KeyInput.isDown(0x27) && keyPressed) {
         } else if(KeyInput.isDown(0x28) && !keyPressed) {
             if(y < world.getHeight()-1 && typeCheck(3,x,y)) {
                 player.incYPos();
+            } else if(y == world.getHeight()-1) {
+                changeMap(3);
             }
             keyPressed = true;
         } else if(KeyInput.isDown(0x28) && keyPressed) {
@@ -275,6 +282,7 @@ public class Application extends Canvas {
         return false;
     }
 
+    // Checks and returns the appropriate tile colour based on location and time.
     private Color colourCheck(int x, int y, boolean night) {
         if(night) {
             if (tiles[x][y].containsNpc()) {
@@ -297,34 +305,67 @@ public class Application extends Canvas {
     }
 
     private void changeMap(int direction) {
-        if(direction == 1 && currentMap+1 < world.mapsTotal()) {
-            int playerYPos = player.getYPos();
+        int playerXPos = player.getXPos();
+        int playerYPos = player.getYPos();
 
-            currentMap++;
-            baseWorld.changeMap(currentMap);
-            world.changeMap(currentMap);
-            tiles = world.getTiles();
+        if(direction == 0) {
 
-            player.setXPos(0);
-            player.setYPos(playerYPos);
+            String map = world.getConnectedMap(0);
+
+            if(!map.equals("null")) {
+                baseWorld.changeMap(map);
+                world.changeMap(map);
+                tiles = world.getTiles();
+
+                player.setXPos(world.getWidth() - 1);
+                player.setYPos(playerYPos);
+            }
+
+        } else if(direction == 1) {
+
+            String map = world.getConnectedMap(1);
+
+            if(!map.equals("null")) {
+                baseWorld.changeMap(map);
+                world.changeMap(map);
+                tiles = world.getTiles();
+
+                player.setXPos(playerXPos);
+                player.setYPos(world.getHeight() - 1);
+            }
+
+        } else if(direction == 2) {
+
+            String map = world.getConnectedMap(2);
+
+            if(!map.equals("null")) {
+                baseWorld.changeMap(map);
+                world.changeMap(map);
+                tiles = world.getTiles();
+
+                player.setXPos(0);
+                player.setYPos(playerYPos);
+            }
+
+        } else if(direction == 3) {
+
+            String map = world.getConnectedMap(3);
+
+            if(!map.equals("null")) {
+                baseWorld.changeMap(map);
+                world.changeMap(map);
+                tiles = world.getTiles();
+
+                player.setXPos(playerXPos);
+                player.setYPos(0);
+            }
         }
 
-        if(direction == 0 && currentMap > 0) {
-            int playerYPos = player.getYPos();
-
-            currentMap--;
-            baseWorld.changeMap(currentMap);
-            world.changeMap(currentMap);
-            tiles = world.getTiles();
-
-            player.setXPos(world.getWidth()-1);
-            player.setYPos(playerYPos);
-        }
     }
 
     private void worldInit() {
-        baseWorld = new World(0);
-        world = new World(0);
+        baseWorld = new World("test");
+        world = new World("test");
         tiles = world.getTiles();
 
         player = new Player("Josh",0);

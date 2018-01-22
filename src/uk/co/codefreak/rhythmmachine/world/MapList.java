@@ -4,22 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MapList implements Serializable {
 
     private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-
-    private ArrayList<Map> maps;
+    private Map[] maps;
 
     public MapList() {
-        maps = new ArrayList<>();
         findMaps();
     }
 
     private void findMaps() {
         try {
-
             BufferedReader count = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("maps/world.maps")));
             int mapCount = 0;
 
@@ -27,11 +23,13 @@ public class MapList implements Serializable {
                 mapCount++;
             }
 
+            maps = new Map[mapCount];
+
             BufferedReader in = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("maps/world.maps")));
 
             for(int i = 0; i < mapCount; i++) {
-                Map map = new MapSerialize().unserialize(in.readLine());
-                maps.add(map);
+                Map map = new MapSerialize().unserialize("maps/"+in.readLine()+".map");
+                maps[i] = map;
             }
 
         } catch(IOException e) {
@@ -39,12 +37,17 @@ public class MapList implements Serializable {
         }
     }
 
-    public Map getMap(int map) {
-        return maps.get(map);
+    public Map getMap(String name) {
+        for(Map map : maps) {
+            if(map.getName().equals(name)) {
+                return map;
+            }
+        }
+        return null;
     }
 
     public int mapsTotal() {
-        return maps.size();
+        return maps.length;
     }
 
 }
