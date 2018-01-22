@@ -1,10 +1,14 @@
-# JAVA-RhythmMachine (0.8.0)
+# JAVA-RhythmMachine (0.8.1)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
 
-## Yep, you can save your progress now... and go anywhere. (0.8.0)
+## Saving, updating, loading and reworking. (0.8.1)
+
+I've been reworking a lot of the earlier stuff already to make them generally better classes and have better features. After a week of working on the project and /only/ being as far as I am which is 3 NPCs, 2 test maps and some basic features, I can really start to appreciate why large scale projects such as video games take years from start to finish. I will keep working on this project in my spare time since it is by far the most in depth thing I've done in Java. I recently looked into JavaFX which seemingly would be much better than how I'm currently doing things (swing) but we're too far in to convert now! I'm committed!
+
+## Yep, you will be able to save... and go anywhere. (0.8.0)
 
 Saving the game is something I've wanted to do since deciding that building a game is the direction I'm taking this. I've finally started to tackle that problem and in doing so I've seen other flaws in the project and tackled those too. The biggest of those is map switching... before it wasn't really going to work at all realistically. I've now re-worked that to allow maps in any direction and inter map (so houses for example), accessed by their filename.
 

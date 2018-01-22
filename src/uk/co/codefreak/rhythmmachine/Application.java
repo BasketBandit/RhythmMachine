@@ -2,6 +2,7 @@ package uk.co.codefreak.rhythmmachine;
 
 import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.data.Flags;
+import uk.co.codefreak.rhythmmachine.data.SaveHandler;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
@@ -16,12 +17,12 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.0";
+    private static final String version = "0.8.1";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
 
-    private Flags flags;
+    private Flags flags = new Flags();
 
     // Base world is used to update the map correctly.
     private World baseWorld;
@@ -41,8 +42,10 @@ public class Application extends Canvas {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private Font[] fonts = ge.getAllFonts();
 
-    private boolean isRunning;
     private boolean keyPressed = false;
+    private boolean focusInventory = false;
+
+    private boolean isRunning;
 
     private void start() {
         if(isRunning) return;
@@ -195,7 +198,20 @@ public class Application extends Canvas {
 
         // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
 
-        if(KeyInput.isDown(0x25) && !keyPressed) {
+        if(KeyInput.isDown(0x45) && !keyPressed) {
+            flags.setFlags(player,world);
+            new SaveHandler(player.getName(),flags);
+            world.setNotification("Game saved!");
+            keyPressed = true;
+        } else if(KeyInput.isDown(0x45) && keyPressed) {
+        } else if(KeyInput.isDown(0x46) && !keyPressed) {
+            new SaveHandler(player.getName());
+            player = flags.PLAYER;
+            world = flags.WORLD;
+            world.setNotification("Game loaded!");
+            keyPressed = true;
+        } else if(KeyInput.isDown(0x46) && keyPressed) {
+        } else if(KeyInput.isDown(0x25) && !keyPressed) {
             if(x > 0 && typeCheck(0,x,y)) {
                 player.decXPos();
             } else if(x == 0) {

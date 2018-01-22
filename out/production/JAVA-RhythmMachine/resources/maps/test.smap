@@ -9,12 +9,11 @@ START_COORDINATES
 NPC_COUNT
 20
 CONNECTED_MAPS
-1
+0
 test2
 test2
 test2
 test2
-test
 MAP_DATA
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
@@ -81,6 +80,11 @@ nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 END
 
 // START MAPS
-  // number of maps (integer)
-  // map name
-  // map name   // etc...
+  // number of extra maps (integer)
+  // LEFT MAP (required)
+  // TOP MAP (required)
+  // RIGHT MAP (required)
+  // BOTTOM MAP (required)
+  // extra map 1 (optional)
+  // extra map 2 (optional)
+  // etc...

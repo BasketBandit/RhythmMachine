@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class Flags implements Serializable {
 
     // Player data
-    public Player player = null;
+    public Player PLAYER = null;
 
     // World data
-    public World world = null;
+    public World WORLD = null;
 
     // Quest data
     public boolean testQuest = false;
@@ -21,9 +21,10 @@ public class Flags implements Serializable {
 
 
     public void setFlags(Player player, World world) {
-        this.player = player;
-        this.world = world;
+        this.PLAYER = player;
+        this.WORLD = world;
     }
+
 
     public boolean getFlag(String flag) {
         switch(flag) {

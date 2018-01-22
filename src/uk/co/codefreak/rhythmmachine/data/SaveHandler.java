@@ -1,13 +1,8 @@
 package uk.co.codefreak.rhythmmachine.data;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
-public class SaveHandler {
-
-    private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+public class SaveHandler implements Serializable {
 
     // Save = true, Load = false
     public SaveHandler(String name, Flags flags) {
@@ -20,7 +15,10 @@ public class SaveHandler {
 
     private void saveGame(String name, Flags flags) {
         try {
-            FileOutputStream output = new FileOutputStream("saves/"+name+".save");
+            File file = new File(System.getenv("APPDATA")+"\\RHYTHMMACHINE\\saves\\");
+            file.mkdirs();
+
+            FileOutputStream output = new FileOutputStream(System.getenv("APPDATA")+"\\RHYTHMMACHINE\\saves\\"+name+".save");
             ObjectOutputStream ob = new ObjectOutputStream(output);
             ob.writeObject(flags);
             ob.close();
@@ -35,7 +33,7 @@ public class SaveHandler {
     private Flags loadGame(String name) {
         try {
             Flags flags;
-            ObjectInputStream ob = new ObjectInputStream(classloader.getResourceAsStream("saves/"+name+".save"));
+            ObjectInputStream ob = new ObjectInputStream(new FileInputStream(System.getenv("APPDATA")+"\\RHYTHMMACHINE\\saves\\"+name+".save"));
             flags = (Flags) ob.readObject();
             ob.close();
             return flags;
