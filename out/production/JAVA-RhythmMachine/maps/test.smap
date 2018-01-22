@@ -9,11 +9,12 @@ START_COORDINATES
 NPC_COUNT
 20
 CONNECTED_MAPS
-0
+1
 test2
 test2
 test2
 test2
+test
 MAP_DATA
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 nnnnnnnnnnnnnwwwwwnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
