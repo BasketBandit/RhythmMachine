@@ -19,6 +19,21 @@ public class Player extends Entity {
         }
     }
 
+    public Player(Player player) {
+        this.setName(player.getName());
+        this.setEntityType(player.getEntityType());
+        this.setPhysType(player.getPhysType());
+        this.gender = player.getGenderInt();
+        this.setEntityColour(player.getEntityColour());
+
+        for (int i = 0; i < player.getInventory().length; i++) {
+            this.inventory[i] = player.getInventoryItem(i);
+        }
+
+        this.setXPos(player.getXPos());
+        this.setYPos(player.getYPos());
+    }
+
     public String getGender() {
         switch (gender) {
             case 0:
@@ -28,6 +43,10 @@ public class Player extends Entity {
             default:
                 return "Apache Attack Helicopter";
         }
+    }
+
+    public int getGenderInt() {
+        return gender;
     }
 
     // Inventory

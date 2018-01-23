@@ -7,7 +7,9 @@ import java.io.Serializable;
 
 public class MapList implements Serializable {
 
-    private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+    // Classloader allowing access to the resource folder after build
+    // Has to have the transient modifier because ClassLoader doesn't implement Serializable.
+    private transient ClassLoader classloader = Thread.currentThread().getContextClassLoader();
     private Map[] maps;
 
     public MapList() {

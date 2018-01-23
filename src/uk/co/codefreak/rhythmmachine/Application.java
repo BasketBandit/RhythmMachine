@@ -27,7 +27,6 @@ public class Application extends Canvas {
     // Base world is used to update the map correctly.
     private World baseWorld;
     private World world;
-    private int currentMap = 0;
 
     private Tile[][] tiles;
 
@@ -205,9 +204,11 @@ public class Application extends Canvas {
             keyPressed = true;
         } else if(KeyInput.isDown(0x45) && keyPressed) {
         } else if(KeyInput.isDown(0x46) && !keyPressed) {
-            new SaveHandler(player.getName());
-            player = flags.PLAYER;
-            world = flags.WORLD;
+            flags = new SaveHandler().loadGame(player.getName());
+
+            player = new Player(flags.PLAYER);
+            baseWorld = new World(flags.WORLD);
+            world = new World(flags.WORLD);
             world.setNotification("Game loaded!");
             keyPressed = true;
         } else if(KeyInput.isDown(0x46) && keyPressed) {
@@ -310,7 +311,7 @@ public class Application extends Canvas {
             }
         } else {
             if (tiles[x][y].containsNpc()) {
-                return world.getNpcByPos(x, y).getEntityColour();
+                return world.getNpcByPos(x,y).getEntityColour();
             } else if (tiles[x][y].containsPlayer()) {
                 return player.getEntityColour();
             } else {

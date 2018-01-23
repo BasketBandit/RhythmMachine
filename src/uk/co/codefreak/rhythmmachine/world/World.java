@@ -26,6 +26,15 @@ public class World implements Serializable {
         initNpcs();
     }
 
+    public World(World world) {
+        this.maps = world.getMaps();
+        this.map = world.getMap();
+        this.npcs = world.getNpcs();
+
+        initialised = true;
+        update(0,0,0);
+    }
+
     public void changeMap(String name) {
         this.map = maps.getMap(name);
         this.npcs = map.getNpcs();
@@ -198,6 +207,14 @@ public class World implements Serializable {
 
     public int mapsTotal() {
         return maps.mapsTotal();
+    }
+
+    public MapList getMaps() {
+        return maps;
+    }
+
+    public Map getMap() {
+        return map;
     }
 
     public int getTotalConnectedMaps() {

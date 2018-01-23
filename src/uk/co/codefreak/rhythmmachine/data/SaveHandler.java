@@ -4,6 +4,9 @@ import java.io.*;
 
 public class SaveHandler implements Serializable {
 
+    public SaveHandler() {
+    }
+
     // Save = true, Load = false
     public SaveHandler(String name, Flags flags) {
         saveGame(name, flags);
@@ -30,7 +33,7 @@ public class SaveHandler implements Serializable {
 
     }
 
-    private Flags loadGame(String name) {
+    public Flags loadGame(String name) {
         try {
             Flags flags;
             ObjectInputStream ob = new ObjectInputStream(new FileInputStream(System.getenv("APPDATA")+"\\RHYTHMMACHINE\\saves\\"+name+".save"));

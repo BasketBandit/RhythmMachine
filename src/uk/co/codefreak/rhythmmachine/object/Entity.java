@@ -10,7 +10,8 @@ import java.util.Random;
 public class Entity implements Serializable {
 
     // Classloader allowing access to the resource folder after build
-    private ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+    // Has to have the transient modifier because ClassLoader doesn't implement Serializable.
+    private transient ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
     private int id;
     private String name;

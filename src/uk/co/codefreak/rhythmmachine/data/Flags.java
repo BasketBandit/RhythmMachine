@@ -13,18 +13,22 @@ public class Flags implements Serializable {
     // World data
     public World WORLD = null;
 
+
     // Quest data
     public boolean testQuest = false;
 
     public Flags() {
     }
 
-
     public void setFlags(Player player, World world) {
-        this.PLAYER = player;
-        this.WORLD = world;
+        PLAYER = player;
+        WORLD = world;
     }
 
+    public void setFlags(Flags flags) {
+        WORLD = flags.WORLD;
+
+    }
 
     public boolean getFlag(String flag) {
         switch(flag) {
