@@ -27,12 +27,13 @@ public class World implements Serializable {
     }
 
     public World(World world) {
+        this.time = world.getTime();
         this.maps = world.getMaps();
         this.map = world.getMap();
         this.npcs = world.getNpcs();
 
-        initialised = true;
         update(0,0,0);
+        initialised = true;
     }
 
     public void changeMap(String name) {

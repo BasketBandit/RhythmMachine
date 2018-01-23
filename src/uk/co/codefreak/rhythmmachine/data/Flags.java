@@ -11,8 +11,8 @@ public class Flags implements Serializable {
     public Player PLAYER = null;
 
     // World data
+    public World BASE_WORLD = null;
     public World WORLD = null;
-
 
     // Quest data
     public boolean testQuest = false;
@@ -20,9 +20,10 @@ public class Flags implements Serializable {
     public Flags() {
     }
 
-    public void setFlags(Player player, World world) {
+    public void setFlags(Player player, World baseWorld, World world) {
         PLAYER = player;
         WORLD = world;
+        BASE_WORLD = baseWorld;
     }
 
     public void setFlags(Flags flags) {

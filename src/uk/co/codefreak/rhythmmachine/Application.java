@@ -198,51 +198,64 @@ public class Application extends Canvas {
         // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
 
         if(KeyInput.isDown(0x45) && !keyPressed) {
-            flags.setFlags(player,world);
+
+            flags.setFlags(player,baseWorld,world);
             new SaveHandler(player.getName(),flags);
             world.setNotification("Game saved!");
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x45) && keyPressed) {
         } else if(KeyInput.isDown(0x46) && !keyPressed) {
-            flags = new SaveHandler().loadGame(player.getName());
 
+            // Load the saved flags from the file, inject them into the application.
+            flags = new SaveHandler().loadGame(player.getName());
             player = new Player(flags.PLAYER);
-            baseWorld = new World(flags.WORLD);
+            baseWorld = new World(flags.BASE_WORLD);
             world = new World(flags.WORLD);
+            tiles = world.getTiles();
             world.setNotification("Game loaded!");
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x46) && keyPressed) {
         } else if(KeyInput.isDown(0x25) && !keyPressed) {
+
             if(x > 0 && typeCheck(0,x,y)) {
                 player.decXPos();
             } else if(x == 0) {
                 changeMap(0);
             }
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x25) && keyPressed) {
         } else if(KeyInput.isDown(0x26) && !keyPressed) {
+
             if(y > 0 && typeCheck(1,x,y)) {
                 player.decYPos();
             } else if(y == 0) {
                 changeMap(1);
             }
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x26) && keyPressed) {
         } else if(KeyInput.isDown(0x27) && !keyPressed) {
+
             if(x < world.getWidth()-1 && typeCheck(2,x,y)) {
                 player.incXPos();
             } else if(x == world.getWidth()-1) {
                 changeMap(2);
             }
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x27) && keyPressed) {
         } else if(KeyInput.isDown(0x28) && !keyPressed) {
+
             if(y < world.getHeight()-1 && typeCheck(3,x,y)) {
                 player.incYPos();
             } else if(y == world.getHeight()-1) {
                 changeMap(3);
             }
             keyPressed = true;
+
         } else if(KeyInput.isDown(0x28) && keyPressed) {
         } else {
             keyPressed = false;
@@ -326,7 +339,6 @@ public class Application extends Canvas {
         int playerYPos = player.getYPos();
 
         if(direction == 0) {
-
             String map = world.getConnectedMap(0);
 
             if(!map.equals("null")) {
@@ -339,7 +351,6 @@ public class Application extends Canvas {
             }
 
         } else if(direction == 1) {
-
             String map = world.getConnectedMap(1);
 
             if(!map.equals("null")) {
@@ -352,7 +363,6 @@ public class Application extends Canvas {
             }
 
         } else if(direction == 2) {
-
             String map = world.getConnectedMap(2);
 
             if(!map.equals("null")) {
@@ -365,7 +375,6 @@ public class Application extends Canvas {
             }
 
         } else if(direction == 3) {
-
             String map = world.getConnectedMap(3);
 
             if(!map.equals("null")) {
