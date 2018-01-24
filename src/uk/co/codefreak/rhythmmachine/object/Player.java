@@ -15,7 +15,7 @@ public class Player extends Entity {
         this.setEntityColour(Colour.WHITE);
 
         for (int i = 0; i < inventory.length; i++) {
-            inventory[i] = Item.KEY;
+            inventory[i] = Item.NOTHING;
         }
     }
 

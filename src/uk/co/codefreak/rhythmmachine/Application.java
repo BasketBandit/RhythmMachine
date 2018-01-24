@@ -17,7 +17,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.3";
+    private static final String version = "0.8.4";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
@@ -41,8 +41,7 @@ public class Application extends Canvas {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private Font[] fonts = ge.getAllFonts();
 
-    private boolean keyPressed = false;
-    private boolean focusInventory = false;
+    private boolean renderInventory = false;
 
     private boolean isRunning;
 
@@ -61,9 +60,6 @@ public class Application extends Canvas {
     private Runnable run = () -> {
         System.out.println("Running...");
 
-        worldInit();
-        frameInit(this);
-
         int refreshRate = 60; // Capped framerate.
         double target = (refreshRate + 0.0);
         double nanoPerTick = 1000000000.0 / target;
@@ -73,6 +69,9 @@ public class Application extends Canvas {
         int framesPerSecond = 0;
         int ticksPerSecond = 0;
         boolean canRender;
+
+        worldInit();
+        frameInit(this);
 
         addKeyListener(new KeyInput());
 
@@ -99,6 +98,7 @@ public class Application extends Canvas {
 
             if(canRender) {
                 render();
+                // new Render(player, world);
                 framesPerSecond++;
             }
 
@@ -126,54 +126,46 @@ public class Application extends Canvas {
         g.setColor(Colour.GREY_40);
         g.fillRect(0, 0, width, height);
 
-        //////////////////////////////////
-
         Graphics2D grr = (Graphics2D) g;
-
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
         grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 20);
-
         // Draw notifications
         grr.drawString(world.getNotification(), 560, 60);
-
         // Draw clock
         grr.drawString(world.getTimeString(), 560, 40);
-
         // Draw character information.
-        grr.drawString("Inventory", 560, 80);
-
+        grr.drawString("Push 'G' to toggle inventory.", 560, 80);
         grr.setFont(fonts[368].deriveFont(Font.PLAIN,12));
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
-
-                // Testing a darkness feature.
                 if(world.isNight() && player.isDistanceFromTile(x,y,5)) {
                     grr.setColor(colourCheck(x, y, true));
                 } else {
                     grr.setColor(colourCheck(x, y, false));
                 }
                 grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 40 + (9 * y));
-
             }
         }
 
-        grr.setColor(Colour.WHITE);
 
-        int invX = 0; int invY = 0;
-        for(int inv = 0; inv < player.getInventory().length; inv++) {
-            grr.drawString(player.getInventoryItem(inv).toString(),560 + (20 * invX),100 + (20 * invY));
+        if(renderInventory) {
+            grr.setColor(Colour.WHITE);
+            int invX = 0;
+            int invY = 0;
+            for (int inv = 0; inv < player.getInventory().length; inv++) {
+                grr.drawString(player.getInventoryItem(inv).toString(), 567 + (24 * invX), 114 + (24 * invY));
+                grr.draw3DRect(560 + (24 * invX), 100 + (24 * invY), 20, 20, false);
 
-            if(invX != 3) {
-                invX++;
-            } else {
-                invX = 0;
-                invY++;
+                if (invX != 3) {
+                    invX++;
+                } else {
+                    invX = 0;
+                    invY++;
+                }
             }
         }
-
-        //////////////////////////////////
 
         g.dispose();
         bs.show();
@@ -197,16 +189,21 @@ public class Application extends Canvas {
 
         // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
 
-        if(KeyInput.isDown(0x45) && !keyPressed) {
+        // G
+        if(KeyInput.isDown(0x47)) {
+            System.out.println("Toggled inventory.");
+            renderInventory = !renderInventory;
+        }
 
+        // E
+        if(KeyInput.isDown(0x45)) {
             flags.setFlags(player,baseWorld,world);
             new SaveHandler(player.getName(),flags);
             world.setNotification("Game saved!");
-            keyPressed = true;
+        }
 
-        } else if(KeyInput.isDown(0x45) && keyPressed) {
-        } else if(KeyInput.isDown(0x46) && !keyPressed) {
-
+        // F
+        if(KeyInput.isDown(0x46)) {
             // Load the saved flags from the file, inject them into the application.
             flags = new SaveHandler().loadGame(player.getName());
             player = new Player(flags.PLAYER);
@@ -214,51 +211,42 @@ public class Application extends Canvas {
             world = new World(flags.WORLD);
             tiles = world.getTiles();
             world.setNotification("Game loaded!");
-            keyPressed = true;
+        }
 
-        } else if(KeyInput.isDown(0x46) && keyPressed) {
-        } else if(KeyInput.isDown(0x25) && !keyPressed) {
-
+        // Left Arrow
+        if(KeyInput.isDown(0x25)) {
             if(x > 0 && typeCheck(0,x,y)) {
                 player.decXPos();
             } else if(x == 0) {
                 changeMap(0);
             }
-            keyPressed = true;
+        }
 
-        } else if(KeyInput.isDown(0x25) && keyPressed) {
-        } else if(KeyInput.isDown(0x26) && !keyPressed) {
-
+        // Up Arrow
+        if(KeyInput.isDown(0x26)) {
             if(y > 0 && typeCheck(1,x,y)) {
                 player.decYPos();
             } else if(y == 0) {
                 changeMap(1);
             }
-            keyPressed = true;
+        }
 
-        } else if(KeyInput.isDown(0x26) && keyPressed) {
-        } else if(KeyInput.isDown(0x27) && !keyPressed) {
-
+        // Right Arrow
+        if(KeyInput.isDown(0x27)) {
             if(x < world.getWidth()-1 && typeCheck(2,x,y)) {
                 player.incXPos();
             } else if(x == world.getWidth()-1) {
                 changeMap(2);
             }
-            keyPressed = true;
+        }
 
-        } else if(KeyInput.isDown(0x27) && keyPressed) {
-        } else if(KeyInput.isDown(0x28) && !keyPressed) {
-
+        // Down Arrow
+        if(KeyInput.isDown(0x28)) {
             if(y < world.getHeight()-1 && typeCheck(3,x,y)) {
                 player.incYPos();
             } else if(y == world.getHeight()-1) {
                 changeMap(3);
             }
-            keyPressed = true;
-
-        } else if(KeyInput.isDown(0x28) && keyPressed) {
-        } else {
-            keyPressed = false;
         }
     }
 
@@ -331,7 +319,6 @@ public class Application extends Canvas {
                 return tiles[x][y].getTileColour(false);
             }
         }
-
     }
 
     private void changeMap(int direction) {
@@ -394,13 +381,13 @@ public class Application extends Canvas {
         world = new World("test");
         tiles = world.getTiles();
 
-        player = new Player("Josh",0);
+        player = new Player("Menu-chan",0);
         player.setXPos(world.getStartXPos());
         player.setYPos(world.getStartYPos());
     }
 
     private void frameInit(Application ex) {
-        frame.add(ex);
+        frame.getContentPane().add(ex);
         frame.setSize(width, height);
         frame.setResizable(false);
         frame.setFocusable(true);
