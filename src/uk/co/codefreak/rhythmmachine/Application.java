@@ -17,9 +17,9 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.5";
+    private static final String version = "0.8.6";
     private static final String title = "Rhythm Machine";
-    private int width = (int) Math.round(screenSize.getWidth()*0.85);
+    private int width = 800;
     private int height = 625;
 
     // Base world is used to update the map correctly.
@@ -126,16 +126,31 @@ public class Application extends Canvas {
         g.fillRect(0, 0, width, height);
 
         Graphics2D grr = (Graphics2D) g;
+
+        grr.setColor(Colour.GREY_30);
+        grr.setFont(fonts[368].deriveFont(Font.PLAIN,12));
+
+        // Draw application background
+        for(int x = 0; x < 82; x++) {
+            for(int y = 0; y < 64; y++) {
+                grr.drawString("w", 1 + (9 * x), 13 + (9 * y));
+            }
+        }
+
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
         grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 20);
+
         // Draw notifications
+        grr.setColor(Colour.WHITE);
         grr.drawString(world.getNotification(), 560, 60);
+
         // Draw clock
         grr.drawString(world.getTimeString(), 560, 40);
+
         // Draw character information.
-        grr.drawString("Push 'G' to toggle inventory.", 560, 80);
-        grr.setFont(fonts[368].deriveFont(Font.PLAIN,12));
+        grr.drawString("Push 'g' to toggle inventory.", 560, 80);
+
         // Draw the world and everything within it.
         for(int x = 0; x < world.getWidth(); x++) {
             for(int y = 0; y < world.getHeight(); y++) {
@@ -401,6 +416,7 @@ public class Application extends Canvas {
         frame.setSize(width, height);
         frame.setResizable(false);
         frame.setFocusable(true);
+        frame.setUndecorated(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
