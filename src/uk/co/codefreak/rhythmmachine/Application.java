@@ -17,20 +17,21 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.4";
+    private static final String version = "0.8.5";
     private static final String title = "Rhythm Machine";
     private int width = (int) Math.round(screenSize.getWidth()*0.85);
     private int height = 625;
 
-    private Flags flags = new Flags();
-
     // Base world is used to update the map correctly.
     private World baseWorld;
     private World world;
-
     private Tile[][] tiles;
-
     private Player player;
+    private Flags flags = new Flags();
+
+    private long moveTimer = System.currentTimeMillis();
+    private boolean renderInventory = false;
+    private boolean m;
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -40,8 +41,6 @@ public class Application extends Canvas {
 
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private Font[] fonts = ge.getAllFonts();
-
-    private boolean renderInventory = false;
 
     private boolean isRunning;
 
@@ -213,41 +212,52 @@ public class Application extends Canvas {
             world.setNotification("Game loaded!");
         }
 
-        // Left Arrow
-        if(KeyInput.isDown(0x25)) {
-            if(x > 0 && typeCheck(0,x,y)) {
-                player.decXPos();
-            } else if(x == 0) {
-                changeMap(0);
+        if(System.currentTimeMillis() - 150 > moveTimer) {
+            moveTimer += 150;
+
+            double keyTimer = System.currentTimeMillis();
+
+            // Left Arrow
+            if(KeyInput.isDown(0x25)) {
+                if (x > 0 && typeCheck(0, x, y)) {
+                    player.decXPos();
+                } else if (x == 0) {
+                    changeMap(0);
+                }
             }
+
+            // Up Arrow
+            if (KeyInput.isDown(0x26)) {
+                if (y > 0 && typeCheck(1, x, y)) {
+                    player.decYPos();
+                } else if (y == 0) {
+                    changeMap(1);
+                }
+                m = true;
+            }
+
+            // Right Arrow
+            if (KeyInput.isDown(0x27)) {
+                if (x < world.getWidth() - 1 && typeCheck(2, x, y)) {
+                    player.incXPos();
+                } else if (x == world.getWidth() - 1) {
+                    changeMap(2);
+                }
+                m = true;
+            }
+
+            // Down Arrow
+            if (KeyInput.isDown(0x28)) {
+                if (y < world.getHeight() - 1 && typeCheck(3, x, y)) {
+                    player.incYPos();
+                } else if (y == world.getHeight() - 1) {
+                    changeMap(3);
+                }
+                m = true;
+            }
+
         }
 
-        // Up Arrow
-        if(KeyInput.isDown(0x26)) {
-            if(y > 0 && typeCheck(1,x,y)) {
-                player.decYPos();
-            } else if(y == 0) {
-                changeMap(1);
-            }
-        }
-
-        // Right Arrow
-        if(KeyInput.isDown(0x27)) {
-            if(x < world.getWidth()-1 && typeCheck(2,x,y)) {
-                player.incXPos();
-            } else if(x == world.getWidth()-1) {
-                changeMap(2);
-            }
-        }
-
-        // Down Arrow
-        if(KeyInput.isDown(0x28)) {
-            if(y < world.getHeight()-1 && typeCheck(3,x,y)) {
-                player.incYPos();
-            } else if(y == world.getHeight()-1) {
-                changeMap(3);
-            }
-        }
     }
 
     private boolean typeCheck(int direction, int x, int y) {
