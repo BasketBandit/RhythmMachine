@@ -16,10 +16,10 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.9.0";
-    private static final String title = "Rhythm Machine";
+    private static final String version = "0.9.1";
+    private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
-    private static final int height = 625;
+    private static final int height = 620;
 
     // Base world is used to update the map correctly.
     private World baseWorld;
@@ -29,6 +29,7 @@ public class Application extends Canvas {
     private Flags flags = new Flags();
 
     private long moveTimer = System.currentTimeMillis();
+    private int notificationTimer = 0;
     private boolean renderInventory = false;
     private boolean[] keyPressed = new boolean[8];
 
@@ -132,15 +133,15 @@ public class Application extends Canvas {
         grr.setFont(fonts[368].deriveFont(Font.PLAIN,12));
 
         // Draw application background
-        for(int x = 0; x < 82; x++) {
-            for(int y = 0; y < 64; y++) {
-                grr.drawString("w", 1 + (9 * x), 13 + (9 * y));
+        for(int x = 0; x < 90; x++) {
+            for(int y = 0; y < 65; y++) {
+                grr.drawString("w", 1 + (9 * x), 1 + (9 * y));
             }
         }
 
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
-        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 20);
+        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 19);
 
         // START SCENE ZERO (Menu)
         if(renderScene[0]) {
@@ -153,17 +154,17 @@ public class Application extends Canvas {
                     } else {
                         grr.setColor(Colour.TRANSPARENT);
                     }
-                    grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 60 + (18 * y));
+                    grr.drawString(">", 10 + (9 * x), 60 + (18 * y));
                 }
             }
 
             // Draw menu option text.
             grr.setColor(Colour.WHITE);
-            grr.drawString("New Game", 30, 60);
-            grr.drawString("Load Game", 30, 78);
+            grr.drawString("New Game", 25, 60);
+            grr.drawString("Load Game", 25, 78);
 
             // Draw copyright
-            grr.drawString("Copyright © 2018 Joshua Hunt", 10, 575);
+            grr.drawString("Copyright © 2018 Joshua Hunt", 10, 570);
 
         } // END SCENE ZERO
 
@@ -188,7 +189,7 @@ public class Application extends Canvas {
                     } else {
                         grr.setColor(colourCheck(x, y, false));
                     }
-                    grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 40 + (9 * y));
+                    grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 37 + (9 * y));
                 }
             }
 
@@ -231,6 +232,13 @@ public class Application extends Canvas {
         }
 
         tiles[player.getXPos()][player.getYPos()].setTileCharacter("λ"); // Set player position.
+
+        // Sets notification text to "" after 3 seconds.
+        notificationTimer++;
+        if(notificationTimer == 180) {
+            world.setNotification("");
+            notificationTimer = 0;
+        }
     }
 
     private void keyCheck(int x, int y) { // NOTE: Try to rework this feature next, it sucks.
@@ -301,14 +309,17 @@ public class Application extends Canvas {
                     renderScene[1] = true;
                 } else if(player.getYPos() == 1) {
                     flags = new SaveHandler().loadGame("Menu-chan");
-                    player = new Player(flags.PLAYER);
-                    baseWorld = new World(flags.BASE_WORLD);
-                    world = new World(flags.WORLD);
-                    tiles = world.getTiles();
-                    world.setNotification("Game loaded!");
+                    if(flags != null) {
+                        player = new Player(flags.PLAYER);
+                        baseWorld = new World(flags.BASE_WORLD);
+                        world = new World(flags.WORLD);
+                        tiles = world.getTiles();
+                        world.setNotification("Game loaded!");
+                        notificationTimer = 0;
 
-                    renderScene[0] = false;
-                    renderScene[1] = true;
+                        renderScene[0] = false;
+                        renderScene[1] = true;
+                    }
                 }
             } else if(KeyInput.isDown(0x0A) && keyPressed[7]) {
             } else {
@@ -334,6 +345,7 @@ public class Application extends Canvas {
                 flags.setFlags(player, baseWorld, world);
                 new SaveHandler(player.getName(), flags);
                 world.setNotification("Game saved!");
+                notificationTimer = 0;
             } else if (KeyInput.isDown(0x45) && keyPressed[5]) {
             } else {
                 keyPressed[5] = false;
@@ -348,10 +360,12 @@ public class Application extends Canvas {
                 world = new World(flags.WORLD);
                 tiles = world.getTiles();
                 world.setNotification("Game loaded!");
-            } else if (KeyInput.isDown(0x46) && keyPressed[6]) {
+                notificationTimer = 0;
+            } else if(KeyInput.isDown(0x46) && keyPressed[6]) {
             } else {
                 keyPressed[6] = false;
             }
+
         }
 
     }
@@ -367,6 +381,7 @@ public class Application extends Canvas {
                 for(NonPlayableCharacter npc : npcs) {
                     if (npc.getXPos() == x - 1 && npc.getYPos() == y && npc.isSolid()) {
                         world.setNotification(npc.getDetails());
+                        notificationTimer = 0;
                         return false;
                     }
                 }
@@ -377,6 +392,7 @@ public class Application extends Canvas {
                 for(NonPlayableCharacter npc : npcs) {
                     if (npc.getXPos() == x && npc.getYPos() == y-1 && npc.isSolid()) {
                         world.setNotification(npc.getDetails());
+                        notificationTimer = 0;
                         return false;
                     }
                 }
@@ -387,6 +403,7 @@ public class Application extends Canvas {
                 for(NonPlayableCharacter npc : npcs) {
                     if (npc.getXPos() == x+1 && npc.getYPos() == y && npc.isSolid()) {
                         world.setNotification(npc.getDetails());
+                        notificationTimer = 0;
                         return false;
                     }
                 }
@@ -397,6 +414,7 @@ public class Application extends Canvas {
                 for(NonPlayableCharacter npc : npcs) {
                     if (npc.getXPos() == x && npc.getYPos() == y+1 && npc.isSolid()) {
                         world.setNotification(npc.getDetails());
+                        notificationTimer = 0;
                         return false;
                     }
                 }

@@ -12,8 +12,8 @@ public class KeyInput extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         keys[e.getKeyCode()] = true;
-        System.out.println("Ke " + e.getKeyCode());
-        System.out.println("Ex " + e.getExtendedKeyCode());
+        //System.out.println("Ke " + e.getKeyCode());
+        //System.out.println("Ex " + e.getExtendedKeyCode());
     }
 
     @Override
