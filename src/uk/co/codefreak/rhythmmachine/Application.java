@@ -17,7 +17,7 @@ import java.awt.image.BufferStrategy;
 public class Application extends Canvas {
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.6";
+    private static final String version = "0.8.7";
     private static final String title = "Rhythm Machine";
     private int width = 800;
     private int height = 625;
@@ -31,7 +31,7 @@ public class Application extends Canvas {
 
     private long moveTimer = System.currentTimeMillis();
     private boolean renderInventory = false;
-    private boolean m;
+    private boolean keyPressed[] = new boolean[7];
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -203,21 +203,76 @@ public class Application extends Canvas {
 
         // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
 
+        // Timeout
+        if(System.currentTimeMillis() - 150 > moveTimer) {
+            moveTimer += 150;
+            for (int i = 0; i < 4; i++) {
+                keyPressed[i] = false;
+            }
+        }
+
+        // Left Arrow
+        if(KeyInput.isDown(0x25) && !keyPressed[0]) {
+            if(x > 0 && typeCheck(0, x, y)) {
+                player.decXPos();
+            } else if(x == 0) {
+                changeMap(0);
+            }
+            keyPressed[0] = true;
+        }
+
+        // Up Arrow
+        if(KeyInput.isDown(0x26) && !keyPressed[1]) {
+            if(y > 0 && typeCheck(1, x, y)) {
+                player.decYPos();
+            } else if(y == 0) {
+                changeMap(1);
+            }
+            keyPressed[1] = true;
+        }
+
+        // Right Arrow
+        if(KeyInput.isDown(0x27) && !keyPressed[2]) {
+            if(x < world.getWidth() - 1 && typeCheck(2, x, y)) {
+                player.incXPos();
+            } else if(x == world.getWidth() - 1) {
+                changeMap(2);
+            }
+            keyPressed[2] = true;
+        }
+
+        // Down Arrow
+        if(KeyInput.isDown(0x28) && !keyPressed[3]) {
+            if(y < world.getHeight() - 1 && typeCheck(3, x, y)) {
+                player.incYPos();
+            } else if(y == world.getHeight() - 1) {
+                changeMap(3);
+            }
+            keyPressed[3] = true;
+        }
+
         // G
-        if(KeyInput.isDown(0x47)) {
+        if(KeyInput.isDown(0x47) && !keyPressed[4]) {
             System.out.println("Toggled inventory.");
             renderInventory = !renderInventory;
+            keyPressed[4] = true;
+        } else if(KeyInput.isDown(0x47) && keyPressed[4]) {
+        } else {
+            keyPressed[4] = false;
         }
 
         // E
-        if(KeyInput.isDown(0x45)) {
+        if(KeyInput.isDown(0x45) && !keyPressed[5]) {
             flags.setFlags(player,baseWorld,world);
             new SaveHandler(player.getName(),flags);
             world.setNotification("Game saved!");
+        } else if(KeyInput.isDown(0x45) && keyPressed[5]) {
+        } else {
+            keyPressed[5] = false;
         }
 
         // F
-        if(KeyInput.isDown(0x46)) {
+        if(KeyInput.isDown(0x46) && !keyPressed[6]) {
             // Load the saved flags from the file, inject them into the application.
             flags = new SaveHandler().loadGame(player.getName());
             player = new Player(flags.PLAYER);
@@ -225,52 +280,9 @@ public class Application extends Canvas {
             world = new World(flags.WORLD);
             tiles = world.getTiles();
             world.setNotification("Game loaded!");
-        }
-
-        if(System.currentTimeMillis() - 150 > moveTimer) {
-            moveTimer += 150;
-
-            double keyTimer = System.currentTimeMillis();
-
-            // Left Arrow
-            if(KeyInput.isDown(0x25)) {
-                if (x > 0 && typeCheck(0, x, y)) {
-                    player.decXPos();
-                } else if (x == 0) {
-                    changeMap(0);
-                }
-            }
-
-            // Up Arrow
-            if (KeyInput.isDown(0x26)) {
-                if (y > 0 && typeCheck(1, x, y)) {
-                    player.decYPos();
-                } else if (y == 0) {
-                    changeMap(1);
-                }
-                m = true;
-            }
-
-            // Right Arrow
-            if (KeyInput.isDown(0x27)) {
-                if (x < world.getWidth() - 1 && typeCheck(2, x, y)) {
-                    player.incXPos();
-                } else if (x == world.getWidth() - 1) {
-                    changeMap(2);
-                }
-                m = true;
-            }
-
-            // Down Arrow
-            if (KeyInput.isDown(0x28)) {
-                if (y < world.getHeight() - 1 && typeCheck(3, x, y)) {
-                    player.incYPos();
-                } else if (y == world.getHeight() - 1) {
-                    changeMap(3);
-                }
-                m = true;
-            }
-
+        } else if(KeyInput.isDown(0x46) && keyPressed[6]) {
+        } else {
+            keyPressed[6] = false;
         }
 
     }
