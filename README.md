@@ -1,8 +1,12 @@
-# JAVA-RhythmMachine (0.8.7)
+# JAVA-RhythmMachine (0.9.0)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## An actual main menu. (0.9.0)
+
+It's been a long time coming, but I've finally created a basic main menu for the game. It allows you to start a new game or load your save. In 0.9.1 I will have been more defensive with my programming for cases where there aren't any saves... I'm also going to add an option for settings because they are usually quite an important part of a game, and I've already formulated some settings to add.
 
 ## Saving, updating, loading and reworking. (0.8.1)
 

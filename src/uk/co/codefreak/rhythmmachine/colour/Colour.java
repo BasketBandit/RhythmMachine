@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Colour {
 
+    public static final Color TRANSPARENT = new Color(0x000000, true);
     public static final Color WHITE = new Color(0xffffff, false);
     public static final Color GREY_E0 = new Color(0xe0e0e0, false);
     public static final Color GREY_D0 = new Color(0xd0d0d0, false);

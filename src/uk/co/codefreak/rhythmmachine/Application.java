@@ -16,11 +16,10 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final String version = "0.8.7";
+    private static final String version = "0.9.0";
     private static final String title = "Rhythm Machine";
-    private int width = 800;
-    private int height = 625;
+    private static final int width = 800;
+    private static final int height = 625;
 
     // Base world is used to update the map correctly.
     private World baseWorld;
@@ -31,7 +30,7 @@ public class Application extends Canvas {
 
     private long moveTimer = System.currentTimeMillis();
     private boolean renderInventory = false;
-    private boolean keyPressed[] = new boolean[7];
+    private boolean[] keyPressed = new boolean[8];
 
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
@@ -43,6 +42,7 @@ public class Application extends Canvas {
     private Font[] fonts = ge.getAllFonts();
 
     private boolean isRunning;
+    private boolean[] renderScene = new boolean[2];
 
     private void start() {
         if(isRunning) return;
@@ -68,6 +68,8 @@ public class Application extends Canvas {
         int framesPerSecond = 0;
         int ticksPerSecond = 0;
         boolean canRender;
+
+        renderScene[0] = true;
 
         worldInit();
         frameInit(this);
@@ -97,7 +99,6 @@ public class Application extends Canvas {
 
             if(canRender) {
                 render();
-                // new Render(player, world);
                 framesPerSecond++;
             }
 
@@ -141,45 +142,75 @@ public class Application extends Canvas {
         grr.setColor(Colour.WHITE);
         grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 20);
 
-        // Draw notifications
-        grr.setColor(Colour.WHITE);
-        grr.drawString(world.getNotification(), 560, 60);
+        // START SCENE ZERO (Menu)
+        if(renderScene[0]) {
 
-        // Draw clock
-        grr.drawString(world.getTimeString(), 560, 40);
-
-        // Draw character information.
-        grr.drawString("Push 'g' to toggle inventory.", 560, 80);
-
-        // Draw the world and everything within it.
-        for(int x = 0; x < world.getWidth(); x++) {
-            for(int y = 0; y < world.getHeight(); y++) {
-                if(world.isNight() && player.isDistanceFromTile(x,y,5)) {
-                    grr.setColor(colourCheck(x, y, true));
-                } else {
-                    grr.setColor(colourCheck(x, y, false));
+            // Draw the world and everything within it.
+            for (int x = 0; x < world.getWidth(); x++) {
+                for (int y = 0; y < world.getHeight(); y++) {
+                    if(tiles[x][y].containsPlayer()) {
+                        grr.setColor(Color.WHITE);
+                    } else {
+                        grr.setColor(Colour.TRANSPARENT);
+                    }
+                    grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 60 + (18 * y));
                 }
-                grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 40 + (9 * y));
             }
-        }
 
-
-        if(renderInventory) {
+            // Draw menu option text.
             grr.setColor(Colour.WHITE);
-            int invX = 0;
-            int invY = 0;
-            for (int inv = 0; inv < player.getInventory().length; inv++) {
-                grr.drawString(player.getInventoryItem(inv).toString(), 567 + (24 * invX), 114 + (24 * invY));
-                grr.draw3DRect(560 + (24 * invX), 100 + (24 * invY), 20, 20, false);
+            grr.drawString("New Game", 30, 60);
+            grr.drawString("Load Game", 30, 78);
 
-                if (invX != 3) {
-                    invX++;
-                } else {
-                    invX = 0;
-                    invY++;
+            // Draw copyright
+            grr.drawString("Copyright © 2018 Joshua Hunt", 10, 575);
+
+        } // END SCENE ZERO
+
+        // START SCENE ONE (Main)
+        if(renderScene[1]) {
+
+            // Draw notifications
+            grr.setColor(Colour.WHITE);
+            grr.drawString(world.getNotification(), 560, 60);
+
+            // Draw clock
+            grr.drawString(world.getTimeString(), 560, 40);
+
+            // Draw character information.
+            grr.drawString("Push 'g' to toggle inventory.", 560, 80);
+
+            // Draw world.
+            for (int x = 0; x < world.getWidth(); x++) {
+                for (int y = 0; y < world.getHeight(); y++) {
+                    if (world.isNight() && player.isDistanceFromTile(x, y, 5)) {
+                        grr.setColor(colourCheck(x, y, true));
+                    } else {
+                        grr.setColor(colourCheck(x, y, false));
+                    }
+                    grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 40 + (9 * y));
                 }
             }
-        }
+
+            // Draw inventory.
+            if (renderInventory) {
+                grr.setColor(Colour.WHITE);
+                int invX = 0;
+                int invY = 0;
+                for (int inv = 0; inv < player.getInventory().length; inv++) {
+                    grr.drawString(player.getInventoryItem(inv).toString(), 567 + (24 * invX), 114 + (24 * invY));
+                    grr.draw3DRect(560 + (24 * invX), 100 + (24 * invY), 20, 20, false);
+
+                    if (invX != 3) {
+                        invX++;
+                    } else {
+                        invX = 0;
+                        invY++;
+                    }
+                }
+            }
+
+        } // END SCENE ONE
 
         g.dispose();
         bs.show();
@@ -195,13 +226,16 @@ public class Application extends Canvas {
             }
         }
 
-        world.update(player.getXPos(), player.getYPos(), ticksPerSecondNumber); // Update dynamic objects and draw.
+        if(renderScene[1]) {
+            world.update(player.getXPos(), player.getYPos(), ticksPerSecondNumber); // Update dynamic objects and draw.
+        }
+
         tiles[player.getXPos()][player.getYPos()].setTileCharacter("λ"); // Set player position.
     }
 
     private void keyCheck(int x, int y) { // NOTE: Try to rework this feature next, it sucks.
 
-        // Arrow keys -> 0x25 = LEFT, 0x26 = UP, 0x27 = RIGHT, 0x28 = DOWN
+        // REMEMBER @ NUMBER ARE IN HEX!
 
         // Timeout
         if(System.currentTimeMillis() - 150 > moveTimer) {
@@ -251,38 +285,73 @@ public class Application extends Canvas {
             keyPressed[3] = true;
         }
 
-        // G
-        if(KeyInput.isDown(0x47) && !keyPressed[4]) {
-            System.out.println("Toggled inventory.");
-            renderInventory = !renderInventory;
-            keyPressed[4] = true;
-        } else if(KeyInput.isDown(0x47) && keyPressed[4]) {
-        } else {
-            keyPressed[4] = false;
+        if(renderScene[0]) {
+
+            // Enter
+            if(KeyInput.isDown(0x0A) && !keyPressed[7]) {
+                if(player.getYPos() == 0) {
+                    baseWorld = new World("test");
+                    world = new World("test");
+                    tiles = world.getTiles();
+                    player = new Player("Menu-chan",0);
+                    player.setXPos(world.getStartXPos());
+                    player.setYPos(world.getStartYPos());
+
+                    renderScene[0] = false;
+                    renderScene[1] = true;
+                } else if(player.getYPos() == 1) {
+                    flags = new SaveHandler().loadGame("Menu-chan");
+                    player = new Player(flags.PLAYER);
+                    baseWorld = new World(flags.BASE_WORLD);
+                    world = new World(flags.WORLD);
+                    tiles = world.getTiles();
+                    world.setNotification("Game loaded!");
+
+                    renderScene[0] = false;
+                    renderScene[1] = true;
+                }
+            } else if(KeyInput.isDown(0x0A) && keyPressed[7]) {
+            } else {
+                keyPressed[7] = false;
+            }
+
         }
 
-        // E
-        if(KeyInput.isDown(0x45) && !keyPressed[5]) {
-            flags.setFlags(player,baseWorld,world);
-            new SaveHandler(player.getName(),flags);
-            world.setNotification("Game saved!");
-        } else if(KeyInput.isDown(0x45) && keyPressed[5]) {
-        } else {
-            keyPressed[5] = false;
-        }
+        if(renderScene[1]) {
 
-        // F
-        if(KeyInput.isDown(0x46) && !keyPressed[6]) {
-            // Load the saved flags from the file, inject them into the application.
-            flags = new SaveHandler().loadGame(player.getName());
-            player = new Player(flags.PLAYER);
-            baseWorld = new World(flags.BASE_WORLD);
-            world = new World(flags.WORLD);
-            tiles = world.getTiles();
-            world.setNotification("Game loaded!");
-        } else if(KeyInput.isDown(0x46) && keyPressed[6]) {
-        } else {
-            keyPressed[6] = false;
+            // G
+            if (KeyInput.isDown(0x47) && !keyPressed[4]) {
+                System.out.println("Toggled inventory.");
+                renderInventory = !renderInventory;
+                keyPressed[4] = true;
+            } else if (KeyInput.isDown(0x47) && keyPressed[4]) {
+            } else {
+                keyPressed[4] = false;
+            }
+
+            // E
+            if (KeyInput.isDown(0x45) && !keyPressed[5]) {
+                flags.setFlags(player, baseWorld, world);
+                new SaveHandler(player.getName(), flags);
+                world.setNotification("Game saved!");
+            } else if (KeyInput.isDown(0x45) && keyPressed[5]) {
+            } else {
+                keyPressed[5] = false;
+            }
+
+            // F
+            if (KeyInput.isDown(0x46) && !keyPressed[6]) {
+                // Load the saved flags from the file, inject them into the application.
+                flags = new SaveHandler().loadGame(player.getName());
+                player = new Player(flags.PLAYER);
+                baseWorld = new World(flags.BASE_WORLD);
+                world = new World(flags.WORLD);
+                tiles = world.getTiles();
+                world.setNotification("Game loaded!");
+            } else if (KeyInput.isDown(0x46) && keyPressed[6]) {
+            } else {
+                keyPressed[6] = false;
+            }
         }
 
     }
@@ -414,8 +483,8 @@ public class Application extends Canvas {
     }
 
     private void worldInit() {
-        baseWorld = new World("test");
-        world = new World("test");
+        baseWorld = new World("menu0");
+        world = new World("menu0");
         tiles = world.getTiles();
 
         player = new Player("Menu-chan",0);
