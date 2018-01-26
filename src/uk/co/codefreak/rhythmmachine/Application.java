@@ -6,6 +6,7 @@ import uk.co.codefreak.rhythmmachine.data.SaveHandler;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
+import uk.co.codefreak.rhythmmachine.time.Time;
 import uk.co.codefreak.rhythmmachine.world.MapSerialize;
 import uk.co.codefreak.rhythmmachine.world.Tile;
 import uk.co.codefreak.rhythmmachine.world.World;
@@ -16,7 +17,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.10.1";
+    private static final String version = "0.10.2";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -36,8 +37,9 @@ public class Application extends Canvas {
     private JFrame frame = new JFrame(title);
     private String framesPerSecondText = "0 FPS";
     private String ticksPerSecondText = "0 TPS";
+    private Time time = new Time();
     private int ticksPerSecondNumber = 0;
-    private int applicationRunTime = 0;
+    private int playTime = 0;
 
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private Font[] fonts = ge.getAllFonts();
@@ -111,7 +113,9 @@ public class Application extends Canvas {
                 framesPerSecond = 0;
                 ticksPerSecond = 0;
                 ticksPerSecondNumber = 0;
-                applicationRunTime++;
+                if(!renderScene[0]) {
+                    playTime++;
+                }
             }
         }
     };
@@ -141,7 +145,7 @@ public class Application extends Canvas {
 
         // Draw framerate, tickrate, version and window dimensions.
         grr.setColor(Colour.WHITE);
-        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 19);
+        grr.drawString(framesPerSecondText + " | " + ticksPerSecondText + " | " + version + " | " + width + " x " + height + " | " + "total playtime " + time.toHours(playTime) + " | " + world.mapsTotal() + " total maps" + " | " + world.getTotalConnectedMaps() + " connected maps", 10, 19);
 
         // START SCENE ZERO (Menu)
         if(renderScene[0]) {
@@ -328,6 +332,7 @@ public class Application extends Canvas {
                         baseWorld = new World(flags.BASE_WORLD);
                         world = new World(flags.WORLD);
                         tiles = world.getTiles();
+                        playTime = flags.PLAY_TIME;
                         world.setNotification("Game loaded!");
                         notificationTimer = 0;
 
@@ -356,7 +361,7 @@ public class Application extends Canvas {
 
             // E
             if (KeyInput.isDown(0x45) && !keyPressed[5]) {
-                flags.setFlags(player, baseWorld, world);
+                flags.setFlags(player, baseWorld, world, playTime);
                 new SaveHandler(player.getName(), flags);
                 world.setNotification("Game saved!");
                 notificationTimer = 0;
@@ -373,6 +378,7 @@ public class Application extends Canvas {
                 baseWorld = new World(flags.BASE_WORLD);
                 world = new World(flags.WORLD);
                 tiles = world.getTiles();
+                playTime = flags.PLAY_TIME;
                 world.setNotification("Game loaded!");
                 notificationTimer = 0;
             } else if(KeyInput.isDown(0x46) && keyPressed[6]) {

@@ -170,7 +170,7 @@ public class World implements Serializable {
             return false;
     }
 
-    // Time methods
+    // time methods
 
     public int getTime() {
         return time;

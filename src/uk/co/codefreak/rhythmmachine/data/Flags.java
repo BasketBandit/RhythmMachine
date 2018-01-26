@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 public class Flags implements Serializable {
 
+    // Meta data
+    public int PLAY_TIME = 0;
+
     // Player data
     public Player PLAYER = null;
 
@@ -20,15 +23,11 @@ public class Flags implements Serializable {
     public Flags() {
     }
 
-    public void setFlags(Player player, World baseWorld, World world) {
+    public void setFlags(Player player, World baseWorld, World world, int playTime) {
         PLAYER = player;
         WORLD = world;
         BASE_WORLD = baseWorld;
-    }
-
-    public void setFlags(Flags flags) {
-        WORLD = flags.WORLD;
-
+        PLAY_TIME = playTime;
     }
 
     public boolean getFlag(String flag) {
