@@ -214,7 +214,7 @@ public class Map implements Serializable {
         return startXPos;
     }
 
-    private void setStartXPos(int startXPos) {
+    public void setStartXPos(int startXPos) {
         this.startXPos = startXPos;
     }
 
@@ -222,7 +222,12 @@ public class Map implements Serializable {
         return startYPos;
     }
 
-    private void setStartYPos(int startYPos) {
+    public void setStartYPos(int startYPos) {
+        this.startYPos = startYPos;
+    }
+
+    public void setStartPos(int startXPos, int startYPos) {
+        this.startXPos = startXPos;
         this.startYPos = startYPos;
     }
 }

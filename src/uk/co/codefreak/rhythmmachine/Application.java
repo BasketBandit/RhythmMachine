@@ -16,7 +16,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.10.0";
+    private static final String version = "0.10.1";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -257,49 +257,53 @@ public class Application extends Canvas {
 
         // Left Arrow
         if(KeyInput.isDown(0x25) && !keyPressed[0]) {
-            if(tiles[x-1][y].isDoor()) {
+            if(x != 0 && tiles[x-1][y].isDoor()) {
                 changeMap(-1, tiles[x-1][y].getTileDoorPointer());
             } else if(x > 0 && typeCheck(0, x, y)) {
                 player.decXPos();
             } else if(x == 0) {
                 changeMap(0,null);
             }
+            moveTimer += 150;
             keyPressed[0] = true;
         }
 
         // Up Arrow
-        if(KeyInput.isDown(0x26) && !keyPressed[1]) {
-            if(tiles[x][y-1].isDoor()) {
+        else if(KeyInput.isDown(0x26) && !keyPressed[1]) {
+            if(y != 0 && tiles[x][y-1].isDoor()) {
                 changeMap(-1, tiles[x][y-1].getTileDoorPointer());
             } else if(y > 0 && typeCheck(1, x, y)) {
                 player.decYPos();
             } else if(y == 0) {
                 changeMap(1, null);
             }
+            moveTimer += 150;
             keyPressed[1] = true;
         }
 
         // Right Arrow
-        if(KeyInput.isDown(0x27) && !keyPressed[2]) {
-            if(tiles[x+1][y].isDoor()) {
+        else if(KeyInput.isDown(0x27) && !keyPressed[2]) {
+            if(x != tiles.length-1 && tiles[x+1][y].isDoor()) { // Looks over the array. FIX out of bounds
                 changeMap(-1, tiles[x+1][y].getTileDoorPointer());
             } else if(x < world.getWidth() - 1 && typeCheck(2, x, y)) {
                 player.incXPos();
             } else if(x == world.getWidth() - 1) {
                 changeMap(2, null);
             }
+            moveTimer += 150;
             keyPressed[2] = true;
         }
 
         // Down Arrow
-        if(KeyInput.isDown(0x28) && !keyPressed[3]) {
-            if(tiles[x][y+1].isDoor()) {
+        else if(KeyInput.isDown(0x28) && !keyPressed[3]) {
+            if(y != tiles[x].length-1 && tiles[x][y+1].isDoor()) {
                 changeMap(-1, tiles[x][y+1].getTileDoorPointer());
             } else if(y < world.getHeight() - 1 && typeCheck(3, x, y)) {
                 player.incYPos();
             } else if(y == world.getHeight() - 1) {
                 changeMap(3,null);
             }
+            moveTimer += 150;
             keyPressed[3] = true;
         }
 
@@ -463,6 +467,7 @@ public class Application extends Canvas {
             String map = world.getConnectedMap(name);
 
             if(!map.equals("null")) {
+                world.getMap().setStartPos(playerXPos, playerYPos);
                 baseWorld.changeMap(map);
                 world.changeMap(map);
                 tiles = world.getTiles();

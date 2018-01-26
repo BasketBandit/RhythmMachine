@@ -1,4 +1,4 @@
-# JAVA-RhythmMachine (0.10.0)
+# JAVA-RhythmMachine (0.10.1)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
