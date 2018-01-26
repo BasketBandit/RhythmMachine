@@ -10,6 +10,7 @@ public class Tile implements Serializable {
     private String tileCharacter = "0";
     private Color tileColour = null;
     private int tileType = 0;
+    private String tileDoorPointer;
 
     public Tile() {
         this.tileCharacter = "▒";
@@ -21,6 +22,13 @@ public class Tile implements Serializable {
         this.tileCharacter = character;
         this.tileType = type;
         this.tileColour = colour;
+    }
+
+    public Tile(String character, int type, Color colour, String doorPointer) {
+        this.tileCharacter = character;
+        this.tileType = type;
+        this.tileColour = colour;
+        this.tileDoorPointer = doorPointer;
     }
 
     // Setters & Getters
@@ -39,6 +47,10 @@ public class Tile implements Serializable {
 
     public int getTileType() {
         return tileType;
+    }
+
+    public String getTileDoorPointer() {
+        return tileDoorPointer;
     }
 
     public void setTileColour(Color colour) {
@@ -83,7 +95,7 @@ public class Tile implements Serializable {
     }
 
     public boolean isDoor() {
-        return tileCharacter.equals("X");
+        return tileType == 3;
     }
 
     public boolean isSolid() {

@@ -22,24 +22,27 @@ public class Map implements Serializable {
         try {
             BufferedReader in = new BufferedReader(new FileReader(map));
 
+            // Name
             in.readLine();
             this.setName(in.readLine());
 
+            // Dimensions
             in.readLine();
             this.setWidth(Integer.parseInt(in.readLine()));
             this.setHeight(Integer.parseInt(in.readLine()));
             this.tiles = new Tile[getWidth()][getHeight()];
 
+            // Starting coordinates
             in.readLine();
             this.setStartXPos(Integer.parseInt(in.readLine()));
             this.setStartYPos(Integer.parseInt(in.readLine()));
 
+            // Number of NPCs
             in.readLine();
             this.npcs = new NonPlayableCharacter[Integer.parseInt(in.readLine())];
 
-            // Find all the connected maps.
+            // Connected Maps
             in.readLine();
-
             int loopTotal = Integer.parseInt(in.readLine());
             connectedMaps = new String[4+loopTotal];
 
@@ -52,7 +55,7 @@ public class Map implements Serializable {
             }
 
             in.readLine();
-            initTiles(in);
+            initTiles(in, loopTotal);
 
         }
         catch (FileNotFoundException e) {
@@ -64,9 +67,26 @@ public class Map implements Serializable {
         }
     }
 
-    private void initTiles(BufferedReader in) {
+    private void initTiles(BufferedReader in, int loopTotal) {
         try {
             boolean flip = true;
+            int[][] doorCoords = new int[0][0];
+            String coord;
+            String[] coords;
+
+            // Loop through the door coordinates, putting them into an int array.
+            if(loopTotal != 0) {
+                doorCoords = new int[loopTotal][2];
+                for (int i = 0; i < loopTotal; i++) {
+                    coord = in.readLine();
+                    coords = coord.split(",");
+                    doorCoords[i][0] = Integer.parseInt(coords[0]);
+                    doorCoords[i][1] = Integer.parseInt(coords[1]);
+                }
+            }
+
+            // Tile Data
+            in.readLine();
 
             for(int y = 0; y < getHeight(); y++) {
                 flip = !flip;
@@ -98,7 +118,14 @@ public class Map implements Serializable {
                         } else if(character.equals("O")) {
                             this.tiles[x][y] = new Tile(character, 1, Colour.GREY_70);
                         } else if(character.equals("X")) {
-                            this.tiles[x][y] = new Tile(character, 0, Colour.WHITE);
+                            // Check which map the current x:y is connected to, creating a tile with that data.
+                            String connectedMap = "";
+                            for(int i = 0; i < doorCoords.length; i++) {
+                                if(x == doorCoords[i][0] && y == doorCoords[i][1]) {
+                                    connectedMap = connectedMaps[4+i];
+                                }
+                            }
+                            this.tiles[x][y] = new Tile(character, 3, Colour.WHITE, connectedMap);
                         } else {
                             this.tiles[x][y] = new Tile();
                         }

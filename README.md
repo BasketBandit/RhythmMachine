@@ -1,8 +1,12 @@
-# JAVA-RhythmMachine (0.9.1)
+# JAVA-RhythmMachine (0.10.0)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## Houses... on the inside! (0.10.0)
+
+I got around to implementing the ability to enter buildings that have entrances marked by "X". This obviously allows for huge amounts more in terms of map customization and was something I wanted in the game from the start. There isn't much point having building if you aren't able to explore the inside of them. The documentation has/will be updated accordingly since to make this implementation I had to change the way maps are read. With each door being represented as an x:y coordinate in the raw map files.
 
 ## An actual main menu. (0.9.0)
 
