@@ -18,6 +18,8 @@ public class Map implements Serializable {
     private int startXPos;
     private int startYPos;
 
+    private boolean alwaysDay;
+
     public Map(String map) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(map));
@@ -36,6 +38,10 @@ public class Map implements Serializable {
             in.readLine();
             this.setStartXPos(Integer.parseInt(in.readLine()));
             this.setStartYPos(Integer.parseInt(in.readLine()));
+
+            // Map flags
+            in.readLine();
+            this.alwaysDay = Boolean.parseBoolean(in.readLine());
 
             // Number of NPCs
             in.readLine();
@@ -229,5 +235,13 @@ public class Map implements Serializable {
     public void setStartPos(int startXPos, int startYPos) {
         this.startXPos = startXPos;
         this.startYPos = startYPos;
+    }
+
+    public boolean isAlwaysDay() {
+        return alwaysDay;
+    }
+
+    public void setAlwaysDay(Boolean value) {
+        alwaysDay = value;
     }
 }

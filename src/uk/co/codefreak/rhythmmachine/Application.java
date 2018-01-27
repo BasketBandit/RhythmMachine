@@ -17,7 +17,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.10.2";
+    private static final String version = "0.10.3";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -188,11 +188,13 @@ public class Application extends Canvas {
             // Draw world.
             for (int x = 0; x < world.getWidth(); x++) {
                 for (int y = 0; y < world.getHeight(); y++) {
-                    if (world.isNight() && player.isDistanceFromTile(x, y, 5)) {
+                    if (world.isNight() && !world.isAlwaysDay() && player.isDistanceFromTile(x, y, 5)) {
                         grr.setColor(colourCheck(x, y, true));
                     } else {
                         grr.setColor(colourCheck(x, y, false));
                     }
+                    // Interesting concept on how to draw background tiles.
+                    //grr.fill3DRect(9 + (9 * x), 29 + (9 * y),10,10,false);
                     grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 37 + (9 * y));
                 }
             }
@@ -350,28 +352,29 @@ public class Application extends Canvas {
         if(renderScene[1]) {
 
             // G
-            if (KeyInput.isDown(0x47) && !keyPressed[4]) {
-                System.out.println("Toggled inventory.");
+            if(KeyInput.isDown(0x47) && !keyPressed[4]) {
                 renderInventory = !renderInventory;
                 keyPressed[4] = true;
-            } else if (KeyInput.isDown(0x47) && keyPressed[4]) {
+            } else if(KeyInput.isDown(0x47) && keyPressed[4]) {
             } else {
                 keyPressed[4] = false;
             }
 
             // E
-            if (KeyInput.isDown(0x45) && !keyPressed[5]) {
-                flags.setFlags(player, baseWorld, world, playTime);
-                new SaveHandler(player.getName(), flags);
-                world.setNotification("Game saved!");
-                notificationTimer = 0;
-            } else if (KeyInput.isDown(0x45) && keyPressed[5]) {
+            if(KeyInput.isDown(0x45) && !keyPressed[5]) {
+                if(playTime != -1 && world != null && baseWorld != null && player != null) {
+                    flags.setFlags(player, baseWorld, world, playTime);
+                    new SaveHandler(player.getName(), flags);
+                    world.setNotification("Game saved!");
+                    notificationTimer = 0;
+                }
+            } else if(KeyInput.isDown(0x45) && keyPressed[5]) {
             } else {
                 keyPressed[5] = false;
             }
 
             // F
-            if (KeyInput.isDown(0x46) && !keyPressed[6]) {
+            if(KeyInput.isDown(0x46) && !keyPressed[6]) {
                 // Load the saved flags from the file, inject them into the application.
                 flags = new SaveHandler().loadGame(player.getName());
                 player = new Player(flags.PLAYER);

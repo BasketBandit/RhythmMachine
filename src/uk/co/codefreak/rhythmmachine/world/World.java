@@ -172,7 +172,7 @@ public class World implements Serializable {
 
     // time methods
 
-    public int getTime() {
+    private int getTime() {
         return time;
     }
 
@@ -192,11 +192,15 @@ public class World implements Serializable {
         return time < timeMax && time > (timeMax/2);
     }
 
-    public int timeUntilDay() {
+    public boolean isAlwaysDay() {
+        return map.isAlwaysDay();
+    }
+
+    private int timeUntilDay() {
         return ((timeMax/2) - time) / 60;
     }
 
-    public int timeUntilNight() {
+    private int timeUntilNight() {
         return (timeMax - time) / 60;
     }
 
@@ -210,7 +214,7 @@ public class World implements Serializable {
         return maps.mapsTotal();
     }
 
-    public MapList getMaps() {
+    private MapList getMaps() {
         return maps;
     }
 
