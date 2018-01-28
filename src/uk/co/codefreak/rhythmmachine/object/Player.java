@@ -6,6 +6,7 @@ public class Player extends Entity {
 
     private int gender;
     private Item[] inventory = new Item[24];
+    private Item[] equipment = new Item[10];
 
     public Player(String name, int gender) {
         this.setName(name);
@@ -14,8 +15,12 @@ public class Player extends Entity {
         this.gender = gender;
         this.setEntityColour(Colour.WHITE);
 
-        for (int i = 0; i < inventory.length; i++) {
+        for(int i = 0; i < inventory.length; i++) {
             inventory[i] = Item.NOTHING;
+        }
+
+        for(int i = 0; i < equipment.length; i++) {
+            equipment[i] = Item.NOTHING;
         }
     }
 

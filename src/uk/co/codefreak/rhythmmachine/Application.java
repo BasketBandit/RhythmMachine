@@ -17,7 +17,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.10.3";
+    private static final String version = "0.10.4";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -107,7 +107,6 @@ public class Application extends Canvas {
 
             if(System.currentTimeMillis() - 1000 > timer) {
                 timer += 1000;
-                //System.out.printf("FPS: %d | TPS: %d\n", framesPerSecond, ticksPerSecond);
                 framesPerSecondText = framesPerSecond + " FPS";
                 ticksPerSecondText = ticksPerSecond + " TPS";
                 framesPerSecond = 0;
@@ -189,12 +188,19 @@ public class Application extends Canvas {
             for (int x = 0; x < world.getWidth(); x++) {
                 for (int y = 0; y < world.getHeight(); y++) {
                     if (world.isNight() && !world.isAlwaysDay() && player.isDistanceFromTile(x, y, 5)) {
-                        grr.setColor(colourCheck(x, y, true));
+                        grr.setColor(colourCheck(x, y, true, true).darker());
                     } else {
-                        grr.setColor(colourCheck(x, y, false));
+                        grr.setColor(colourCheck(x, y, true, false).darker());
                     }
                     // Interesting concept on how to draw background tiles.
-                    //grr.fill3DRect(9 + (9 * x), 29 + (9 * y),10,10,false);
+                    grr.fill3DRect(9 + (9 * x), 29 + (9 * y),10,10,false);
+
+                    // Colour Player and NPCs
+                    if (world.isNight() && !world.isAlwaysDay() && player.isDistanceFromTile(x, y, 5)) {
+                        grr.setColor(colourCheck(x, y, false, true));
+                    } else {
+                        grr.setColor(colourCheck(x, y, false, false));
+                    }
                     grr.drawString(tiles[x][y].getTileCharacter(), 10 + (9 * x), 37 + (9 * y));
                 }
             }
@@ -252,8 +258,8 @@ public class Application extends Canvas {
         // REMEMBER @ NUMBER ARE IN HEX!
 
         // Timeout
-        if(System.currentTimeMillis() - 150 > moveTimer) {
-            moveTimer += 150;
+        if(System.currentTimeMillis() - 125 > moveTimer) {
+            moveTimer += 125;
             for (int i = 0; i < 4; i++) {
                 keyPressed[i] = false;
             }
@@ -270,7 +276,7 @@ public class Application extends Canvas {
             } else if(x == 0) {
                 changeMap(0,null);
             }
-            moveTimer += 150;
+            moveTimer += 125;
             keyPressed[0] = true;
         }
 
@@ -283,7 +289,7 @@ public class Application extends Canvas {
             } else if(y == 0) {
                 changeMap(1, null);
             }
-            moveTimer += 150;
+            moveTimer += 125;
             keyPressed[1] = true;
         }
 
@@ -296,7 +302,7 @@ public class Application extends Canvas {
             } else if(x == world.getWidth() - 1) {
                 changeMap(2, null);
             }
-            moveTimer += 150;
+            moveTimer += 125;
             keyPressed[2] = true;
         }
 
@@ -309,7 +315,7 @@ public class Application extends Canvas {
             } else if(y == world.getHeight() - 1) {
                 changeMap(3,null);
             }
-            moveTimer += 150;
+            moveTimer += 125;
             keyPressed[3] = true;
         }
 
@@ -321,6 +327,7 @@ public class Application extends Canvas {
                     baseWorld = new World("test");
                     world = new World("test");
                     tiles = world.getTiles();
+                    playTime = 0;
                     player = new Player("Menu-chan",0);
                     player.setXPos(world.getStartXPos());
                     player.setYPos(world.getStartYPos());
@@ -362,7 +369,7 @@ public class Application extends Canvas {
 
             // E
             if(KeyInput.isDown(0x45) && !keyPressed[5]) {
-                if(playTime != -1 && world != null && baseWorld != null && player != null) {
+                if(world != null && baseWorld != null) {
                     flags.setFlags(player, baseWorld, world, playTime);
                     new SaveHandler(player.getName(), flags);
                     world.setNotification("Game saved!");
@@ -448,22 +455,28 @@ public class Application extends Canvas {
     }
 
     // Checks and returns the appropriate tile colour based on location and time.
-    private Color colourCheck(int x, int y, boolean night) {
-        if(night) {
-            if (tiles[x][y].containsNpc()) {
-                return world.getNpcByPos(x,y).getEntityColour();
-            } else if (tiles[x][y].containsPlayer()) {
-                return player.getEntityColour();
-            } else {
-                return tiles[x][y].getTileColour(true);
-            }
+    private Color colourCheck(int x, int y, boolean background, boolean night) {
+        if(background && night) {
+            return baseWorld.getTiles()[x][y].getTileColour(true);
+        } else if(background && !night) {
+            return baseWorld.getTiles()[x][y].getTileColour(false);
         } else {
-            if (tiles[x][y].containsNpc()) {
-                return world.getNpcByPos(x,y).getEntityColour();
-            } else if (tiles[x][y].containsPlayer()) {
-                return player.getEntityColour();
+            if (night) {
+                if (tiles[x][y].containsNpc()) {
+                    return world.getNpcByPos(x, y).getEntityColour();
+                } else if (tiles[x][y].containsPlayer()) {
+                    return player.getEntityColour();
+                } else {
+                    return tiles[x][y].getTileColour(true);
+                }
             } else {
-                return tiles[x][y].getTileColour(false);
+                if (tiles[x][y].containsNpc()) {
+                    return world.getNpcByPos(x, y).getEntityColour();
+                } else if (tiles[x][y].containsPlayer()) {
+                    return player.getEntityColour();
+                } else {
+                    return tiles[x][y].getTileColour(false);
+                }
             }
         }
     }
