@@ -9,12 +9,15 @@ import java.util.Random;
 
 public class Entity implements Serializable {
 
+    public static final Entity NOTHING = new Entity("", ' ');
+
     // Classloader allowing access to the resource folder after build
     // Has to have the transient modifier because ClassLoader doesn't implement Serializable.
     private transient ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
     private int id;
     private String name;
+    private char character;
     private Color entityColour;
 
     // Type -> 0 = Player, 1 = NPC, 2 = Item
@@ -29,6 +32,11 @@ public class Entity implements Serializable {
     public Entity() {
     }
 
+    public Entity(String name, char character) {
+        this.name = name;
+        this.character = character;
+    }
+
     // Setters & Getters
 
     public int getId() {
@@ -37,6 +45,10 @@ public class Entity implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public char getCharacter() {
+        return character;
     }
 
     public Color getEntityColour() {
@@ -65,6 +77,10 @@ public class Entity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCharacter(char character) {
+        this.character = character;
     }
 
     public void setEntityColour(Color colour) {

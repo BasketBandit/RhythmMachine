@@ -6,14 +6,16 @@ public class NonPlayableCharacter extends Entity {
 
     // See documentation for type information.
     private int npcType;
+    private boolean roams;
 
-    public NonPlayableCharacter(int xPos, int yPos, int npcType) {
+    public NonPlayableCharacter(int xPos, int yPos, int npcType, boolean roams) {
         this.setXPos(xPos);
         this.setYPos(yPos);
         this.setName(randomName());
         this.setEntityType(1);
         this.setPhysType(1);
         this.npcType = npcType;
+        this.roams = roams;
 
         autoColour(npcType);
     }
@@ -52,6 +54,10 @@ public class NonPlayableCharacter extends Entity {
 
     public boolean canSwim() {
         return npcType == 1;
+    }
+
+    public boolean roams() {
+        return roams;
     }
 
     public String toString() {

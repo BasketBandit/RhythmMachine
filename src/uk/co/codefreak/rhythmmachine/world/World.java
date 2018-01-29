@@ -56,19 +56,19 @@ public class World implements Serializable {
                     x = new Random().nextInt(60);
                     y = new Random().nextInt(60);
                 }
-                npcs[i] = new NonPlayableCharacter(x,y,0);
+                npcs[i] = new NonPlayableCharacter(x,y,0, true);
             } else if(rand == 1) {
                 while(getTile(x,y).getTileType() == 1 || getTile(x,y).containsNpc()) {
                     x = new Random().nextInt(60);
                     y = new Random().nextInt(60);
                 }
-                npcs[i] = new NonPlayableCharacter(x, y, 1);
+                npcs[i] = new NonPlayableCharacter(x, y, 1,true);
             } else {
                 while(getTile(x,y).getTileType() == 1 || getTile(x,y).getTileType() == 2 || getTile(x,y).containsNpc()) {
                     x = new Random().nextInt(60);
                     y = new Random().nextInt(60);
                 }
-                npcs[i] = new NonPlayableCharacter(x,y,2);
+                npcs[i] = new NonPlayableCharacter(x,y,2,true);
             }
         }
         this.initialised = true;
@@ -109,23 +109,24 @@ public class World implements Serializable {
         if(initialised) {
             for(NonPlayableCharacter npc : npcs) {
                 int rand = new Random().nextInt(501);
+                if(npc.roams()) {
+                    // Randomly decide if the NPC is going to move or not. (4/500)x60 -> (240/500) -> (12/25) -> (0.48)/s
+                    if (rand == 1 && npc.getXPos() < map.getWidth() - 1 && posCheck(2, npc, playerXPos, playerYPos)) {
+                        npc.incXPos();
+                    } else if (rand == 2 && npc.getXPos() > 0 && posCheck(0, npc, playerXPos, playerYPos)) {
+                        npc.decXPos();
+                    } else if (rand == 3 && npc.getYPos() < map.getHeight() - 1 && posCheck(3, npc, playerXPos, playerYPos)) {
+                        npc.incYPos();
+                    } else if (rand == 4 && npc.getYPos() > 0 && posCheck(1, npc, playerXPos, playerYPos)) {
+                        npc.decYPos();
+                    }
 
-                // Randomly decide if the NPC is going to move or not. (4/500)x60 -> (240/500) -> (12/25) -> (0.48)/s
-                if(rand == 1 && npc.getXPos() < map.getWidth()-1 && posCheck(2, npc, playerXPos, playerYPos)) {
-                    npc.incXPos();
-                } else if(rand == 2 && npc.getXPos() > 0 && posCheck(0, npc, playerXPos, playerYPos)) {
-                    npc.decXPos();
-                } else if(rand == 3 && npc.getYPos() < map.getHeight()-1 && posCheck(3, npc, playerXPos, playerYPos)) {
-                    npc.incYPos();
-                } else if(rand == 4 && npc.getYPos() > 0 && posCheck(1, npc, playerXPos, playerYPos)) {
-                    npc.decYPos();
-                }
-
-                // If its dark and the NPC is within viewing distance, display, else don't.
-                if(isNight() && !npc.isDistanceFromTile(playerXPos,playerYPos,5)) {
-                    map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
-                } else if(!isNight()) {
-                    map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
+                    // If its dark and the NPC is within viewing distance, display, else don't.
+                    if (isNight() && !npc.isDistanceFromTile(playerXPos, playerYPos, 5)) {
+                        map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
+                    } else if (!isNight()) {
+                        map.getTile(npc.getXPos(), npc.getYPos()).setTileCharacter(npc.toString());
+                    }
                 }
             }
         }

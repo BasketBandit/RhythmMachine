@@ -4,6 +4,7 @@ import uk.co.codefreak.rhythmmachine.colour.Colour;
 import uk.co.codefreak.rhythmmachine.data.Flags;
 import uk.co.codefreak.rhythmmachine.data.SaveHandler;
 import uk.co.codefreak.rhythmmachine.input.KeyInput;
+import uk.co.codefreak.rhythmmachine.object.Equippable;
 import uk.co.codefreak.rhythmmachine.object.NonPlayableCharacter;
 import uk.co.codefreak.rhythmmachine.object.Player;
 import uk.co.codefreak.rhythmmachine.time.Time;
@@ -17,7 +18,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.10.4";
+    private static final String version = "0.11.0";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -31,7 +32,8 @@ public class Application extends Canvas {
 
     private long moveTimer = System.currentTimeMillis();
     private int notificationTimer = 0;
-    private boolean renderInventory = false;
+    private boolean renderInventory = false; // default false.
+    private boolean renderEquipment = true; // default false.
     private boolean[] keyPressed = new boolean[8];
 
     private JFrame frame = new JFrame(title);
@@ -206,11 +208,11 @@ public class Application extends Canvas {
             }
 
             // Draw inventory.
-            if (renderInventory) {
+            if(renderInventory) {
                 grr.setColor(Colour.WHITE);
                 int invX = 0;
                 int invY = 0;
-                for (int inv = 0; inv < player.getInventory().length; inv++) {
+                for (int inv = 0; inv < player.getInventory().size(); inv++) {
                     grr.drawString(player.getInventoryItem(inv).toString(), 567 + (24 * invX), 114 + (24 * invY));
                     grr.draw3DRect(560 + (24 * invX), 100 + (24 * invY), 20, 20, false);
 
@@ -220,6 +222,32 @@ public class Application extends Canvas {
                         invX = 0;
                         invY++;
                     }
+                }
+            }
+
+            if(renderEquipment) {
+                grr.setColor(Colour.WHITE);
+                Equippable e;
+
+                // Head, neck, body, legs, feet.
+                for(int i = 0; i < 5; i++) {
+                    e = (Equippable) player.getEquipment(i);
+                    grr.drawString(e.toString(), 603, 274 + (24 * i));
+                    grr.draw3DRect(596, 260 + (24 * i), 20, 20, false);
+                }
+
+                // Sword, hands.
+                for(int i = 0; i < 2; i++) {
+                    e = (Equippable) player.getEquipment(i + 5);
+                    grr.drawString(e.toString(), 579, 322 + (48 * i));
+                    grr.draw3DRect(572, 308 + (48 * i), 20, 20, false);
+                }
+
+                // Offhand, finger.
+                for(int i = 0; i < 2; i++) {
+                    e = (Equippable) player.getEquipment(i + 7);
+                    grr.drawString(e.toString(), 627, 324 + (48 * i));
+                    grr.draw3DRect(620, 308 + (48 * i), 20, 20, false);
                 }
             }
 

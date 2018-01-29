@@ -2,11 +2,13 @@ package uk.co.codefreak.rhythmmachine.object;
 
 import uk.co.codefreak.rhythmmachine.colour.Colour;
 
-public class Player extends Entity {
+import java.util.ArrayList;
+
+public class Player extends Item {
 
     private int gender;
-    private Item[] inventory = new Item[24];
-    private Item[] equipment = new Item[10];
+    private ArrayList<Object> inventory;
+    private ArrayList<Object> equipment;
 
     public Player(String name, int gender) {
         this.setName(name);
@@ -15,13 +17,18 @@ public class Player extends Entity {
         this.gender = gender;
         this.setEntityColour(Colour.WHITE);
 
-        for(int i = 0; i < inventory.length; i++) {
-            inventory[i] = Item.NOTHING;
+        inventory = new ArrayList<>();
+        equipment = new ArrayList<>();
+
+        inventory.add(Equippable.WOODEN_SWORD);
+        for(int i = 0; i < 23; i++) {
+            inventory.add(Equippable.NOTHING);
         }
 
-        for(int i = 0; i < equipment.length; i++) {
-            equipment[i] = Item.NOTHING;
+        for(int i = 0; i < 10; i++) {
+            equipment.add(Equippable.NOTHING);
         }
+        switchEquipment(0);
     }
 
     public Player(Player player) {
@@ -31,8 +38,8 @@ public class Player extends Entity {
         this.gender = player.getGenderInt();
         this.setEntityColour(player.getEntityColour());
 
-        for (int i = 0; i < player.getInventory().length; i++) {
-            this.inventory[i] = player.getInventoryItem(i);
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            this.inventory.set(i, player.getInventoryItem(i));
         }
 
         this.setXPos(player.getXPos());
@@ -56,26 +63,26 @@ public class Player extends Entity {
 
     // Inventory
 
-    public Item[] getInventory() {
+    public ArrayList getInventory() {
         return inventory;
     }
 
-    public Item getInventoryItem(int slot) {
-        return inventory[slot];
+    public Object getInventoryItem(int slot) {
+        return inventory.get(slot);
     }
 
-    public void setInventory(int slot, Item item) {
-        inventory[slot] = item;
+    public void setInventory(int slot, Entity item) {
+        inventory.set(slot, item);
     }
 
     public void switchInventory(int slot1, int slot2) {
-        Item temp = inventory[slot2];
-        inventory[slot2] = inventory[slot1];
-        inventory[slot1] = temp;
+        Object temp = inventory.get(slot2);
+        inventory.set(slot2,inventory.get(slot1));
+        inventory.set(slot1, temp);
     }
 
-    public boolean hasItem(Item requestedItem) {
-        for(Item item: inventory) {
+    public boolean hasItem(Entity requestedItem) {
+        for(Object item: inventory) {
             if(item == requestedItem) {
                 return true;
             }
@@ -84,12 +91,65 @@ public class Player extends Entity {
     }
 
     public void removeInventory(int slot) {
-        inventory[slot] = null;
+        inventory.remove(slot);
     }
 
     public void removeAllInventory() {
-        for (int i = 0; i < inventory.length - 1; i++) {
-            inventory[i] = null;
+        inventory.clear();
+    }
+
+    // Equipment
+
+    public ArrayList getEquipment() {
+        return equipment;
+    }
+
+    public Object getEquipment(int slot) {
+        return equipment.get(slot);
+    }
+
+    public void setEquipment(int slot, Equippable item) {
+        equipment.set(slot, item);
+    }
+
+
+    public boolean switchEquipment(int slot1) {
+        if(inventory.get(slot1) instanceof Equippable) {
+            Equippable e = (Equippable) inventory.get(slot1);
+            int slot2 = e.getEquiptmentSlot();
+            Object temp = equipment.get(slot2);
+
+            equipment.set(slot2, inventory.get(slot1));
+            inventory.set(slot1, temp);
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    public boolean hasEquipment(Equippable requestedItem) {
+        for(Object item: equipment) {
+            if(item == requestedItem) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeEquipment(int slot) {
+        equipment.remove(slot);
+    }
+
+    public boolean removeToInventory(int slot) {
+        if(inventory.size() < 24) {
+            inventory.add(equipment.get(slot));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void removeAllEquipment() {
+        equipment.clear();
     }
 }

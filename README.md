@@ -1,8 +1,16 @@
-# JAVA-RhythmMachine (0.10.4)
+# JAVA-RhythmMachine (0.11.0)
 
 [![Build Status](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine.svg?branch=master)](https://travis-ci.org/Galaxiosaurus/JAVA-RhythmMachine)
 
 As the description suggests, this repository is purely for my own experimental code. Things that I'm playing around with and try to learn more about. Below I will list what is currently being experimented with with the newest addition being added at the top of the list.
+
+## Equipment, equipping and a new items. (0.11.0)
+
+Progress has appeared to be slow this recently but I have been working on the next huge feature within the game. This is the ability to equip items. It's still not completely finished and I need to iron out a lot of the kinks but the groundwork is mostly done. After I've finished the equipment system and worked more on how the inventory works, I'm looking to implement level systems with XP and other related features you'd typically find in an RPG. This is going to take, I would say at least a week to get properly implemented, with new items and thorough testing. From now on, I'm also going to be forking things into a development branch in an effort to be more professional.
+
+## New art style testing (0.10.4)
+
+In this update, I decided to test a new way of rendering the maps in terms of art style. Before it would draw a coloured character onto a dark grey background and I found that it seemed a bit washed out and hard to see at points. I'm now testing out that, but with coloured squares being rendered behind them to give the game more vibrance and I must say it does look better. For now I will keep it but I'm not sure if that is the best thing I could do. More testing to come.
 
 ## Houses... on the inside! (0.10.0)
 
