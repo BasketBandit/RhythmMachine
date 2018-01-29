@@ -151,13 +151,8 @@ public class Player extends Item {
         return false;
     }
 
-    public boolean removeToInventory(int slot) {
-        if(inventory.size() < 24) {
-            inventory.add(equipment.get(slot));
-            return true;
-        } else {
-            return false;
-        }
+    public void forceRemoveEquipment(int slot) {
+        equipment.set(slot, Equippable.NOTHING);
     }
 
     public void removeAllEquipment() {
