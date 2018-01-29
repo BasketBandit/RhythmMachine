@@ -136,8 +136,19 @@ public class Player extends Item {
         return false;
     }
 
-    public void removeEquipment(int slot) {
-        equipment.remove(slot);
+    public boolean removeEquipment(int slot) {
+        int i = 0;
+        for(Object object : inventory) {
+            if(object instanceof Equippable) {
+                if(((Equippable) object).getEquiptmentSlot() == -1) {
+                    inventory.set(i, equipment.get(slot));
+                    equipment.set(slot, Equippable.NOTHING);
+                    return true;
+                }
+            }
+            i++;
+        }
+        return false;
     }
 
     public boolean removeToInventory(int slot) {

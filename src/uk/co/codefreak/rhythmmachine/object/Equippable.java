@@ -14,6 +14,7 @@ public class Equippable extends Item {
 
     // Wooden
     public static final Equippable WOODEN_SWORD = new Equippable("Wooden sword", Colour.SADDLE_BROWN, 'I',5,1,1.0,0.0,-1,2.0);
+    public static final Equippable WOODEN_SHIELD = new Equippable("Wooden shield", Colour.SADDLE_BROWN, 'O',7,1,0.0,1.0,-1,5.0);
 
     private int equiptmentSlot;
     private int level;
@@ -42,5 +43,25 @@ public class Equippable extends Item {
 
     public int getEquiptmentSlot() {
         return equiptmentSlot;
+    }
+
+    public double getAttackValue() {
+        return attackValue;
+    }
+
+    public double getDefenseValue() {
+        return  defenseValue;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public double getDurability() {
+        return durability;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
