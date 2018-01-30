@@ -21,7 +21,8 @@ public class Player extends Item {
         equipment = new ArrayList<>();
 
         inventory.add(Equippable.WOODEN_SWORD);
-        for(int i = 0; i < 23; i++) {
+        inventory.add(Equippable.WOODEN_SHIELD);
+        for(int i = 0; i < 22; i++) {
             inventory.add(Equippable.NOTHING);
         }
 
@@ -29,6 +30,7 @@ public class Player extends Item {
             equipment.add(Equippable.NOTHING);
         }
         switchEquipment(0);
+        switchEquipment(1);
     }
 
     public Player(Player player) {
