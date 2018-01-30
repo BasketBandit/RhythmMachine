@@ -18,7 +18,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.11.1";
+    private static final String version = "0.11.2";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
