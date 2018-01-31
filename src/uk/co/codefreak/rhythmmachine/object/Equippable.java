@@ -10,13 +10,26 @@ public class Equippable extends Item {
     public static final Equippable NOTHING = new Equippable("", Colour.TRANSPARENT, ' ', -1,-1,0.0,0.0,-1,0.0);
 
     // Imaginary
-    public static final Equippable IMAGINARY_SWORD = new Equippable("Imaginary sword", Colour.TRANSPARENT,' ', 0,1,0.0,0.0,-1,0.0);
+    public static final Equippable IMAGINARY_SWORD = new Equippable("Imaginary sword", Colour.TRANSPARENT,' ', 5,1,0.0,0.0,-1,0.0);
+    public static final Equippable IMAGINARY_SHIELD = new Equippable("Imaginary shield", Colour.TRANSPARENT, ' ',7,1,0.0,0.0,-1,0.0);
+    public static final Equippable IMAGINARY_HELMET = new Equippable("Imaginary helmet", Colour.TRANSPARENT, ' ', 0, 1, 0.0, 0.0, -1, 0.0);
+    public static final Equippable IMAGINARY_CUIRASS = new Equippable("Imaginary cuirass", Colour.TRANSPARENT, ' ', 2,1,0.0,0.0, -1, 0.0);
+    public static final Equippable IMAGINARY_GREAVES = new Equippable("Imaginary greaves", Colour.TRANSPARENT, ' ', 3, 1, 0.0, 0.0, -1, 0.0);
+    public static final Equippable IMAGINARY_GAUNTLETS = new Equippable("Imaginary gauntlets", Colour.TRANSPARENT, ' ', 6, 1, 0.0, 0.0,-1,0.0);
+    public static final Equippable IMAGINARY_BOOTS = new Equippable("Imaginary boots", Colour.TRANSPARENT, ' ', 4, 1, 0.0, 0.0, -1, 0.0);
+
 
     // Wooden
     public static final Equippable WOODEN_SWORD = new Equippable("Wooden sword", Colour.SADDLE_BROWN, 'I',5,1,1.0,0.0,-1,2.0);
-    public static final Equippable WOODEN_SHIELD = new Equippable("Wooden shield", Colour.SADDLE_BROWN, 'O',7,1,0.0,1.0,-1,5.0);
+    public static final Equippable WOODEN_SHIELD = new Equippable("Wooden shield", Colour.SADDLE_BROWN, 'O',7,1,0.0,3.0,-1,5.0);
+    public static final Equippable WODDEN_HELMET = new Equippable("Wooden helmet", Colour.SADDLE_BROWN, 'M', 0, 1, 0.0, 1.0, -1, 2.0);
+    public static final Equippable WOODEN_CUIRASS = new Equippable("Wooden cuirass", Colour.SADDLE_BROWN, 'T', 2,1,0.0,1.0, -1, 5.0);
+    public static final Equippable WOODEN_GREAVES = new Equippable("Wooden greaves", Colour.SADDLE_BROWN, 'H', 3, 1, 0.0, 1.0, -1, 4.0);
+    public static final Equippable WOODEN_GAUNTLETS = new Equippable("Wooden gauntlets", Colour.SADDLE_BROWN, 'P', 6, 1, 0.0, 1.0,-1,1.0);
+    public static final Equippable WOODEN_BOOTS = new Equippable("Wooden boots", Colour.SADDLE_BROWN, 'F', 4, 1, 0.0, 1.0, -1, 2.0);
 
-    private int equiptmentSlot;
+    // Item data
+    private int equipmentSlot;
     private int level;
     private double attackValue;
     private double defenseValue;
@@ -29,7 +42,7 @@ public class Equippable extends Item {
         setEntityColour(colour);
         setCharacter(character);
         setPhysType(0);
-        this.equiptmentSlot = slot;
+        this.equipmentSlot = slot;
         this.level = level;
         this.attackValue = attack;
         this.defenseValue = defense;
@@ -42,7 +55,7 @@ public class Equippable extends Item {
     }
 
     public int getEquiptmentSlot() {
-        return equiptmentSlot;
+        return equipmentSlot;
     }
 
     public double getAttackValue() {

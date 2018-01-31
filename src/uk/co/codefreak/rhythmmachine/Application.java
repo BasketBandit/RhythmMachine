@@ -18,7 +18,7 @@ import java.awt.image.BufferStrategy;
 
 public class Application extends Canvas {
 
-    private static final String version = "0.11.2";
+    private static final String version = "0.11.3";
     private static final String title = "Rhythm Machine (" + version + ")";
     private static final int width = 800;
     private static final int height = 620;
@@ -33,7 +33,7 @@ public class Application extends Canvas {
     private long moveTimer = System.currentTimeMillis();
     private int notificationTimer = 0;
     private boolean renderInventory = false; // default false.
-    private boolean renderEquipment = true; // default false.
+    private boolean renderEquipment = false; // default false.
     private boolean[] keyPressed = new boolean[8];
 
     private JFrame frame = new JFrame(title);
@@ -246,7 +246,7 @@ public class Application extends Canvas {
                 // Offhand, finger.
                 for(int i = 0; i < 2; i++) {
                     e = (Equippable) player.getEquipment(i + 7);
-                    grr.drawString(e.toString(), 627, 324 + (48 * i));
+                    grr.drawString(e.toString(), 627, 322 + (48 * i));
                     grr.draw3DRect(620, 308 + (48 * i), 20, 20, false);
                 }
             }
@@ -389,6 +389,7 @@ public class Application extends Canvas {
             // G
             if(KeyInput.isDown(0x47) && !keyPressed[4]) {
                 renderInventory = !renderInventory;
+                renderEquipment = !renderEquipment;
                 keyPressed[4] = true;
             } else if(KeyInput.isDown(0x47) && keyPressed[4]) {
             } else {
@@ -486,7 +487,7 @@ public class Application extends Canvas {
     private Color colourCheck(int x, int y, boolean background, boolean night) {
         if(background && night) {
             return baseWorld.getTiles()[x][y].getTileColour(true);
-        } else if(background && !night) {
+        } else if(background) {
             return baseWorld.getTiles()[x][y].getTileColour(false);
         } else {
             if (night) {
